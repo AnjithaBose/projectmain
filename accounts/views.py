@@ -63,7 +63,9 @@ class Home(View):
 class AdminDashboard(View):
     def get(self, request):
         x = AdminCheck(request)
+        staff = Staff.objects.get(user=request.user)
         if x == True:
-            return HttpResponse("Admin")
+            context={'staff':staff}
+            return render(request,'admin/dashboard.html',context)
         else:
             return redirect('home')
