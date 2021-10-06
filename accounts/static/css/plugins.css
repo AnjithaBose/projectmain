@@ -1,0 +1,62 @@
+/*Bootstrap CSS*/
+@import "bootstrap.min.css";
+
+/* Animate*/
+@import "animate.min.css";
+
+/*Themify css*/
+@import "themify-icons.css";
+
+/* Header css*/
+@import "header.css";
+
+/* Header css*/
+@import "menu.css";
+
+/* Icon css*/
+@import "icons.css";
+
+/* mCustomScrollbar css*/
+@import "jquery.mCustomScrollbar.css";
+
+/* simple line icons css*/
+@import "simple-line-icons.css"; 
+
+/* Easy-pie-chart css*/
+@import "jquery.easy-pie-chart.css"; 
+
+/* Fullcalendar css*/
+@import "fullcalendar.css"; 
+
+/* Calender css*/
+@import "bootstrap-timepicker.min.css"; 
+@import "bootstrap-colorpicker.min.css"; 
+@import "bootstrap-datepicker.min.css"; 
+@import "bootstrap-clockpicker.min.css"; 
+@import "daterangepicker.css"; 
+
+/* jquery.steps css*/
+@import "jquery.steps.css"; 
+
+/* jquery.fileupload css*/
+@import "bootstrap-fileupload.css"; 
+
+/* Dropzone css*/
+@import "dropzone.css"; 
+
+/* Custombox css*/
+@import "custombox.min.css"; 
+
+/* Tablesaw.css*/
+@import "tablesaw.css"; 
+
+/* chartist.css*/
+@import "chartist.min.css"; 
+
+/* photoswipe.css*/
+@import "photoswipe.css"; 
+
+
+
+
+
