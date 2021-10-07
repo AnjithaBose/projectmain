@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate,login,logout
 
 from .functions import *
 from .models import *
+from .forms import *
 # Create your views here.
 
 
@@ -77,7 +78,29 @@ class ViewCourses(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             course = Course.objects.all()
-            context={'staff':staff,'course': course}
+            form = CourseCreateForm()
+            context={'staff':staff,'course': course,'form':form}
             return render(request,'admin/courses.html',context)
         else:
             return redirect('home')
+
+    def post(self, request):
+        x= AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            course = Course.objects.all()
+            form = CourseCreateForm(request.POST,request.FILES)
+            if form.is_valid:
+                form.save()
+                msg = 'Course created successfully'
+                context={'staff':staff,'course': course,'form':form,'msg':msg}
+                return render(request,'messages/admin/courses.html',context)
+            else:
+                alert = 'Course creation failed'
+                context={'staff':staff,'course': course,'form':form,'alert':alert}
+                return render(request,'messages/admin/courses.html',context)  
+        else:
+            return redirect('home')
+            
+            
+

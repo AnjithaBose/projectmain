@@ -84,7 +84,7 @@ class Course(models.Model):
     name = models.CharField(max_length=1000,null=True, blank=True)
     code = models.CharField(max_length=10, null=True, blank=True)
     fee = models.CharField(max_length=10, null=True, blank=True)
-    pic = models.ImageField(null=True, blank=True, default='images/couse.jpg',upload_to='images/course/')
+    pic = models.ImageField(null=True, blank=True, default='accounts/static/images/course.jpg',upload_to='images/course/')
 
     def __str__(self):
         return self.name
