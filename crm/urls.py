@@ -31,8 +31,11 @@ urlpatterns = [
 
     path('administrator/home/',AdminDashboard.as_view(),name='admin_dashboard'),
     path('administrator/courses/',ViewCourses.as_view(),name='view_courses'),
-    path('administrator/course/edit/<id>',EditCourse.as_view(),name='edit_course'),
-    path('administrator/course/delete/<id>',DeleteCourse.as_view(),name='delete_course'),
+    path('administrator/course/edit/<id>/',EditCourse.as_view(),name='edit_course'),
+    path('administrator/course/delete/<id>/',DeleteCourse.as_view(),name='delete_course'),
+
+
+    path('operations/batches/',ViewBatches.as_view(),name='view_batches'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

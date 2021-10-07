@@ -164,6 +164,21 @@ class DeleteCourse(View):
             return redirect('home')
 
 
+class ViewBatches(View):
+    def get(self, request):
+        x = OperationsCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            batch = Batch.objects.all()
+            page = Pagination(request,batch,5)
+            form = BatchCreateForm()
+            context={'staff':staff,'batch': page,'form':form}
+            return render(request,'operations/batches.html',context)
+        else:
+            return redirect('home')
+
+
+
 
 
 

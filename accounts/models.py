@@ -90,7 +90,7 @@ class Course(models.Model):
         return self.name
 
 class Batch(models.Model):
-    subject = models.ForeignKey(Course,on_delete=models.PROTECT,null=True, blank=True)
+    subject = models.ForeignKey(Course,on_delete=models.PROTECT)
     batch_code = models.CharField(max_length=500, blank=True)
     trainer = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,limit_choices_to={'stype':"3"})
     start_date = models.DateField(null=True, blank=True)
@@ -99,7 +99,8 @@ class Batch(models.Model):
     end_time = models.TimeField(null=True, blank=True)
     link = models.CharField(max_length=1000, null=True, blank=True)
     passcode = models.CharField(max_length=250,null=True, blank=True)
-    type = models.CharField(max_length=100,null=True, blank=True,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
-    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Yet to Start','Yet to Start'),('Ongoing','Ongoing'),('Completed','Completed'),('Cancelled','Cancelled')))
+    type = models.CharField(max_length=100,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
+    status = models.CharField(max_length=100,choices=(('Yet to Start','Yet to Start'),('Ongoing','Ongoing'),('Completed','Completed'),('Cancelled','Cancelled')))
+    strength = models.IntegerField(null=True, blank=True)
     approval = models.BooleanField(null=True, blank=True, default=False)
 

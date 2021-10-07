@@ -9,3 +9,13 @@ class CourseCreateForm(ModelForm):
     class Meta:
         model = Course
         fields = '__all__'
+
+class BatchCreateForm(ModelForm):
+    trainer = forms.ModelChoiceField(queryset=Staff.objects.filter(stype='3'),required=False)
+    link = forms.CharField(required=False)
+    passcode = forms.CharField(required=False)
+    class Meta:
+        model = Batch
+        fields = ['subject','trainer','start_date','end_date','start_time','end_time','link','passcode','type','status']
+
+
