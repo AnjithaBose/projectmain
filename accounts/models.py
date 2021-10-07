@@ -53,6 +53,9 @@ class Staff(models.Model):
     ('2', 'Sales'),
     ('3', 'Trainer'),
     ('4', 'Admin'),
+    ('5', 'Operations Manager'),
+    ('6', 'Sales Manager'),
+
     )
     user = models.OneToOneField(User,on_delete=models.PROTECT,null=True,blank=True)
     name = models.CharField(max_length=100,null=True, blank=True)
@@ -70,10 +73,32 @@ class Staff(models.Model):
     state = models.CharField(max_length=100,null=True,choices=state, blank=True)
     stype = models.CharField(max_length=100,null=True,choices=value, blank=True)
     status = models.CharField(max_length=20,choices=(('Active','Active'),('Inactive','Inactive')),default='Active')
-    profile_pic = models.ImageField(null=True, blank=True,upload_to='images/dp/')
+    profile_pic = models.ImageField(null=True, blank=True,upload_to='images/dp/',default='images/user3.png')
     approval = models.BooleanField(null=True, blank=True, default=False)
-    admin_status = models.BooleanField(null=True, blank=True, default=False)
 
 
     def __str__(self):
         return self.name
+
+class Course(models.Model):
+    name = models.CharField(max_length=1000,null=True, blank=True)
+    code = models.CharField(max_length=10, null=True, blank=True)
+    fee = models.CharField(max_length=10, null=True, blank=True)
+    pic = models.ImageField(null=True, blank=True, default='images/couse.jpg',upload_to='images/course/')
+
+    def __str__(self):
+        return self.name
+
+class Batch(models.Model):
+    subject = models.ForeignKey(Course,on_delete=models.PROTECT,null=True, blank=True)
+    batch_code = models.CharField(max_length=500, blank=True)
+    trainer = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,limit_choices_to={'stype':"3"})
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    start_time = models.TimeField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
+    link = models.CharField(max_length=1000, null=True, blank=True)
+    passcode = models.CharField(max_length=250,null=True, blank=True)
+    type = models.CharField(max_length=100,null=True, blank=True,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
+    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Yet to Start','Yet to Start'),('Ongoing','Ongoing'),('Completed','Completed'),('Cancelled','Cancelled')))
+

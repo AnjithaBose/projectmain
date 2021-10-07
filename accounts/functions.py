@@ -12,3 +12,5 @@ def AdminCheck(request):
                 return (False)
         except:
             return (False)
+    else:
+        return (False)

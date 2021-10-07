@@ -20,11 +20,11 @@
                     <!-- Dropdown_User -->
                     <div class="dropdown dropdown-user"> <a href="javascript:void(0)" class="dropdown-toggle"
                         data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="true"> <img
-                          class="img-circle pro_pic" src="{{staff.profile_pic.url}}" alt=""> </a>
+                          class="img-circle pro_pic" src="{{staff.profile_pic.url}}" alt="{{staff.name}}"> </a>
                       <ul class="dropdown-menu dropdown-menu-default">
                         <li>
                           <div class="user-panel">
-                            <div class="user_image"> <img src="{{staff.profile_pic.url}}" class="img-circle mCS_img_loaded" alt="">
+                            <div class="user_image"> <img src="{{staff.profile_pic.url}}" class="img-circle mCS_img_loaded" alt="{{staff.name}}">
                             </div>
                             <div class="info">
                               <p>{{staff.name}}</p>
@@ -32,12 +32,12 @@
                             </div>
                           </div>
                         </li>
-                        <li> <a href="#"> <i class="icon-user"></i> Profile </a> </li>
-                        <li> <a href="#"> <i class="icon-settings"></i> Settings </a> </li>
-                        <li> <a href="#"> <i class="icon-directions"></i> Help </a> </li>
+                        <li> <a href="#"> <i class="ti ti-user"></i> Profile </a> </li>
+                        <li> <a href="#"> <i class="ti ti-settings"></i> Settings </a> </li>
+                        <li> <a href="#"> <i class="ti ti-help-alt"></i> Help </a> </li>
                         <li class="divider"></li>
-                        <li> <a href="404.html"> <i class="icon-lock"></i> Lock </a> </li>
-                        <li> <a href="#"> <i class="icon-logout"></i> Log Out </a> </li>
+                        <!-- <li> <a href="404.html"> <i class="icon-lock"></i> Lock </a> </li> -->
+                        <li> <a href="{% url 'logout' %}"> <i class="fa fa-sign-out"></i> Log Out </a> </li>
                       </ul>
                     </div>
                   </div>

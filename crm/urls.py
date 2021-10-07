@@ -29,7 +29,8 @@ urlpatterns = [
     path('', Home.as_view(),name='home'),
 
 
-    path('administrator/home/',AdminDashboard.as_view(),name='admin_dashboard')
+    path('administrator/home/',AdminDashboard.as_view(),name='admin_dashboard'),
+    path('administrator/courses/',ViewCourses.as_view(),name='view_courses'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

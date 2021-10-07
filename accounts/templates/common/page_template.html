@@ -1,0 +1,19 @@
+{% extends 'common/main.html' %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'admin/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            {% block div_content %}
+
+            {% endblock %}
+            <!-- End row -->
+            <!-- state end-->
+            {% include 'common/footer.html' %}
+        </div>
+    </div>
+</div>

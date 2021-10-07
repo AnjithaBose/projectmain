@@ -63,9 +63,21 @@ class Home(View):
 class AdminDashboard(View):
     def get(self, request):
         x = AdminCheck(request)
-        staff = Staff.objects.get(user=request.user)
-        if x == True:
+        if x == True: 
+            staff = Staff.objects.get(user=request.user)
             context={'staff':staff}
             return render(request,'admin/dashboard.html',context)
+        else:
+            return redirect('home')
+
+
+class ViewCourses(View):
+    def get(self, request):
+        x= AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            course = Course.objects.all()
+            context={'staff':staff,'course': course}
+            return render(request,'admin/courses.html',context)
         else:
             return redirect('home')
