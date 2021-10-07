@@ -101,6 +101,73 @@ class ViewCourses(View):
                 return render(request,'messages/admin/courses.html',context)  
         else:
             return redirect('home')
+
+class EditCourse(View):
+    def get(self, request,id):
+        x= AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            course = Course.objects.get(id=id)
+            form = CourseCreateForm(instance=course)
+            context={'staff':staff,'course': course,'form':form}
+            return render(request,'admin/edit_course.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request,id):
+        x= AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            course = Course.objects.get(id=id)
+            form = CourseCreateForm(request.POST,instance=course)
+            if form.is_valid():
+                c=form.save(commit=False)
+                try:
+                    pic = request.FILES['avatar']
+                    c.pic = pic
+                except:
+                    c.pic = course.pic
+                c.save()
+                msg = 'Course edited successfully'
+                context={'staff':staff,'course': course,'form':form,'msg':msg}
+                return render(request,'messages/admin/courses.html',context)
+            else:
+                msg = 'Course editing failed.Please review again.'
+                context={'staff':staff,'course': course,'form':form,'msg':msg}
+                return render(request,'admin/edit_course.html',context)
+        else:
+            return redirect('home')
+
+class DeleteCourse(View):
+    def get(self, request,id):
+        x= AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            course = Course.objects.get(id=id)
+            confirm = "Are you sure you want to delete?.Once clicked on OK changes cant be reverted."
+            context={'staff':staff,'course': course,'confirm':confirm}
+            return render(request,'messages/admin/courses.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request,id):
+        x= AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            course = Course.objects.get(id=id)
+            course.delete()
+            msg = 'Course deleted successfully!'
+            context={'staff':staff,'course': course,'msg':msg}
+            return render(request,'messages/admin/courses.html',context)
+        else:
+            return redirect('home')
+
+
+
+
+
+
+
             
             
 

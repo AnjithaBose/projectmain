@@ -46,13 +46,37 @@
                 </div>
               </div>
             {% endif %}
+            {% if confirm %}
+            <div class="col-lg-6">
+                <div class="card m-b-30">
+                  <div class="card-header border-bottom">
+                  </div>
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading"><i class="ti ti-alert"></i> Are you sure <i class="ti ti-help"></i></h4>
+                        <p>{{confirm}}</p>
+                        <hr>
+                        <form method="post" action>
+                            {% csrf_token %}
+                            
+                        <a class="btn btn-secondary" href="{% url 'view_courses' %}">Cancel</a>
+                        <button class="btn btn-danger" type="submit">OK</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
             
 
             
             <!-- End row -->
             <!-- state end-->
-            {% include 'common/footer.html' %}
         </div>
     </div>
+    
+    {% include 'common/footer.html' %}
 </div>
 {% endblock %}

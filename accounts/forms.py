@@ -5,6 +5,7 @@ from .models import *
 
 
 class CourseCreateForm(ModelForm):
+    pic = forms.ImageField(required=False)
     class Meta:
         model = Course
         fields = '__all__'

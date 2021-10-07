@@ -1,0 +1,105 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'admin/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Edit {{course}} Course</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'view_courses' %}">Courses</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Edit-{{course}}</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+            <!-- state start-->
+            <div class="row">
+                <div class="col-lg-8 col-md-10 col-12">
+                    <div class="card">
+                        <h4 class="m-t-0 header-title">Edit Course</h4><img class="img-circle pro_pic" src="{{course.pic.url}}" alt="{{course.name}}" style="width: 100px;height:100px">
+
+                        
+                        <div class="card card-body">
+                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                                {% csrf_token %}
+                              <div class="form-group">
+                                <label for="exampleInputName1">Course name</label>
+                                {% load widget_tweaks %} 
+                                {% render_field form.name class="form-control"  placeholder="Course name" required="true" %}
+                              </div>
+                              <div class="form-group">
+                                <label for="exampleInputEmail3">Course code</label>
+                                {% render_field form.code class="form-control"  placeholder="Course code" required="true" %}
+                              </div>
+                              <div class="form-group">
+                                <label for="exampleInputPassword4">Fee</label>
+                                {% render_field form.fee class="form-control"  placeholder="Course fee" required="true" %}
+                              </div>
+                              <div class="form-group">
+                                <label>Avatar</label>
+                                <div class="input-group col-xs-12">
+                                    <input type="file" class="form-control" name="avatar" >
+                                  
+                                </div>
+                              </div>
+                              <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                              <button class="btn btn-light my-1" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Cancel</button>
+                            </form>
+                  </div>
+                </div>
+                    </div>
+                </div>
+                
+            </div>
+            <!--- End row -->
+
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+<!-- <script type="text/javascript">
+    $(document).ready(function(){
+    
+    setInterval(function(){
+        $.ajax({
+            method: 'GET',
+            contentType: 'application/json',
+            url : "/administrator/courses/",
+            success: function(response){
+            console.log($(response).context);}
+
+        });
+    },1000);
+    })
+</script> -->
+{% endblock %}
