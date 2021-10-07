@@ -110,6 +110,14 @@
                                 
                             </tbody>
                         </table>
+                        <div class="text-right">
+                            {% if course.has_previous %}
+                            <a href="{% url 'view_courses' %}?page={{ course.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
+                            {% endif %}
+                            {% if course.has_next %}
+                            <a href="{% url 'view_courses' %}?page={{ course.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 

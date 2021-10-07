@@ -78,8 +78,9 @@ class ViewCourses(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             course = Course.objects.all()
+            page = Pagination(request,course,5)
             form = CourseCreateForm()
-            context={'staff':staff,'course': course,'form':form}
+            context={'staff':staff,'course': page,'form':form}
             return render(request,'admin/courses.html',context)
         else:
             return redirect('home')
