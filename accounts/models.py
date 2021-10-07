@@ -101,4 +101,5 @@ class Batch(models.Model):
     passcode = models.CharField(max_length=250,null=True, blank=True)
     type = models.CharField(max_length=100,null=True, blank=True,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
     status = models.CharField(max_length=100,null=True, blank=True,choices=(('Yet to Start','Yet to Start'),('Ongoing','Ongoing'),('Completed','Completed'),('Cancelled','Cancelled')))
+    approval = models.BooleanField(null=True, blank=True, default=False)
 

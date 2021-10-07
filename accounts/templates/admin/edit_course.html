@@ -47,11 +47,11 @@
                               <div class="form-group">
                                 <label for="exampleInputName1">Course name</label>
                                 {% load widget_tweaks %} 
-                                {% render_field form.name class="form-control"  placeholder="Course name" required="true" %}
+                                {% render_field form.name class="form-control"  placeholder="Course name" required="true" style="text-transform: capitalize;" %}
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputEmail3">Course code</label>
-                                {% render_field form.code class="form-control"  placeholder="Course code" required="true" %}
+                                {% render_field form.code class="form-control"  placeholder="Course code" required="true" style="text-transform: uppercase;" %}
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputPassword4">Fee</label>
