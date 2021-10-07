@@ -1,75 +1,428 @@
+{% extends 'common/main.html' %}
 {% load static %}
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<title>Multinod - Bootstrap 4x Mobile HTML template</title>
-<!-- Plugins CSS -->
-<link href="{% static 'css/plugins.css' %}" rel="stylesheet" >
-<!-- Custom CSS -->
-<link href="{% static 'css/style.css' %}" rel="stylesheet">
-<!-- Favicon -->
-<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
-</head>
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+  <div class="side_bar scroll_auto">
+    <div class="user-panel">
+      <div class="user_image"> <img src="images/about-1.jpg" class="img-circle mCS_img_loaded" alt=""> </div>
+      <div class="info">
+        <p> Less Williams</p>
+        <a href="#"> <i class="fa fa-circle text-success"></i> Online</a>
+      </div>
+    </div>
+    <ul id="dc_accordion" class="sidebar-menu tree">
+      <li> <a href="index.html" class=" active"> <i class="ti-home"></i> <span>Dashboard</span></a> </li>
+      <li class="menu_sub"> <a href="#"> <i class="ti-blackboard"></i> <span>UI Elements </span> <span
+            class="badge badge-pill badge-danger float-right">New</span> </a>
+        <ul class="down_menu">
+          <li><a href="alerts.html">Alerts</a></li>
+          <li><a href="badges.html">Badges</a></li>
+          <li><a href="buttons.html">Buttons</a></li>
+          <li><a href="cards.html">Cards</a></li>
+          <li><a href="carousel.html">Carousel</a></li>
+          <li><a href="collapse.html">Collapse</a></li>
+          <li><a href="dropdowns.html">Dropdowns</a></li>
+          <li><a href="embeds.html">Embeds</a></li>
+          <li><a href="grids.html">Grids</a></li>
+          <li><a href="images.html">Images</a></li>
+          <li><a href="media.html">Media</a></li>
+          <li><a href="modals.html">Modals</a></li>
+          <li><a href="paginations.html">Paginations</a></li>
+          <li><a href="popovers.html">Popovers</a></li>
+          <li><a href="progressbars.html">Progress Bars</a></li>
+          <li><a href="spinners.html">Spinners</a></li>
+          <li><a href="tabs.html">Tabs</a></li>
+          <li><a href="toasts.html">Toasts</a></li>
+          <li><a href="tooltips.html">Tooltips</a></li>
+          <li><a href="typography.html">Typography</a></li>
+        </ul>
+      </li>
+      <li class="menu_sub"> <a href="#"> <i class="ti-pencil-alt"></i> <span>Icons</span> <span
+            class="ti ti-angle-down styleicon"></span> </a>
+        <ul class="down_menu">
+          <li><a href="themify.html">Themify</a></li>
+          <li><a href="font-awesome.html">Font Awesome</a></li>
+          <li><a href="dripicons.html">Dripicons</a></li>
+          <li><a href="feather.html">Feather</a></li>
 
-<body>
-<!-- Pre Loader -->
-<div id="dvLoading"></div>
-<div class="wrapper"> 
-  <!-- header -->
-  <div class="header-bg">
-    <header class="main-header">
-      <div class="container_header phone_view border_top_bott">
+          <li><a href="ionicons.html">Ion</a></li>
+          <li><a href="line-awesome.html">Line Awesome</a></li>
+          <li><a href="material-design.html">Material Design</a></li>
+          <li><a href="remixicon.html">Remixicon</a></li>
+          <li><a href="simple-line.html">Simple Line</a></li>
+          <li><a href="socicon.html">Socicon</a></li>
+          <li><a href="typicons.html">Typicons</a></li>
+        </ul>
+      </li>
+      <li class="menu_sub"> <a href="#"> <i class="fa fa-table"></i> <span>Widgets </span> <span
+            class="ti ti-angle-down styleicon"></span> </a>
+        <ul class="down_menu">
+          <li> <a href="widgets-base.html">Widgets Base</a> </li>
+          <li> <a href="widgets-chart.html">Widgets Chart</a> </li>
+        </ul>
+      </li>
+      <li class="menu_sub"> <a href="#"> <i class="fa fa-envelope-o"></i> <span>Email </span> <span
+            class="badge badge-pill badge-info float-right">New</span> </a>
+        <ul class="down_menu">
+          <li> <a href="inbox.html">Inbox</a> </li>
+          <li> <a href="inbox-details.html">Email Read</a> </li>
+          <li> <a href="inbox-compose.html">Email Compose</a> </li>
+        </ul>
+      </li>
+      <li class="menu_sub"> <a href="#"> <i class="icon-calendar"></i> <span>Calendar </span> <span
+            class="ti ti-angle-down styleicon"></span> </a>
+        <ul class="down_menu">
+          <li> <a href="calendar-basic.html">Basic Calendar</a> </li>
+          <li> <a href="calendar-external-events.html">External Events Calendar</a> </li>
+          <li> <a href="calendar-list.html">List Calendar</a> </li>
+        </ul>
+      </li>
+      <li class="menu_sub"> <a href="#"> <i class="icon-speech"></i> <span>Forms</span> <span
+            class="ti ti-angle-down styleicon"></span> </a>
+        <ul class="down_menu">
+          <li><a href="form-elements.html">Form Elements</a></li>
+          <li><a href="form-validation.html">Form Validation</a></li>
+          <li><a href="form-pickers.html">Form Pickers</a></li>
+          <li><a href="form-wizard.html">Form Wizard</a></li>
+          <li><a href="form-mask.html">Form Masks</a></li>
+          <li><a href="form-x-editable.html">X Editable</a></li>
+          <li><a href="form-uploads.html">Multiple File Upload</a></li>
+        </ul>
+      </li>
+      <li class="menu_sub"> <a href="#"> <i class="ti-layout-cta-center"></i> <span>Apps </span> <span
+            class="ti ti-angle-down styleicon"></span> </a>
+        <ul class="down_menu">
+          <li><a href="apps-calendar.html">Calendar</a></li>
+          <li><a href="apps-contacts.html">Contacts</a></li>
+          <li><a href="apps-todo.html">Todo List</a></li>
+
+        </ul>
+      </li>
+      <li class="menu_sub"> <a href="#"> <i class="icon-grid"></i> <span>Tables</span> <span
+            class="ti ti-angle-down styleicon"></span> </a>
+        <ul class="down_menu">
+          <li><a href="tables-basic.html">Basic Tables</a></li>
+          <li><a href="tables-datatable.html">Data Tables</a></li>
+          <li><a href="tables-responsive.html">Responsive Table</a></li>
+          <li><a href="tables-tablesaw.html">Tablesaw Tables</a></li>
+          <li><a href="tables-foo.html">Foo Tables</a></li>
+        </ul>
+      </li>
+      <li class="menu_sub"> <a href="#"> <i class="ti-pie-chart"></i> <span>Charts</span> <span
+            class="ti ti-angle-down styleicon"></span> </a>
+        <ul class="down_menu">
+          <li><a href="chart-flot.html">Flot Chart</a></li>
+          <li><a href="chart-morris.html">Morris Chart</a></li>
+          <li><a href="chart-google.html">Google Chart</a></li>
+          <li><a href="chart-chartist.html">Chartist Chart</a></li>
+          <li><a href="chart-chartjs.html">Chartjs Chart</a></li>
+          <li><a href="chart-sparkline.html">Sparkline Chart</a></li>
+          <li><a href="chart-knob.html">Jquery Knob</a></li>
+        </ul>
+      </li>
+      <li class="menu_sub"> <a href="#"> <i class="icon-equalizer"></i> <span>Extra Pages</span> <span
+            class="ti ti-angle-down styleicon"></span> </a>
+        <ul class="down_menu">
+          <li> <a href="profile.html">User Profile</a> </li>
+          <li> <a href="page-login.html">Sign In</a> </li>
+          <li> <a href="page-register.html">Sign Up</a> </li>
+          <li> <a href="invoice.html">Invoice</a> </li>
+          <li> <a href="page_404.html">404</a> </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div class="content_wrapper bg_homebefore">
+    <div class="container-fluid">
+      <div class="sec-title">
+        <div class="row d-flex align-items-center">
+          <div class="col-md-12">
+            <div class="heading_home">
+              <h2>Welcome back Multinod</h2>
+              <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industry. </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-bar">
+        <!-- Start row -->
         <div class="row">
-          <div class="col-md-12 d-flex justify-content-between align-items-center">
-            <div class="menu-icon"> <a href="javascript:void(0)" class="menu-toggler sidebar-toggler"></a> </div>
-            <div class="logo d-flex align-items-center justify-content-center"> <a href="javascript:void(0)"> <strong class="logo_icon"> <img src="images/small-logo.png" alt=""> </strong> <span class="logo-default"> <img src="images/small-logo.png" alt=""> </span> </a> </div>
-            <div class="right_detail">
-              <div class="row d-flex align-items-center justify-content-end">
-                <div class="col-xl-12 col-12 d-flex justify-content-end">
-                  <div class="right_bar_top d-flex align-items-center"> 
-                    
-                    <!-- notification_Start -->
-                    <div class="dropdown dropdown-notification"> <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"> <i class="fa fa-bell"></i> <span class="badge_coun"> 6 </span> </a>
-                      <ul class="dropdown-menu scroll_auto height_fixed" >
-                        <li class="bigger">
-                          <h3><span class="bold">Notifications</span></h3>
-                          <span class="notification-label">New 6</span> </li>
-                        <li>
-                          <ul class="dropdown-menu-list">
-                            <li> <a href="javascript:void(0)"> <span class="time">just now</span> <span class="details"> <span class="notification-icon deepPink-bgcolor"> <i class="fa fa-check"></i> </span> Congratulations!. </span> </a> </li>
-                            <li> <a href="javascript:void(0)"> <span class="time">3 mins</span> <span class="details"> <span class="notification-icon purple-bgcolor"> <i class="fa fa-user o"></i> </span> <b>John Micle </b>is now following you. </span> </a> </li>
-                            <li> <a href="javascript:void(0)"> <span class="time">7 mins</span> <span class="details"> <span class="notification-icon blue-bgcolor"> <i class="fa fa-comments-o"></i> </span> <b>Sneha Jogi </b>sent you a message. </span> </a> </li>
-                            <li> <a href="javascript:void(0)"> <span class="time">12 mins</span> <span class="details"> <span class="notification-icon pink"> <i class="fa fa-heart"></i> </span> <b>Ravi Patel </b>like your photo. </span> </a> </li>
-                            <li> <a href="javascript:void(0)"> <span class="time">15 mins</span> <span class="details"> <span class="notification-icon yellow"> <i class="fa fa-warning"></i> </span> Warning! </span> </a> </li>
-                            <li> <a href="javascript:void(0)"> <span class="time">10 hrs</span> <span class="details"> <span class="notification-icon red"> <i class="fa fa-times"></i> </span> Application error. </span> </a> </li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </div>
-                    <!-- notification_End --> 
-                    
-                    <!-- Dropdown_User -->
-                    <div class="dropdown dropdown-user"> <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="true"> <img class="img-circle pro_pic" src="images/user3.png" alt=""> </a>
-                      <ul class="dropdown-menu dropdown-menu-default">
-                        <li>
-                          <div class="user-panel">
-                            <div class="user_image"> <img src="images/user3.png" class="img-circle mCS_img_loaded" alt=""> </div>
-                            <div class="info">
-                              <p> James Vince </p>
-                              <a href="#"> info@sbtechnosoft.com</a> </div>
-                          </div>
-                        </li>
-                        <li> <a href="#"> <i class="icon-user"></i> Profile </a> </li>
-                        <li> <a href="#"> <i class="icon-settings"></i> Settings </a> </li>
-                        <li> <a href="#"> <i class="icon-directions"></i> Help </a> </li>
-                        <li class="divider"></li>
-                        <li> <a href="404.html"> <i class="icon-lock"></i> Lock </a> </li>
-                        <li> <a href="#"> <i class="icon-logout"></i> Log Out </a> </li>
-                      </ul>
+          <!-- Start col -->
+          <div class="col-lg-12 col-xl-3">
+            <div class="card m-b-20">
+              <div class="card-body">
+                <div class="row align-items-center no-gutters">
+                  <div class="col-8">
+                    <p class="font-15">Revenue Increase</p>
+                    <h4 class="card-title mb-0 border-0">10%</h4>
+                  </div>
+                  <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i
+                        class="ti ti-arrow-top-right line align-unset"></i></span> </div>
+                </div>
+              </div>
+            </div>
+            <div class="card m-b-20">
+              <div class="card-body">
+                <div class="row align-items-center no-gutters">
+                  <div class="col-8">
+                    <p class="font-15">Open Projects</p>
+                    <h4 class="card-title mb-0 border-0">498</h4>
+                  </div>
+                  <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i
+                        class="ti ti-money line align-unset"></i></span> </div>
+                </div>
+              </div>
+            </div>
+            <div class="card m-b-20">
+              <div class="card-body">
+                <div class="row align-items-center no-gutters">
+                  <div class="col-8">
+                    <p class="font-15">Working Employees</p>
+                    <h4 class="card-title mb-0 border-0">17,986</h4>
+                  </div>
+                  <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i
+                        class="ti-user line align-unset"></i></span> </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End col -->
+          <!-- Start col -->
+          <div class="col-lg-12 col-xl-9">
+            <div class="card m-b-30">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-6 col-lg-9">
+                    <h5 class="card-title mb-0">Lead Compare</h5>
+                  </div>
+                  <div class="col-6 col-lg-3">
+                    <select class="form-control font-12">
+                      <option value="class1" selected>Last Week</option>
+                      <option value="class2">Last Month</option>
+                      <option value="class3">Last Year</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div id="apex-bar-chart"></div>
+              </div>
+            </div>
+          </div>
+          <!-- End col -->
+        </div>
+        <!-- End row -->
+        <!-- Start row -->
+        <div class="row">
+          <!-- Start col -->
+          <div class="col-lg-12 col-xl-9">
+            <div class="card m-b-30">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-6 col-lg-9">
+                    <h5 class="card-title mb-0">Average Monthly Revenue</h5>
+                  </div>
+                  <div class="col-6 col-lg-3">
+                    <select class="form-control font-12">
+                      <option value="class1" selected>Last Week</option>
+                      <option value="class2">Last Month</option>
+                      <option value="class3">Last Year</option>
+                    </select>
+                  </div>
+                </div>
+                <h2>$8,66,587</h2>
+              </div>
+              <div class="card-body p-0">
+                <div id="apex-area-chart"></div>
+              </div>
+            </div>
+          </div>
+          <!-- End col -->
+          <!-- Start col -->
+          <div class="col-lg-12 col-xl-3">
+            <div class="card m-b-30">
+              <div class="card-header text-center">
+                <h5 class="card-title mb-0">Ticket Status</h5>
+              </div>
+              <div class="card-body text-center">
+                <div id="apex-stroked-circle-guage-chart"></div>
+              </div>
+              <div class="card-footer text-center">
+                <div class="row">
+                  <div class="col-4 border-right px-0">
+                    <p class="my-2">New</p>
+                    <h5>589</h5>
+                  </div>
+                  <div class="col-4 border-right px-0">
+                    <p class="my-2">Open</p>
+                    <h5>1298</h5>
+                  </div>
+                  <div class="col-4 px-0">
+                    <p class="my-2">Time</p>
+                    <h5>1 Day</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End col -->
+        </div>
+        <!-- End row -->
+        <!-- Start row -->
+        <div class="row customers">
+          <div class="col-lg-12 col-xl-3">
+            <div class="card  m-b-30 no-border">
+              <div class="card-header bg-white">
+                <h3 class="card-title float-left">Visiting customers</h3>
+                <div class="float-right"> <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"> <i class="lni-more-alt"></i> </a>
+                  <div class="dropdown-menu"> <a class="dropdown-item" href="#"><i class="lni-eye m-r-10"></i> View</a>
+                    <a class="dropdown-item" href="#"><i class="lni-add-file m-r-10"></i> Add</a> <a
+                      class="dropdown-item" href="#"><i class="lni-download m-r-10"></i> Download</a> <a
+                      class="dropdown-item" href="#"><i class="lni-cog m-r-10"></i> More</a> <a class="dropdown-item"
+                      href="#"><i class="lni-archive m-r-10"></i> Remove</a> </div>
+                </div>
+              </div>
+              <div class="card-body visitor-customer">
+                <div class="media border-bottom p-b-15"> <img class="rounded-circle m-r-15 w-45"
+                    src="images/customer-img1.jpg" alt="widget">
+                  <div class="media-body">
+                    <div><strong>Anderson</strong></div>
+                    Designer at facebook
+                  </div>
+                  <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12
+                      Oct 2014</small> </div>
+                </div>
+                <div class="media m-t-15 m-b-15 p-b-15 border-bottom"> <img class="rounded-circle m-r-15 w-45"
+                    src="images/customer-img2.jpg" alt="widget">
+                  <div class="media-body">
+                    <div><strong>David adnan</strong></div>
+                    Manager at google
+                  </div>
+                  <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12
+                      Oct 2014</small> </div>
+                </div>
+                <div class="media m-t-15 m-b-15 p-b-15 border-bottom"> <img class="rounded-circle m-r-15 w-45"
+                    src="images/customer-img3.jpg" alt="widget">
+                  <div class="media-body">
+                    <div><strong>Maria leo</strong></div>
+                    developer at google
+                  </div>
+                  <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12
+                      Oct 2014</small> </div>
+                </div>
+                <div class="media m-t-15 m-b-15 p-b-15 border-bottom"> <img class="rounded-circle m-r-15 w-45"
+                    src="images/customer-img4.jpg" alt="widget">
+                  <div class="media-body">
+                    <div><strong>Adnan</strong></div>
+                    Designer at youtube
+                  </div>
+                  <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12
+                      Oct 2014</small> </div>
+                </div>
+                <div class="media m-t-15"> <img class="rounded-circle m-r-15 w-45" src="images/customer-img5.jpg"
+                    alt="widget">
+                  <div class="media-body">
+                    <div><strong>David</strong></div>
+                    Facebook developer
+                  </div>
+                  <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12
+                      Oct 2014</small> </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12 col-xl-9">
+            <div class="card m-b-30 no-border recent-order">
+              <div class="card-header bg-white no-border border-bottom-transparent">
+                <h3 class="card-title float-left">Recent Orders</h3>
+                <div class="float-right">
+                  <ul class="nav" role="tablist">
+                    <li class="nav-item"> <a class="p-r-10 active" data-toggle="tab" href="#edl-tab30">Today</a> </li>
+                    <li class="nav-item"> <a class="p-r-10" data-toggle="tab" href="#edl-tab31">Week</a> </li>
+                    <li class="nav-item"> <a data-toggle="tab" href="#edl-tab32">Month</a> </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-body no-padding">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="edl-tab30">
+                    <div class="table-responsive">
+                      <table class="table recent-order">
+                        <thead class="">
+                          <tr>
+                            <th class="border-0">#</th>
+                            <th class="border-0">Item name</th>
+                            <th class="border-0">Product Id</th>
+                            <th class="border-0">Quantity</th>
+                            <th class="border-0">Price</th>
+                            <th class="border-0">Time</th>
+                            <th class="border-0">Customer</th>
+                            <th class="border-0">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>Computer</td>
+                            <td>id#9001 </td>
+                            <td>20</td>
+                            <td>$120.00</td>
+                            <td>19-11-2016 03:09:08</td>
+                            <td>Patricia J. King </td>
+                            <td><span class="badge-dot badge-brand mr-1"></span>Pending </td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>CPU</td>
+                            <td>id#9002 </td>
+                            <td>12</td>
+                            <td>$190.00</td>
+                            <td>29-12-2016 01:23:11</td>
+                            <td>Rachel J. Wicker </td>
+                            <td><span class="badge-dot badge-success mr-1"></span>Delivered</td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>Laptop</td>
+                            <td>id#9003 </td>
+                            <td>23</td>
+                            <td>$690.00</td>
+                            <td>12-12-2016 11:12:28</td>
+                            <td>Michael K. Ledford </td>
+                            <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
+                          </tr>
+                          <tr class="border-bottom">
+                            <td>4</td>
+                            <td>Mobile</td>
+                            <td>id#9004 </td>
+                            <td>34</td>
+                            <td>$650.00</td>
+                            <td>23-12-2016 09:08:55</td>
+                            <td>Michael K. Ledford </td>
+                            <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
+                          </tr>
+                          <tr class="border-bottom">
+                            <td>5</td>
+                            <td>Tab</td>
+                            <td>id#9004 </td>
+                            <td>34</td>
+                            <td>$650.00</td>
+                            <td>23-12-2016 09:08:55</td>
+                            <td>Michael K. Ledford </td>
+                            <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
+                          </tr>
+                          <tr class="border-top-transparent">
+                            <td colspan="9" class="pr-0 pb-0"><a href="#"
+                                class="bttn bttn-success float-right m-t-10">View Details</a></td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -77,437 +430,13 @@
             </div>
           </div>
         </div>
+        <!-- End row -->
+        {% include 'common/footer.html' %}
       </div>
-    </header>
-  </div>
-  <!-- header_End --> 
-  <!-- Content_right -->
-  <div class="container_full">
-    <div class="side_bar scroll_auto">
-      <div class="user-panel">
-        <div class="user_image"> <img src="images/about-1.jpg" class="img-circle mCS_img_loaded" alt=""> </div>
-        <div class="info">
-          <p> Less Williams</p>
-          <a href="#"> <i class="fa fa-circle text-success"></i> Online</a> </div>
-      </div>
-      <ul id="dc_accordion" class="sidebar-menu tree">
-        <li> <a href="index.html" class=" active"> <i class="ti-home"></i> <span>Dashboard</span></a> </li>
-        <li class="menu_sub"> <a href="#"> <i class="ti-blackboard"></i> <span>UI Elements </span> <span class="badge badge-pill badge-danger float-right">New</span> </a>
-          <ul class="down_menu">
-            <li><a href="alerts.html">Alerts</a></li>
-            <li><a href="badges.html">Badges</a></li>
-            <li><a href="buttons.html">Buttons</a></li>
-            <li><a href="cards.html">Cards</a></li>
-            <li><a href="carousel.html">Carousel</a></li>
-            <li><a href="collapse.html">Collapse</a></li>
-            <li><a href="dropdowns.html">Dropdowns</a></li>
-            <li><a href="embeds.html">Embeds</a></li>
-            <li><a href="grids.html">Grids</a></li>
-            <li><a href="images.html">Images</a></li>
-            <li><a href="media.html">Media</a></li>
-            <li><a href="modals.html">Modals</a></li>
-            <li><a href="paginations.html">Paginations</a></li>
-            <li><a href="popovers.html">Popovers</a></li>
-            <li><a href="progressbars.html">Progress Bars</a></li>
-            <li><a href="spinners.html">Spinners</a></li>
-            <li><a href="tabs.html">Tabs</a></li>
-            <li><a href="toasts.html">Toasts</a></li>
-            <li><a href="tooltips.html">Tooltips</a></li>
-            <li><a href="typography.html">Typography</a></li>
-          </ul>
-        </li>
-        <li class="menu_sub"> <a href="#"> <i class="ti-pencil-alt"></i> <span>Icons</span> <span class="ti ti-angle-down styleicon"></span> </a>
-          <ul class="down_menu">
-            <li><a href="themify.html">Themify</a></li>
-            <li><a href="font-awesome.html">Font Awesome</a></li>
-            <li><a href="dripicons.html">Dripicons</a></li>
-            <li><a href="feather.html">Feather</a></li>
-           
-            <li><a href="ionicons.html">Ion</a></li>
-            <li><a href="line-awesome.html">Line Awesome</a></li>
-            <li><a href="material-design.html">Material Design</a></li>
-            <li><a href="remixicon.html">Remixicon</a></li>
-            <li><a href="simple-line.html">Simple Line</a></li>
-            <li><a href="socicon.html">Socicon</a></li>
-            <li><a href="typicons.html">Typicons</a></li>            
-          </ul>
-        </li>
-        <li class="menu_sub"> <a href="#"> <i class="fa fa-table"></i> <span>Widgets </span> <span class="ti ti-angle-down styleicon"></span> </a>
-          <ul class="down_menu">
-            <li> <a href="widgets-base.html">Widgets Base</a> </li>
-            <li> <a href="widgets-chart.html">Widgets Chart</a> </li>
-          </ul>
-        </li>
-        <li class="menu_sub"> <a href="#"> <i class="fa fa-envelope-o"></i> <span>Email </span> <span class="badge badge-pill badge-info float-right">New</span> </a>
-          <ul class="down_menu">
-            <li> <a href="inbox.html">Inbox</a> </li>
-            <li> <a href="inbox-details.html">Email Read</a> </li>
-            <li> <a href="inbox-compose.html">Email Compose</a> </li>
-          </ul>
-        </li>
-        <li class="menu_sub"> <a href="#"> <i class="icon-calendar"></i> <span>Calendar </span> <span class="ti ti-angle-down styleicon"></span> </a>
-          <ul class="down_menu">
-            <li> <a href="calendar-basic.html">Basic Calendar</a> </li>
-            <li> <a href="calendar-external-events.html">External Events Calendar</a> </li>
-            <li> <a href="calendar-list.html">List Calendar</a> </li>
-          </ul>
-        </li>
-        <li class="menu_sub"> <a href="#"> <i class="icon-speech"></i> <span>Forms</span> <span class="ti ti-angle-down styleicon"></span> </a>
-          <ul class="down_menu">
-                <li><a href="form-elements.html">Form Elements</a></li>
-                <li><a href="form-validation.html">Form Validation</a></li>
-                <li><a href="form-pickers.html">Form Pickers</a></li>
-                <li><a href="form-wizard.html">Form Wizard</a></li>
-                <li><a href="form-mask.html">Form Masks</a></li>
-                <li><a href="form-x-editable.html">X Editable</a></li>
-                <li><a href="form-uploads.html">Multiple File Upload</a></li>                
-          </ul>
-        </li>
-        <li class="menu_sub"> <a href="#"> <i class="ti-layout-cta-center"></i> <span>Apps </span> <span class="ti ti-angle-down styleicon"></span> </a>
-          <ul class="down_menu">
-            <li><a href="apps-calendar.html">Calendar</a></li>
-            <li><a href="apps-contacts.html">Contacts</a></li>
-            <li><a href="apps-todo.html">Todo List</a></li>
-           
-          </ul> 
-        </li> 
-        <li class="menu_sub"> <a href="#"> <i class="icon-grid"></i> <span>Tables</span> <span class="ti ti-angle-down styleicon"></span> </a>
-          <ul class="down_menu">
-            <li><a href="tables-basic.html">Basic Tables</a></li>
-            <li><a href="tables-datatable.html">Data Tables</a></li>
-            <li><a href="tables-responsive.html">Responsive Table</a></li>
-            <li><a href="tables-tablesaw.html">Tablesaw Tables</a></li>
-            <li><a href="tables-foo.html">Foo Tables</a></li>
-          </ul>
-        </li>
-        <li class="menu_sub"> <a href="#"> <i class="ti-pie-chart"></i> <span>Charts</span> <span class="ti ti-angle-down styleicon"></span> </a>
-          <ul class="down_menu">
-            <li><a href="chart-flot.html">Flot Chart</a></li>
-            <li><a href="chart-morris.html">Morris Chart</a></li>
-            <li><a href="chart-google.html">Google Chart</a></li>
-            <li><a href="chart-chartist.html">Chartist Chart</a></li>
-            <li><a href="chart-chartjs.html">Chartjs Chart</a></li>
-            <li><a href="chart-sparkline.html">Sparkline Chart</a></li>
-            <li><a href="chart-knob.html">Jquery Knob</a></li>            
-          </ul>
-        </li>
-        <li class="menu_sub"> <a href="#"> <i class="icon-equalizer"></i> <span>Extra Pages</span> <span class="ti ti-angle-down styleicon"></span> </a>
-          <ul class="down_menu">
-            <li> <a href="profile.html">User Profile</a> </li>
-            <li> <a href="page-login.html">Sign In</a> </li>
-            <li> <a href="page-register.html">Sign Up</a> </li>
-            <li> <a href="invoice.html">Invoice</a> </li>
-            <li> <a href="page_404.html">404</a> </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="content_wrapper bg_homebefore">
-      <div class="container-fluid">
-        <div class="sec-title">
-          <div class="row d-flex align-items-center">
-            <div class="col-md-12">
-              <div class="heading_home">
-                <h2>Welcome back Multinod</h2>
-                <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry. </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="content-bar"> 
-          <!-- Start row -->
-          <div class="row"> 
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-3">
-              <div class="card m-b-20">
-                <div class="card-body">
-                  <div class="row align-items-center no-gutters">
-                    <div class="col-8">
-                      <p class="font-15">Revenue Increase</p>
-                      <h4 class="card-title mb-0 border-0">10%</h4>
-                    </div>
-                    <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i class="ti ti-arrow-top-right line align-unset"></i></span> </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card m-b-20">
-                <div class="card-body">
-                  <div class="row align-items-center no-gutters">
-                    <div class="col-8">
-                      <p class="font-15">Open Projects</p>
-                      <h4 class="card-title mb-0 border-0">498</h4>
-                    </div>
-                    <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i class="ti ti-money line align-unset"></i></span> </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card m-b-20">
-                <div class="card-body">
-                  <div class="row align-items-center no-gutters">
-                    <div class="col-8">
-                      <p class="font-15">Working Employees</p>
-                      <h4 class="card-title mb-0 border-0">17,986</h4>
-                    </div>
-                    <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i class="ti-user line align-unset"></i></span> </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End col --> 
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-9">
-              <div class="card m-b-30">
-                <div class="card-header">
-                  <div class="row align-items-center">
-                    <div class="col-6 col-lg-9">
-                      <h5 class="card-title mb-0">Lead Compare</h5>
-                    </div>
-                    <div class="col-6 col-lg-3">
-                      <select class="form-control font-12">
-                        <option value="class1" selected>Last Week</option>
-                        <option value="class2">Last Month</option>
-                        <option value="class3">Last Year</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-body p-0">
-                  <div id="apex-bar-chart"></div>
-                </div>
-              </div>
-            </div>
-            <!-- End col --> 
-          </div>
-          <!-- End row --> 
-          <!-- Start row -->
-          <div class="row"> 
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-9">
-              <div class="card m-b-30">
-                <div class="card-header">
-                  <div class="row align-items-center">
-                    <div class="col-6 col-lg-9">
-                      <h5 class="card-title mb-0">Average Monthly Revenue</h5>
-                    </div>
-                    <div class="col-6 col-lg-3">
-                      <select class="form-control font-12">
-                        <option value="class1" selected>Last Week</option>
-                        <option value="class2">Last Month</option>
-                        <option value="class3">Last Year</option>
-                      </select>
-                    </div>
-                  </div>
-                  <h2>$8,66,587</h2>
-                </div>
-                <div class="card-body p-0">
-                  <div id="apex-area-chart"></div>
-                </div>
-              </div>
-            </div>
-            <!-- End col --> 
-            <!-- Start col -->
-            <div class="col-lg-12 col-xl-3">
-              <div class="card m-b-30">
-                <div class="card-header text-center">
-                  <h5 class="card-title mb-0">Ticket Status</h5>
-                </div>
-                <div class="card-body text-center">
-                  <div id="apex-stroked-circle-guage-chart"></div>
-                </div>
-                <div class="card-footer text-center">
-                  <div class="row">
-                    <div class="col-4 border-right px-0">
-                      <p class="my-2">New</p>
-                      <h5>589</h5>
-                    </div>
-                    <div class="col-4 border-right px-0">
-                      <p class="my-2">Open</p>
-                      <h5>1298</h5>
-                    </div>
-                    <div class="col-4 px-0">
-                      <p class="my-2">Time</p>
-                      <h5>1 Day</h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End col --> 
-          </div>
-          <!-- End row --> 
-          <!-- Start row -->
-          <div class="row customers">
-            <div class="col-lg-12 col-xl-3">
-              <div class="card  m-b-30 no-border">
-                <div class="card-header bg-white">
-                  <h3 class="card-title float-left">Visiting customers</h3>
-                  <div class="float-right"> <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="lni-more-alt"></i> </a>
-                    <div class="dropdown-menu"> <a class="dropdown-item" href="#"><i class="lni-eye m-r-10"></i> View</a> <a class="dropdown-item" href="#"><i class="lni-add-file m-r-10"></i> Add</a> <a class="dropdown-item" href="#"><i class="lni-download m-r-10"></i> Download</a> <a class="dropdown-item" href="#"><i class="lni-cog m-r-10"></i> More</a> <a class="dropdown-item" href="#"><i class="lni-archive m-r-10"></i> Remove</a> </div>
-                  </div>
-                </div>
-                <div class="card-body visitor-customer">
-                  <div class="media border-bottom p-b-15"> <img class="rounded-circle m-r-15 w-45" src="images/customer-img1.jpg" alt="widget">
-                    <div class="media-body">
-                      <div><strong>Anderson</strong></div>
-                      Designer at facebook </div>
-                    <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12 Oct 2014</small> </div>
-                  </div>
-                  <div class="media m-t-15 m-b-15 p-b-15 border-bottom"> <img class="rounded-circle m-r-15 w-45" src="images/customer-img2.jpg" alt="widget">
-                    <div class="media-body">
-                      <div><strong>David adnan</strong></div>
-                      Manager at google </div>
-                    <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12 Oct 2014</small> </div>
-                  </div>
-                  <div class="media m-t-15 m-b-15 p-b-15 border-bottom"> <img class="rounded-circle m-r-15 w-45" src="images/customer-img3.jpg" alt="widget">
-                    <div class="media-body">
-                      <div><strong>Maria leo</strong></div>
-                      developer at google </div>
-                    <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12 Oct 2014</small> </div>
-                  </div>
-                  <div class="media m-t-15 m-b-15 p-b-15 border-bottom"> <img class="rounded-circle m-r-15 w-45" src="images/customer-img4.jpg" alt="widget">
-                    <div class="media-body">
-                      <div><strong>Adnan</strong></div>
-                      Designer at youtube </div>
-                    <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12 Oct 2014</small> </div>
-                  </div>
-                  <div class="media m-t-15"> <img class="rounded-circle m-r-15 w-45" src="images/customer-img5.jpg" alt="widget">
-                    <div class="media-body">
-                      <div><strong>David</strong></div>
-                      Facebook developer </div>
-                    <div class="float-right"> <small class="text-muted ml-md-auto"><i class="fe fe-calendar mr-1"></i> 12 Oct 2014</small> </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-12 col-xl-9">
-              <div class="card m-b-30 no-border recent-order">
-                <div class="card-header bg-white no-border border-bottom-transparent">
-                  <h3 class="card-title float-left">Recent Orders</h3>
-                  <div class="float-right">
-                    <ul class="nav" role="tablist">
-                      <li class="nav-item"> <a class="p-r-10 active" data-toggle="tab" href="#edl-tab30">Today</a> </li>
-                      <li class="nav-item"> <a class="p-r-10" data-toggle="tab" href="#edl-tab31">Week</a> </li>
-                      <li class="nav-item"> <a data-toggle="tab" href="#edl-tab32">Month</a> </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="card-body no-padding">
-                  <div class="tab-content">
-                    <div class="tab-pane active" id="edl-tab30">
-                      <div class="table-responsive">
-                        <table class="table recent-order">
-                          <thead class="">
-                            <tr>
-                              <th class="border-0">#</th>
-                              <th class="border-0">Item name</th>
-                              <th class="border-0">Product Id</th>
-                              <th class="border-0">Quantity</th>
-                              <th class="border-0">Price</th>
-                              <th class="border-0">Time</th>
-                              <th class="border-0">Customer</th>
-                              <th class="border-0">Status</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>Computer</td>
-                              <td>id#9001 </td>
-                              <td>20</td>
-                              <td>$120.00</td>
-                              <td>19-11-2016 03:09:08</td>
-                              <td>Patricia J. King </td>
-                              <td><span class="badge-dot badge-brand mr-1"></span>Pending </td>
-                            </tr>
-                            <tr>
-                              <td>2</td>
-                              <td>CPU</td>
-                              <td>id#9002 </td>
-                              <td>12</td>
-                              <td>$190.00</td>
-                              <td>29-12-2016 01:23:11</td>
-                              <td>Rachel J. Wicker </td>
-                              <td><span class="badge-dot badge-success mr-1"></span>Delivered</td>
-                            </tr>
-                            <tr>
-                              <td>3</td>
-                              <td>Laptop</td>
-                              <td>id#9003 </td>
-                              <td>23</td>
-                              <td>$690.00</td>
-                              <td>12-12-2016 11:12:28</td>
-                              <td>Michael K. Ledford </td>
-                              <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
-                            </tr>
-                            <tr class="border-bottom">
-                              <td>4</td>
-                              <td>Mobile</td>
-                              <td>id#9004 </td>
-                              <td>34</td>
-                              <td>$650.00</td>
-                              <td>23-12-2016 09:08:55</td>
-                              <td>Michael K. Ledford </td>
-                              <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
-                            </tr>
-                            <tr class="border-bottom">
-                              <td>5</td>
-                              <td>Tab</td>
-                              <td>id#9004 </td>
-                              <td>34</td>
-                              <td>$650.00</td>
-                              <td>23-12-2016 09:08:55</td>
-                              <td>Michael K. Ledford </td>
-                              <td><span class="badge-dot badge-success mr-1"></span>Delivered </td>
-                            </tr>
-                            <tr class="border-top-transparent">
-                              <td colspan="9" class="pr-0 pb-0"><a href="#" class="bttn bttn-success float-right m-t-10">View Details</a></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- End row -->
-          <div class="row">
-            <div class="col-lg-12"> 
-              <!-- Start Footerbar -->
-              <div class="footerbar">
-                <footer class="footer">
-                  <p class="mb-0">© <span id="year"></span> Multinod - All Rights Reserved.</p>
-                </footer>
-              </div>
-              <!-- End Footerbar --> 
-            </div>
-          </div>
-        </div>
-        <!-- End Rightbar --> 
-      </div>
+      <!-- End Rightbar -->
     </div>
   </div>
 </div>
 </div>
-<!--jquery js --> 
-<script src="{% static 'js/jquery-min.js' %}"></script> 
-<script src="{% static 'js/popper.min.js' %}"></script> 
-<!--jquery js --> 
-<script src="{% static 'js/bootstrap.min.js' %}"></script> 
-<!--jquery js --> 
-<script src="{% static 'js/plugins.js' %}"></script> 
-<!--mCustomScrollbar js --> 
-<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script> 
-<!--Fontawesome js --> 
-<script src="{% static 'js/fontawesome.js' %}"></script> 
-<!--Dcjqaccordion js --> 
-<script src="{% static 'js/jquery.dcjqaccordion.js' %}"></script> 
-<!--Charts js --> 
-<script src="{% static 'js/apexcharts.min.js' %}"></script> 
-<!--Custom Dashboard js --> 
-<script src="{% static 'js/custom-dashboard.js' %}"></script> 
-<!--jquery js --> 
-<script src="{% static 'js/custom.js' %}"></script>
-</body>
-</html>
+
+{% endblock %}
