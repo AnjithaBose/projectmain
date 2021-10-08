@@ -243,12 +243,12 @@ class EditBatch(View):
                 if staff.stype == '4' or staff.stype== '5':
                     f.approval = True
                     f.to_be_approved_by = staff
-                    msg = "Batch edites have been updated"
+                    msg = "Batch edits have been updated"
                 else:
                     f.approval = False
                     r = Reporting.objects.get(user=staff)
                     f.to_be_approved_by = r.manager
-                    msg = "Batch edites have been noted and send for approval"
+                    msg = "Batch edits have been noted and send for approval"
                 f.save()
                 context={'staff':staff,'msg':msg}
                 return render(request,'messages/operations/batches.html',context)
