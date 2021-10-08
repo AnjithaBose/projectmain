@@ -24,6 +24,12 @@ class SendMailForm(ModelForm):
     class Meta:
         model = Email
         fields = '__all__'
+
+class SendChatMessageForm(ModelForm):
+    class Meta:
+        model = ChatMessage
+        fields = ['message']
+
         
 
 

@@ -336,12 +336,52 @@ class ViewStaff(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            # contacts = Staff.objects.filter(~Q(user=request.user))
-            contacts = Staff.objects.all()
+            contacts = Staff.objects.filter(~Q(user=request.user))
+            # contacts = Staff.objects.all()
             context={'staff':staff,'contacts':contacts}
             return render(request,'common/contacts.html',context)
         else:
             return redirect('home')
+
+class Message(View):
+    def get(self, request,id):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            receiver = Staff.objects.get(id=id)
+            try:
+                chatroom = ChatRoom.objects.get(user1=staff,user2=receiver)
+            except:
+                try:
+                    chatroom = ChatRoom.objects.get(user1=receiver,user2=staff)
+                except:
+                    chatroom = ChatRoom(user1 = staff, user2 = receiver)
+                    chatroom.save()
+            chatmessage = ChatMessage.objects.filter(chatroom=chatroom).order_by('timestamp')
+            form = SendChatMessageForm()
+            context={'staff':staff,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
+            return render(request,'common/chat.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request,id):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            receiver = Staff.objects.get(id=id)
+            form = SendChatMessageForm(request.POST)
+            if form.is_valid():
+                f= form.save(commit=False)
+                f.user = staff
+                try:
+                    chatroom = ChatRoom.objects.get(user1=staff,user2=receiver)
+                except:
+                    chatroom = ChatRoom.objects.get(user1=receiver,user2=staff)
+                f.chatroom = chatroom
+                f.timestamp = datetime.datetime.now()
+                f.save()
+            return redirect('message',id=id)
+        
 
 
 

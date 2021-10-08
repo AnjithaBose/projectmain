@@ -64,7 +64,7 @@
                     <li class="list-inline-item"> <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="{{i.instagram}}" target="_blank" data-original-title="Instegram"><i class="fa fa-instagram"></i></a> </li>
                     {% endif %}
                   </ul>
-                  <button type="button" class="btn btn-primary m-t-20 btn-rounded btn-bordered waves-effect w-md waves-light">Message Now</button>
+                  <a href="{% url 'message' i.id %}"><button type="button" class="btn btn-primary m-t-20 btn-rounded btn-bordered waves-effect w-md waves-light">Message Now</button></a>
                   
                 </div>
               </div>

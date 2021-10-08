@@ -1,0 +1,115 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Contacts</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'view_contacts' %}">Contacts</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Message</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <div class="padding">
+                    <div class="row container-fluid  justify-content-center">
+                        <div class="col-12">
+                            <div class="card">
+                                
+                                <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:350px !important;">
+                                    {% for i in chatmessage %}
+                                    {% if i.user == staff %}
+                                    <div class="media media-chat alert alert-primary" style="padding:10px;margin-right: 40%;">
+                                         <img class="avatar img-circle pro_pic" src="{{i.user.profile_pic.url}}" alt="{{staff.name}}" style="width: 40px;height: 40px;">
+                                        <div class="media-body">
+                                            <p>{{i.message}}</p>
+                                            <p class="meta"><time><small>{{i.timestamp}}</small></time></p>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="media media-chat alert alert-success" style="padding:10px;margin-left: 40%;text-align: right;"> 
+                                        
+                                        <div class="media-body">
+                                            <p><img class="avatar img-circle pro_pic" src="{{i.user.profile_pic.url}}" alt="{{staff.name}}" style="width: 40px;height: 40px;">
+                                                {{i.message}}</p>
+                                            <p class="meta"><time><small>{{i.timestamp}}</small></time></p>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% empty %}
+                                    <div class="media media-chat">
+                                        <p>No chat history available</p>
+                                    </div>
+                                    {% endfor %}
+                                    
+                                    <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                                        <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                                    </div>
+                                    <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
+                                        <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
+                                    </div>
+                                </div>
+                                <div class="publisher bt-1 border-light" style="background-color: rgb(223, 223, 223);padding-top: 20px;padding-bottom: 20px;">
+                                    <form method="post" action>  
+                                        {% csrf_token %}
+                                        <div class="row">
+                                        <div class="col-1">
+                                            <center>
+                                            <img class="img-circle pro_pic" src="{{staff.profile_pic.url}}" alt="{{staff.name}}" style="width: 30px;height: 30px;">
+                                        </center>
+                                        </div>
+                                        <div class="col-8 col-md-10">
+                                        {% load widget_tweaks %}
+                                        <!-- <input class="publisher-input" type="text" placeholder="Write something"> -->
+                                        {% render_field form.message class="form-control publisher-input" required="true" colspan="300px" %}
+                                        </div>
+                                        <div class="col-1">
+                                            <center>
+                                            <button class="btn btn-primary" type="submit" ><i class="fa fa-paper-plane"></i></button>
+                                        </center>
+                                        </div>
+                                    </div>
+                                     <!-- <a class="publisher-btn text-info" href="#" data-abc="true"><i class="fa fa-paper-plane"></i></a> -->
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <!-- state end-->
+            <script>
+            setTimeout(function(){
+                window.location.reload(1);
+             }, 90000);
+            </script>
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

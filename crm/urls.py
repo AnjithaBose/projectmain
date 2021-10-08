@@ -45,6 +45,7 @@ urlpatterns = [
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
+    path('message/<id>/',Message.as_view(),name='message'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

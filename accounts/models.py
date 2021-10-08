@@ -131,3 +131,14 @@ class Email(models.Model):
     def __str__(self):
         return self.subject
 
+class ChatRoom(models.Model):
+    user1 = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name="user1")
+    user2 = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name="user2")
+
+class ChatMessage(models.Model):
+    chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.PROTECT)
+    user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True)
+    message = models.CharField(max_length=5000,null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
+
+
