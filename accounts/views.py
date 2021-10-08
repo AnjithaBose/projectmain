@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate,login,logout
 from django.core.mail import send_mail
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 from .functions import *
 from .models import *
@@ -403,6 +404,38 @@ class CreateStaff(View):
             return render(request,'admin/add_staff.html',context)
         else:
             return redirect('home')
+
+    def post(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = CreateStaffForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                user = User.objects.create_user(f.email,f.email,f.mobile)
+                user.save()
+                f.user = user
+                y = AdminCheck(request)
+                if y == True:
+                    f.approval = True
+                else:
+                    f.approval = False
+                    user.is_active = False
+                if staff.stype== '5':
+                    f.stype == 'Operations'
+                else:
+                    f.stype == 'Sales'
+                f.save()
+                relation = Reporting(user = f , manager = staff)
+                relation.save()
+                return redirect('view_contacts')
+            else:
+                return redirect('view_contacts')
+        else:
+            return redirect('home')
+                
+
+
 
 
 

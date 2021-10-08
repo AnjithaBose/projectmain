@@ -31,13 +31,13 @@ class SendChatMessageForm(ModelForm):
         fields = ['message']
 
 class CreateStaffForm(ModelForm):
-    blood_group = forms.ChoiceField(required=False)
+    blood_group = forms.ChoiceField(required=False,choices = groups)
     house = forms.CharField(required=False)
     street = forms.CharField(required=False)
     street2 = forms.CharField(required=False)
     city = forms.CharField(required=False)
-    state = forms.ChoiceField(required=False)
-    stype = forms.ChoiceField(required=False)
+    state = forms.ChoiceField(required=False,choices=state)
+    stype = forms.ChoiceField(required=False,choices=Staff.value)
     profile_pic = forms.ImageField(required=False)
     facebook = forms.CharField(required=False)
     linkedin = forms.CharField(required=False)
