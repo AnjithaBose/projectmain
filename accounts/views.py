@@ -271,6 +271,8 @@ class ViewMails(View):
             page = Pagination(request,mail,10)
             context={'staff':staff,'draft':draft,'mail':page}
             return render(request,'admin/view_mails.html',context)
+        else:
+            return redirect('home')
 
 
 class SendMail(View):
@@ -283,6 +285,8 @@ class SendMail(View):
             mail = Email.objects.filter(status="Mail")
             context={'staff':staff,'form':form,'draft':draft,'mail':mail}
             return render(request,'admin/send_mail.html',context)
+        else:
+            return redirect('home')
 
     def post(self, request):
         x = ManagerCheck(request)
@@ -318,6 +322,8 @@ class SendDraft(View):
             form = SendMailForm(instance=draft)
             context={'staff':staff,'form':form,'draft':draft}
             return render(request,'admin/send_mail.html',context)
+        else:
+            return redirect('home')
 
 
 class ViewMail(View):
@@ -329,6 +335,8 @@ class ViewMail(View):
             form = SendMailForm(instance=mail)
             context={'staff':staff,'form':form,'mail':mail}
             return render(request,'admin/view_mail.html',context)
+        else:
+            return redirect('home')
 
 
 class ViewStaff(View):
@@ -381,6 +389,23 @@ class Message(View):
                 f.timestamp = datetime.datetime.now()
                 f.save()
             return redirect('message',id=id)
+        else:
+            return redirect('home')
+
+
+class CreateStaff(View):
+    def get(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = CreateStaffForm()
+            context={'staff':staff,'form':form}
+            return render(request,'admin/add_staff.html',context)
+        else:
+            return redirect('home')
+
+
+
         
 
 

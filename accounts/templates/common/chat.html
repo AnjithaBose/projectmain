@@ -15,7 +15,7 @@
                 <!-- Start row -->
                 <div class="row">
                     <div class="col-md-8 col-lg-8">
-                        <h4 class="page-title">Contacts</h4>
+                        <h4 class="page-title">Chat - {{chatroom.user1}}&{{chatroom.user2}}</h4>
                         <div class="breadcrumb-list">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -38,7 +38,7 @@
                         <div class="col-12">
                             <div class="card">
                                 
-                                <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:350px !important;">
+                                <div class="ps-container ps-theme-default ps-active-y" id="chat-content" onload="updateScroll()" style="overflow-y: scroll !important; height:350px !important;">
                                     {% for i in chatmessage %}
                                     {% if i.user == staff %}
                                     <div class="media media-chat alert alert-primary" style="padding:10px;margin-right: 40%;">
@@ -103,9 +103,16 @@
             
             <!-- state end-->
             <script>
-            setTimeout(function(){
+            setTimeout(function()
+            {
                 window.location.reload(1);
+                updateScroll()
              }, 90000);
+
+             function updateScroll(){
+                var element = document.getElementById("chat-content");
+                element.scrollTop = scrollTo(0,element.scrollHeight);
+                }
             </script>
         </div>
     </div>

@@ -37,6 +37,7 @@ urlpatterns = [
     path('administrator/mail/<id>/',ViewMail.as_view(),name='view_mail'),
     path('administrator/mail/send/',SendMail.as_view(),name='send_mail'),
     path('administrator/draft/send/<id>/',SendDraft.as_view(),name='send_draft'),
+    path('administrator/staff/add/',CreateStaff.as_view(),name='add_staff'),
 
 
     path('operations/batches/',ViewBatches.as_view(),name='view_batches'),

@@ -71,6 +71,7 @@ class Staff(models.Model):
     street2 =models.CharField(max_length=100,null=True, blank=True)
     city = models.CharField(max_length=100,null=True, blank=True)
     state = models.CharField(max_length=100,null=True,choices=state, blank=True)
+    pin = models.CharField(max_length=100,null=True,blank=True)
     stype = models.CharField(max_length=100,null=True,choices=value, blank=True)
     status = models.CharField(max_length=20,choices=(('Active','Active'),('Inactive','Inactive')),default='Active')
     profile_pic = models.ImageField(null=True, blank=True,upload_to='images/dp/',default='accounts/static/images/user3.png')

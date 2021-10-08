@@ -30,6 +30,22 @@ class SendChatMessageForm(ModelForm):
         model = ChatMessage
         fields = ['message']
 
+class CreateStaffForm(ModelForm):
+    blood_group = forms.ChoiceField(required=False)
+    house = forms.CharField(required=False)
+    street = forms.CharField(required=False)
+    street2 = forms.CharField(required=False)
+    city = forms.CharField(required=False)
+    state = forms.ChoiceField(required=False)
+    stype = forms.ChoiceField(required=False)
+    profile_pic = forms.ImageField(required=False)
+    facebook = forms.CharField(required=False)
+    linkedin = forms.CharField(required=False)
+    instagram = forms.CharField(required=False)
+    class Meta:
+        model = Staff
+        fields = ['name','empid','mobile','email','sex','dob','doj','blood_group','house','street','street2','city','state','pin','stype','profile_pic','facebook','linkedin','instagram']
+
         
 
 
