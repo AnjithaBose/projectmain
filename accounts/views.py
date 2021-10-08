@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate,login,logout
 from .functions import *
 from .models import *
 from .forms import *
+import time
 # Create your views here.
 
 
@@ -169,13 +170,42 @@ class ViewBatches(View):
         x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            batch = Batch.objects.all()
-            page = Pagination(request,batch,5)
+            wdbatch = Batch.objects.filter(type="Weekday",approval=True)
+            webatch = Batch.objects.filter(type="Weekend",approval=True)
+            page = Pagination(request,wdbatch,5)
+            pages = Pagination(request,webatch,5)
             form = BatchCreateForm()
-            context={'staff':staff,'batch': page,'form':form}
+            context={'staff':staff,'wdbatch': page,'webatch': pages,'form':form}
             return render(request,'operations/batches.html',context)
         else:
             return redirect('home')
+
+    def post(self, request):
+        x = OperationsCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = BatchCreateForm(request.POST)
+            if form.is_valid():
+                f=form.save(commit=False)
+                code = time.time()
+                f.batch_code = "%s_%d" % (f.subject.code, code)
+                if staff.stype == '4' or staff.stype== '5':
+                    f.approval = True
+                else:
+                    f.approval = False
+                f.save()
+                msg = 'Batch added successfully'
+                context={'staff':staff,'msg':msg}
+            else:
+                alert = 'Batch creation failed!.Please review your edit.'
+                context={'staff':staff,'alert':alert}
+            return render(request,'messages/operations/batches.html',context)
+        else:
+            return redirect('home')
+
+
+
+
 
 
 

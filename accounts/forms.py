@@ -17,5 +17,6 @@ class BatchCreateForm(ModelForm):
     class Meta:
         model = Batch
         fields = ['subject','trainer','start_date','end_date','start_time','end_time','link','passcode','type','status']
+        
 
 

@@ -100,7 +100,10 @@ class Batch(models.Model):
     link = models.CharField(max_length=1000, null=True, blank=True)
     passcode = models.CharField(max_length=250,null=True, blank=True)
     type = models.CharField(max_length=100,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
-    status = models.CharField(max_length=100,choices=(('Yet to Start','Yet to Start'),('Ongoing','Ongoing'),('Completed','Completed'),('Cancelled','Cancelled')))
+    status = models.CharField(max_length=100,choices=(('Yet to Start','Yet to Start'),('Ongoing','Ongoing'),('Completed','Completed'),('Cancelled','Cancelled')),default='Yet to Start')
     strength = models.IntegerField(null=True, blank=True)
     approval = models.BooleanField(null=True, blank=True, default=False)
+
+    def __str__(self):
+        return self.batch_code
 
