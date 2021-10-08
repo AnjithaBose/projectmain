@@ -114,3 +114,13 @@ class Reporting(models.Model):
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='staff')
     manager = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='manager')
 
+class Email(models.Model):
+    subject = models.CharField(max_length=1000, null=True, blank=True)
+    message = models.TextField(max_length=10000,null=True, blank=True)
+    from_address = models.EmailField(null=True, blank=True)
+    to_address= models.CharField(max_length=5000,null=True, blank=True)
+    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Mail','Mail'),('Draft','Draft')))
+
+    def __str__(self):
+        return self.subject
+

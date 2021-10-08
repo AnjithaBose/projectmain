@@ -1,0 +1,84 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Send Mail</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Send Email</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+            <!-- state start-->
+            <div class="row">
+                <div class="col-lg-8 col-md-10 col-12">
+                    <div class="card">
+                        <h4 class="m-t-0 header-title">Send Mail</h4>
+                        <p><code>If no receipiants are added the mail will be saved as draft</code></p>
+                        
+                        
+                        <div class="card card-body">
+                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                                {% csrf_token %}
+                              <div class="form-group">
+                                  <label for="exampleInputName1">To</label> 
+                                  {% load widget_tweaks %}
+                                  {% render_field form.to_address class="form-control" placeholder="Enter receipiant addresses seperates by commas" %}
+                              </div>
+                              <div class="form-group">
+                                  <label for="exampleInputName1">Subject</label> 
+                                  {% render_field form.subject class="form-control" required="true" placeholder="Enter email subject" %}
+                              </div>
+                              <div class="form-group">
+                                <label for="exampleInputName1">Body</label> 
+                                {% render_field form.message class="form-control" required="true" placeholder="Enter email body" %}
+                            </div>
+                              
+                              <button type="submit" class="btn btn-primary mr-2">Send</button>
+                              <a href="{% url 'home' %}" class="btn btn-light">Cancel</a>
+                            </form>
+                  </div>
+                </div>
+                    </div>
+                </div>
+                
+            </div>
+            <!--- End row -->
+
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

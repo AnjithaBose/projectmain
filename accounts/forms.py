@@ -18,6 +18,12 @@ class BatchCreateForm(ModelForm):
     class Meta:
         model = Batch
         fields = ['subject','trainer','start_date','end_date','start_time','end_time','link','passcode','type','status']
+
+class SendMailForm(ModelForm):
+    to = forms.CharField(required=False)
+    class Meta:
+        model = Email
+        fields = '__all__'
         
 
 

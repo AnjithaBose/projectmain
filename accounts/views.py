@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.views import View
 from django.http import HttpResponse
 from django.contrib.auth import authenticate,login,logout
+from django.core.mail import send_mail
 
 from .functions import *
 from .models import *
@@ -236,12 +237,9 @@ class EditBatch(View):
             batch = Batch.objects.get(id=id)
             form = BatchCreateForm(request.POST,instance=batch)
             if form.is_valid():
-                print('test')
                 f = form.save(commit=False)
                 f.last_edit_time = datetime.datetime.now()
                 f.last_edit_user = staff 
-                print(f.last_edit_time)
-                print(f.last_edit_user)
                 if staff.stype == '4' or staff.stype== '5':
                     f.approval = True
                     f.to_be_approved_by = staff
@@ -252,10 +250,6 @@ class EditBatch(View):
                     f.to_be_approved_by = r.manager
                     msg = "Batch edites have been noted and send for approval"
                 f.save()
-                print(f)
-                print(f.to_be_approved_by)
-                print(f.last_edit_time)
-                print(f.last_edit_user)
                 context={'staff':staff,'msg':msg}
                 return render(request,'messages/operations/batches.html',context)
             else:
@@ -264,6 +258,43 @@ class EditBatch(View):
                 return render(request,'messages/operations/batches.html',context)
         else:
             return redirect('home')
+
+
+class SendMail(View):
+    def get(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = SendMailForm()
+            context={'staff':staff,'form':form}
+            return render(request,'admin/send_mail.html',context)
+
+    def post(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = SendMailForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                if f.to_address :
+                    f.status = "Mail"
+                    print(f.to_address)
+                    mailsend(request,f.subject,f.message,staff.email,f.to_address)
+                    msg ="Mail(s) send successfully."
+                else:
+                    f.status = "Draft"
+                    msg ="Mail successfully saved as draft." 
+                context={'staff':staff,'msg':msg}
+                f.save()
+            else:
+                alert="Mail send failed!.Please try again."
+                context={'staff':staff,'alert':alert}
+            return render(request,'messages/admin/send_mail.html',context)
+        else:
+            return redirect('home')
+            
+
+
 
 
 
