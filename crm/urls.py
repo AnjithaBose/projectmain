@@ -36,6 +36,8 @@ urlpatterns = [
 
 
     path('operations/batches/',ViewBatches.as_view(),name='view_batches'),
+    path('operations/batch/view/<id>/',ViewBatch.as_view(),name='view_batch'),
+    path('operations/batch/edit/<id>/',EditBatch.as_view(),name='edit_batch'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

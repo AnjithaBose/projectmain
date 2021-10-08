@@ -147,16 +147,26 @@
                       <td>{{i.trainer}}</td>
                       <td>{{i.start_date}}-{{i.end_date}}</td>
                       <td>{{i.start_time}}-{{i.end_time}}</td>
-                      {% if i.status == "Yet to Start" %}
+                      {% if i.status == "2" %}
                       <td><span class="badge label-table badge-secondary">Upcoming</span></td>
-                      {% elif i.status == "Ongoing" %}
+                      {% elif i.status == "1" %}
                       <td><span class="badge label-table badge-success">Active</span></td>
-                      {% elif i.status == "Completed" %}
+                      {% elif i.status == "3" %}
                       <td><span class="badge label-table badge-danger">Completed</span></td>
-                      {% elif i.status == "Cancelled" %}
+                      {% elif i.status == "4" %}
                       <td><span class="badge label-table badge-warning">Cancelled</span></td>
                       {% endif %}
-                      <td class="text-right"></td>
+                      <td class="text-right">
+                        <div class="btn-group mr-2">
+                          <div class="dropdown">
+                            <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                              <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
+                                  <a class="dropdown-item" href="{% url 'edit_batch' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a> 
+                                  <a class="dropdown-item" href="{% url 'view_batch' i.id %}"><i class="ti ti-info mr-2"></i>Info</a> 
+                              </div>
+                          </div>
+                        </div>
+                      </td>
                       {% empty %}
                       <td colspan="7">No batches to show.</td>
                     </tr>
@@ -195,16 +205,25 @@
                       <td>{{i.trainer}}</td>
                       <td>{{i.start_date}}-{{i.end_date}}</td>
                       <td>{{i.start_time}}-{{i.end_time}}</td>
-                      {% if i.status == "Yet to Start" %}
+                      {% if i.status == "2" %}
                       <td><span class="badge label-table badge-secondary">Upcoming</span></td>
-                      {% elif i.status == "Ongoing" %}
+                      {% elif i.status == "1" %}
                       <td><span class="badge label-table badge-success">Active</span></td>
-                      {% elif i.status == "Completed" %}
+                      {% elif i.status == "3" %}
                       <td><span class="badge label-table badge-danger">Completed</span></td>
-                      {% elif i.status == "Cancelled" %}
+                      {% elif i.status == "4" %}
                       <td><span class="badge label-table badge-warning">Cancelled</span></td>
                       {% endif %}
-                      <td class="text-right"></td>
+                      <td class="text-right">
+                        <div class="btn-group mr-2">
+                          <div class="dropdown">
+                            <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                              <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
+                                  <a class="dropdown-item" href="{% url 'edit_batch' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a> 
+                              </div>
+                          </div>
+                        </div>
+                      </td>
                       {% empty %}
                       <td colspan="7">No batches to show.</td>
                     </tr>

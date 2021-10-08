@@ -7,6 +7,7 @@ from .functions import *
 from .models import *
 from .forms import *
 import time
+import datetime
 # Create your views here.
 
 
@@ -202,6 +203,73 @@ class ViewBatches(View):
             return render(request,'messages/operations/batches.html',context)
         else:
             return redirect('home')
+
+class ViewBatch(View):
+    def get(self, request,id):
+        x = OperationsCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            batch = Batch.objects.get(id=id)
+            context={'staff':staff,'batch': batch}
+            return render(request,'operations/batch.html',context)
+        else:
+            return redirect('home')
+
+
+
+class EditBatch(View):
+    def get(self, request,id):
+        x = OperationsCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            batch = Batch.objects.get(id=id)
+            form = BatchCreateForm(instance=batch)
+            context={'staff':staff,'batch': batch,'form':form}
+            return render(request,'operations/edit_batch.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request,id):
+        x = OperationsCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            batch = Batch.objects.get(id=id)
+            form = BatchCreateForm(request.POST,instance=batch)
+            if form.is_valid():
+                print('test')
+                f = form.save(commit=False)
+                f.last_edit_time = datetime.datetime.now()
+                f.last_edit_user = staff 
+                print(f.last_edit_time)
+                print(f.last_edit_user)
+                if staff.stype == '4' or staff.stype== '5':
+                    f.approval = True
+                    f.to_be_approved_by = staff
+                    msg = "Batch edites have been updated"
+                else:
+                    f.approval = False
+                    r = Reporting.objects.get(user=staff)
+                    f.to_be_approved_by = r.manager
+                    msg = "Batch edites have been noted and send for approval"
+                f.save()
+                print(f)
+                print(f.to_be_approved_by)
+                print(f.last_edit_time)
+                print(f.last_edit_user)
+                context={'staff':staff,'msg':msg}
+                return render(request,'messages/operations/batches.html',context)
+            else:
+                alert="Batch editing failed!.Please review your edit."
+                context={'staff':staff,'alert':alert}
+                return render(request,'messages/operations/batches.html',context)
+        else:
+            return redirect('home')
+
+
+
+
+
+
 
 
 

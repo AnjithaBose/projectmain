@@ -100,10 +100,17 @@ class Batch(models.Model):
     link = models.CharField(max_length=1000, null=True, blank=True)
     passcode = models.CharField(max_length=250,null=True, blank=True)
     type = models.CharField(max_length=100,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
-    status = models.CharField(max_length=100,choices=(('Yet to Start','Yet to Start'),('Ongoing','Ongoing'),('Completed','Completed'),('Cancelled','Cancelled')),default='Yet to Start')
+    status = models.CharField(max_length=100,choices=(('2','Yet to Start'),('1','Ongoing'),('3','Completed'),('4','Cancelled')),default='2')
     strength = models.IntegerField(null=True, blank=True)
+    last_edit_time = models.DateTimeField(null=True, blank=True)
+    last_edit_user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='edited_by')
     approval = models.BooleanField(null=True, blank=True, default=False)
+    to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='approved_by')
 
     def __str__(self):
         return self.batch_code
+
+class Reporting(models.Model):
+    user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='staff')
+    manager = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='manager')
 

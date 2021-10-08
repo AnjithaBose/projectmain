@@ -11,6 +11,7 @@ class CourseCreateForm(ModelForm):
         fields = '__all__'
 
 class BatchCreateForm(ModelForm):
+    subject = forms.ModelChoiceField(queryset=Course.objects.all(),required=False)
     trainer = forms.ModelChoiceField(queryset=Staff.objects.filter(stype='3'),required=False)
     link = forms.CharField(required=False)
     passcode = forms.CharField(required=False)

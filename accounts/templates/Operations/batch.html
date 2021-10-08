@@ -1,0 +1,133 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">View {{batch}} Batch</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'view_batches' %}">Batches</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">View-{{batch}}</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+            <!-- state start-->
+            <div class="row">
+                <div class="col-lg-8 col-md-10 col-12">
+                    <div class="card">
+                        <h4 class="m-t-0 header-title">View Batch</h4>
+                        <p><code>Last updated time and last updated person will be only available for batches that have been updated atleast once.</code></p>
+                        <img class="img-circle pro_pic" src="{{batch.subject.pic.url}}" alt="{{batch.subject.name}}" style="width: 100px;height:100px">
+                        {% if batch.trainer %}
+                        <img class="img-circle pro_pic" src="{{batch.trainer.profile_pic.url}}" alt="{{batch.trainer.name}}" style="width: 100px;height:100px">
+                        {% endif %}
+
+                        
+                        <div class="card card-body">
+                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputName1">Course</label> 
+                                  <input type="text" class="form-control" value="{{batch.subject}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Trainer</label>
+                                  <input type="text" class="form-control" value="{{batch.trainer}}" disabled>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <div class="col-12 col-md-3">
+                                  <label for="exampleInputName1">Start Date</label>
+                                  <input type="date" class="form-control" value="{{batch.start_date}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                  <label for="exampleInputEmail3">End Date</label>
+                                  <input type="date" class="form-control" value="{{batch.end_date}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                  <label for="exampleInputEmail3">Start Time</label>
+                                  <input type="time" class="form-control" value="{{batch.start_time}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                  <label for="exampleInputEmail3">End Time</label>
+                                  <input type="time" class="form-control" value="{{batch.end_time}}" disabled>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputName1">Link</label>
+                                  <input type="text" class="form-control" value="{{batch.link}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Passcode</label>
+                                  <input type="text" class="form-control" value="{{batch.passcode}}" disabled>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputName1">Type</label>
+                                  <input type="text" class="form-control" value="{{batch.type}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Status</label>
+                                  <input type="text" class="form-control" value="{{batch.status}}" disabled>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputName1">Last Updated On </label>
+                                  <input type="text" class="form-control" value="{{batch.last_edit_time}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Last Updated By</label>
+                                  <input type="text" class="form-control" value="{{batch.last_edit_user}}" disabled>
+                                </div>
+                              </div>
+                              
+                              <a class="btn btn-light" href="{% url 'edit_batch' batch.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a>
+                              <a href="{% url 'view_batches' %}" class="btn btn-light">Cancel</a>
+                            </form>
+                  </div>
+                </div>
+                    </div>
+                </div>
+                
+            </div>
+            <!--- End row -->
+
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}
