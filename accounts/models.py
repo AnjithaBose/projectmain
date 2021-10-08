@@ -73,12 +73,18 @@ class Staff(models.Model):
     state = models.CharField(max_length=100,null=True,choices=state, blank=True)
     stype = models.CharField(max_length=100,null=True,choices=value, blank=True)
     status = models.CharField(max_length=20,choices=(('Active','Active'),('Inactive','Inactive')),default='Active')
-    profile_pic = models.ImageField(null=True, blank=True,upload_to='images/dp/',default='images/user3.png')
+    profile_pic = models.ImageField(null=True, blank=True,upload_to='images/dp/',default='accounts/static/images/user3.png')
+    facebook = models.CharField(max_length=1000, null=True, blank=True)
+    linkedin = models.CharField(max_length=1000, null=True, blank=True)
+    instagram = models.CharField(max_length=1000, null=True, blank=True)
     approval = models.BooleanField(null=True, blank=True, default=False)
 
 
     def __str__(self):
         return self.name
+
+    
+
 
 class Course(models.Model):
     name = models.CharField(max_length=1000,null=True, blank=True)

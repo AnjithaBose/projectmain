@@ -66,3 +66,18 @@ def mailsend(request,subject,message,from_address,to):
             fail_silently=False,
         )
 
+def StaffCheck(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            staff = Staff.objects.get(user=user)
+            if staff:
+                return (True)
+            else:
+                return (False)
+        except:
+            return (False)
+    else:
+        return (False)
+
+

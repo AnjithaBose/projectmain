@@ -3,6 +3,7 @@ from django.views import View
 from django.http import HttpResponse
 from django.contrib.auth import authenticate,login,logout
 from django.core.mail import send_mail
+from django.db.models import Q
 
 from .functions import *
 from .models import *
@@ -328,6 +329,21 @@ class ViewMail(View):
             form = SendMailForm(instance=mail)
             context={'staff':staff,'form':form,'mail':mail}
             return render(request,'admin/view_mail.html',context)
+
+
+class ViewStaff(View):
+    def get(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            # contacts = Staff.objects.filter(~Q(user=request.user))
+            contacts = Staff.objects.all()
+            context={'staff':staff,'contacts':contacts}
+            return render(request,'common/contacts.html',context)
+        else:
+            return redirect('home')
+
+
 
             
 

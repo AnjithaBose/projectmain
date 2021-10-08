@@ -1,0 +1,126 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Contacts</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Contacts</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+           <!-- state start-->
+        <div class="row">
+            {% if staff.stype == '4' or staff.stype == '5' or staff.stype == '6' %}
+            <div class="col-sm-4"> <a href="" class="bttn btn-custom waves-effect waves-light mb-4" data-animation="fadein" data-plugin="custommodal"
+                                             data-overlaySpeed="200" data-overlayColor="#36404a"><i class="ti ti-plus"></i> Add Staff</a> </div>
+            {% endif %}
+            <!-- end col --> 
+          </div>
+          
+          <!-- End row -->
+          <div class="row">
+            {% for i in contacts %}
+            <div class="col-md-3 col-12">
+              <div class="text-center card">
+                <div class="member-card pt-2 pb-2">
+                  <div class="thumb-lg member-thumb m-b-10 mx-auto"> <img src="{{i.profile_pic.url}}" class="rounded-circle img-thumbnail" alt="{{i.name}}" style="width: 150px;height:150px"> </div>
+                  <div class="">
+                    <h4 class="m-b-5">{{i.name}}</h4>
+                    <p class="text-muted">{{i.get_stype_display}} <br> <span> <a href="mailto:{{i.email}}" class="text-pink">{{i.email}}</a> </span></p>
+                  </div>
+                  <ul class="social-links list-inline m-t-20">
+                      {% if i.facebook %}
+                    <li class="list-inline-item"> <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="{{i.facebook}}" target="_blank" data-original-title="Facebook"><i class="fa fa-facebook"></i></a> </li>
+                    {% endif %}
+                    {% if i.linkedin %}
+                    <li class="list-inline-item"> <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="{{i.linkedin}}" target="_blank" data-original-title="LinkedIn"><i class="fa fa-linkedin"></i></a> </li>
+                    {% endif %}
+                    {% if i.instagram %}
+                    <li class="list-inline-item"> <a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="{{i.instagram}}" target="_blank" data-original-title="Instegram"><i class="fa fa-instagram"></i></a> </li>
+                    {% endif %}
+                  </ul>
+                  <button type="button" class="btn btn-primary m-t-20 btn-rounded btn-bordered waves-effect w-md waves-light">Message Now</button>
+                  
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="col-lg-6">
+                <div class="card m-b-30">
+                  <div class="card-header border-bottom">
+                  </div>
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading"><i class="far fa-times-circle"></i> Contacts is empty!</h4>
+                        <p></p>
+                        <hr>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            {% endfor %}
+            <!-- end col -->
+            
+             
+          </div>
+          <!-- End row -->
+          
+          
+          
+          <div class="row">
+            <div class="col-12">
+              <div class="text-right">
+                <ul class="pagination pagination-split mt-0 pull-right mb-4">
+                  <li class="page-item"> <a class="page-link" href="#" aria-label="Previous"> <span aria-hidden="true">«</span> <span class="sr-only">Previous</span> </a> </li>
+                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item"><a class="page-link" href="#">4</a></li>
+                  <li class="page-item"><a class="page-link" href="#">5</a></li>
+                  <li class="page-item"> <a class="page-link" href="#" aria-label="Next"> <span aria-hidden="true">»</span> <span class="sr-only">Next</span> </a> </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- End row -->
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}
