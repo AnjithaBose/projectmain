@@ -1,0 +1,168 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+
+            <div class="breadcrumbbar"> 
+                <!-- Start row -->
+                <div class="row">
+                  <div class="col-md-8 col-lg-8">
+                    <h4 class="page-title">Mails</h4>
+                    <div class="breadcrumb-list">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Mails</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 mr-0">
+                    <div class="widgetbar">
+                        <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Breadcrumbbar --> 
+              
+              
+             
+        <!-- state start-->
+        <div class="row ">
+            <div class="col-12">
+              <div class="card">
+
+
+                <p class=" text-right">
+                  <a class="btn btn-primary my-1" href="{% url 'send_mail' %}"><i class="ti ti-email"></i> Send Mail</a>
+              </p>
+                  <div class="card card-body">
+                <h4 class="m-t-0 header-title">Drafts</h4>
+                
+                <div class="table-responsive">
+                <table id="demo-foo-filtering" class="table table-striped table-bordered toggle-circle m-b-0" >
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Subject</th>
+                      <th>Message</th>
+                      <th>To</th>
+                      <th>From</th>
+                      <th class="text-right"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in draft %}
+                    <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td>{{i.subject}}<br><small>{{i.time_stamp}}</small></td>
+                      <td>{{i.message|truncatechars:40 }}...</td>
+                      <td>{{i.to_address}}</td>
+                      <td>{{i.from_address}}</td>
+                      <td class="text-right">
+                        <div class="btn-group mr-2">
+                          <div class="dropdown">
+                            <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                              <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
+                                  <a class="dropdown-item" href="{% url 'send_draft' i.id %}"><i class="ti ti-pencil mr-2"></i>Send</a> 
+                                  <a class="dropdown-item" href="{% url 'view_batch' i.id %}"><i class="ti ti-info mr-2"></i>Info</a> 
+                              </div>
+                          </div>
+                        </div>
+                      </td>
+                      {% empty %}
+                      <td colspan="6">No drafts to show.</td>
+                    </tr>
+                    {% endfor %}
+                    
+                  </tbody>
+                  <tfoot>
+                    <tr class="active">
+                      <td colspan="6"><div class="text-right">
+                          <ul class="pagination pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
+                          </ul>
+                        </div></td>
+                    </tr>
+                  </tfoot>
+                </table></div><br><br>
+                <h4 class="m-t-0 header-title">Outbox</h4>
+                
+                <div class="table-responsive">
+                <table id="demo-foo-filtering" class="table table-striped table-bordered toggle-circle m-b-0" >
+                  <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>To</th>
+                        <th>From</th>
+                        <th class="text-right"></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in mail %}
+                    <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td>{{i.subject}}<br><small>{{i.time_stamp}}</small></td>
+                      <td>{{i.message|truncatechars:40 }}...</td>
+                      <td>{{i.to_address}}</td>
+                      <td>{{i.from_address}}</td>
+                      <td class="text-right">
+                        <div class="btn-group mr-2">
+                          <div class="dropdown">
+                            <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                              <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
+                                  <a class="dropdown-item" href="{% url 'view_batch' i.id %}"><i class="ti ti-info mr-2"></i>Info</a> 
+                              </div>
+                          </div>
+                        </div>
+                      </td>
+                      {% empty %}
+                      <td colspan="6">No outbox to show.</td>
+                    </tr>
+                    {% endfor %}
+                    
+                  </tbody>
+                  <tfoot>
+                    <tr class="active">
+                      <td colspan="6"><div class="text-right">
+                          <ul class="pagination pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
+                          </ul>
+                        </div></td>
+                    </tr>
+                  </tfoot>
+                </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+
+
+
+
+
+
+          
+          </div> 
+        <!-- End row --> 
+
+
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+        {% include 'common/footer.html' %}
+    </div>
+    
+    
+</div>
+{% endblock %}

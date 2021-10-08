@@ -119,6 +119,7 @@ class Email(models.Model):
     message = models.TextField(max_length=10000,null=True, blank=True)
     from_address = models.EmailField(null=True, blank=True)
     to_address= models.CharField(max_length=5000,null=True, blank=True)
+    time_stamp = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=100,null=True, blank=True,choices=(('Mail','Mail'),('Draft','Draft')))
 
     def __str__(self):

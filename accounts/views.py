@@ -260,13 +260,26 @@ class EditBatch(View):
             return redirect('home')
 
 
+class ViewMails(View):
+    def get(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            draft = Email.objects.filter(status="Draft").order_by('-time_stamp')
+            mail = Email.objects.filter(status="Mail").order_by('-time_stamp')
+            context={'staff':staff,'draft':draft,'mail':mail}
+            return render(request,'admin/view_mails.html',context)
+
+
 class SendMail(View):
     def get(self, request):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
             form = SendMailForm()
-            context={'staff':staff,'form':form}
+            draft = Email.objects.filter(status="Draft")
+            mail = Email.objects.filter(status="Mail")
+            context={'staff':staff,'form':form,'draft':draft,'mail':mail}
             return render(request,'admin/send_mail.html',context)
 
     def post(self, request):
@@ -278,20 +291,34 @@ class SendMail(View):
                 f = form.save(commit=False)
                 if f.to_address :
                     f.status = "Mail"
-                    print(f.to_address)
                     mailsend(request,f.subject,f.message,staff.email,f.to_address)
                     msg ="Mail(s) send successfully."
                 else:
                     f.status = "Draft"
                     msg ="Mail successfully saved as draft." 
                 context={'staff':staff,'msg':msg}
+                f.time_stamp = datetime.datetime.now()
+                f.from_address = staff.email
                 f.save()
             else:
                 alert="Mail send failed!.Please try again."
                 context={'staff':staff,'alert':alert}
-            return render(request,'messages/admin/send_mail.html',context)
+            return render(request,'messages/admin/view_mails.html',context)
         else:
             return redirect('home')
+
+class SendDraft(View):
+    def get(self, request,id):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            draft = Email.objects.get(id=id)
+            form = SendMailForm(instance=draft)
+            context={'staff':staff,'form':form,'draft':draft}
+            return render(request,'admin/send_mail.html',context)
+
+            
+
             
 
 

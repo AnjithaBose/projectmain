@@ -21,7 +21,7 @@
                         <h4 class="alert-heading"><i class="far fa-check-circle"></i> Well done!</h4>
                         <p>{{msg}}</p>
                         <hr>
-                        <a class="btn btn-primary" href="{% url 'send_mail' %}">OK</a>
+                        <a class="btn btn-primary" href="{% url 'view_mails' %}">OK</a>
                       </div>
                     </div>
                   </div>
@@ -39,7 +39,7 @@
                         <h4 class="alert-heading"><i class="far fa-times-circle"></i> Something went wrong!</h4>
                         <p>{{alert}}</p>
                         <hr>
-                        <a class="btn btn-primary" href="{% url 'send_mail' %}">OK</a>
+                        <a class="btn btn-primary" href="{% url 'view_mails' %}">OK</a>
                       </div>
                     </div>
                   </div>
@@ -60,7 +60,7 @@
                         <form method="post" action>
                             {% csrf_token %}
                             
-                        <a class="btn btn-secondary" href="{% url 'send_mail' %}">Cancel</a>
+                        <a class="btn btn-secondary" href="{% url 'view_mails' %}">Cancel</a>
                         <button class="btn btn-danger" type="submit">OK</button>
                         </form>
                       </div>

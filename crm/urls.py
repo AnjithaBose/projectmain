@@ -33,7 +33,9 @@ urlpatterns = [
     path('administrator/courses/',ViewCourses.as_view(),name='view_courses'),
     path('administrator/course/edit/<id>/',EditCourse.as_view(),name='edit_course'),
     path('administrator/course/delete/<id>/',DeleteCourse.as_view(),name='delete_course'),
+    path('administrator/mails/',ViewMails.as_view(),name='view_mails'),
     path('administrator/mail/send/',SendMail.as_view(),name='send_mail'),
+    path('administrator/draft/send/<id>/',SendDraft.as_view(),name='send_draft'),
 
 
     path('operations/batches/',ViewBatches.as_view(),name='view_batches'),
