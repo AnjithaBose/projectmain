@@ -135,11 +135,20 @@
                     <tr class="active">
                       <td colspan="6"><div class="text-right">
                           <ul class="pagination pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
+                              
                           </ul>
                         </div></td>
                     </tr>
                   </tfoot>
                 </table>
+                <div class="text-right">
+                    {% if mail.has_previous %}
+                    <a href="{% url 'view_mails' %}?page={{ mail.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
+                    {% endif %}
+                    {% if mail.has_next %}
+                    <a href="{% url 'view_mails' %}?page={{ mail.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
+                    {% endif %}
+                </div>
                 </div>
               </div>
             </div>

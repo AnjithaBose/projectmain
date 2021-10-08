@@ -267,7 +267,8 @@ class ViewMails(View):
             staff = Staff.objects.get(user=request.user)
             draft = Email.objects.filter(status="Draft").order_by('-time_stamp')
             mail = Email.objects.filter(status="Mail").order_by('-time_stamp')
-            context={'staff':staff,'draft':draft,'mail':mail}
+            page = Pagination(request,mail,10)
+            context={'staff':staff,'draft':draft,'mail':page}
             return render(request,'admin/view_mails.html',context)
 
 
