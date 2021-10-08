@@ -317,6 +317,17 @@ class SendDraft(View):
             context={'staff':staff,'form':form,'draft':draft}
             return render(request,'admin/send_mail.html',context)
 
+
+class ViewMail(View):
+    def get(self, request,id):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            mail = Email.objects.get(id=id)
+            form = SendMailForm(instance=mail)
+            context={'staff':staff,'form':form,'mail':mail}
+            return render(request,'admin/view_mail.html',context)
+
             
 
             
