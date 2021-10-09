@@ -103,6 +103,32 @@ def StudentConvert(request,lead):
     student.save()
     return (student)
 
+def NotTrainerCheck(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            staff = Staff.objects.get(user=user)
+            if staff.stype == '6' or staff.stype=='4' or staff.stype== '5' or staff.stype== '2' or staff.stype== '1':
+                return (True)
+            else:
+                return (False)
+        except:
+            return (False)
+    else:
+        return (False)
+
+def scd(request,student):
+    student.course_enrolled = []
+    student.now_attending = []
+    cd = StudentCourseData.objects.filter(student=student)
+    for i in cd:
+        student.course_enrolled.append(i.batch.subject.code)
+        if i.batch.status == '1':
+            student.now_attending.append(i.batch.batch_code)
+    student.save()
+        
+
+
 
 
 

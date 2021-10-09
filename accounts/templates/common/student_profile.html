@@ -1,0 +1,126 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">{{student}}</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'view_students' %}">Students</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{student}}</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <a href="{% url 'add_scd' student.id %}" class="btn btn-primary"><i class="ti ti-plus"></i> Course Data</a>
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+            <!-- state start-->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="card">
+                        <h4 class="m-t-0 header-title">{{student}} 's  Data</h4>
+                
+                        <img class="img-circle pro_pic" src="{{student.profile_pic.url}}" alt="{{student.name}}" style="width: 100px;height:100px">
+                        
+                        <div class="card card-body">
+                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                                {% csrf_token %}
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6" style="padding:10px">
+                                    <label for="exampleInputName1">Name</label> 
+                                    <input type="text" class="form-control" value="{{student.name}}" disabled>
+                                  </div>
+                                <div class="col-12 col-md-6" style="padding:10px">
+                                    <label for="exampleInputName1">Email</label> 
+                                    <input type="text" class="form-control" value="{{student.email}}" disabled>
+                                  </div>
+                                  <div class="col-12 col-md-6" style="padding:10px">
+                                    <label for="exampleInputName1">Mobile</label> 
+                                    <input type="text" class="form-control" value="{{student.mobile}}" disabled>
+                                  </div>
+                                  <div class="col-12 col-md-6" style="padding:10px">
+                                    <label for="exampleInputName1">Status</label> 
+                                    <input type="text" class="form-control" value="{{student.status}}" disabled>
+                                  </div>
+                                  <div class="col-12 col-md-6" style="padding:10px">
+                                    <label for="exampleInputName1">Courses Enrolled</label> 
+                                    <!-- <textarea class="form-control" disabled> -->
+                                        <ul type="disc">
+                                        {% for i in cd %}
+                                        <li class="btn btn-primary-rgba">{{i.batch.subject.code}}&nbsp;&nbsp;&nbsp;&nbsp;<small><a href="{% url 'delete_scd' i.id %}"><i class="btn btn-primary ti ti-close"></i></a></small></li>
+                                        {% endfor %}
+                                        </ul>
+                                    <!-- </textarea> -->
+                                  </div>
+                                  <div class="col-12 col-md-6" style="padding:10px">
+                                    <label for="exampleInputName1">Now Attending</label> 
+                                        <ul type="disc">
+                                        {% for i in na %}
+                                        <li><a href="" class="btn btn-primary-rgba">{{i.batch.batch_code}}</a></li>
+                                        {% endfor %}
+                                        </ul>
+                                  </div>
+                                  <div class="col-6 col-md-3" style="padding:10px">
+                                    <label for="exampleInputName1">Gender</label> 
+                                    <input type="text" class="form-control" value="{{student.sex}}" disabled>
+                                  </div>
+                                  <div class="col-6 col-md-3" style="padding:10px">
+                                    <label for="exampleInputName1">Date of Birth</label> 
+                                    <input type="text" class="form-control" value="{{student.dob}}" disabled>
+                                  </div>
+                                  <div class="col-6 col-md-3" style="padding:10px">
+                                    <label for="exampleInputName1">Blood Group</label> 
+                                    <input type="text" class="form-control" value="{{student.blood_group}}" disabled>
+                                  </div>
+                                  <div class="col-6 col-md-3" style="padding:10px">
+                                    <label for="exampleInputName1">Date of Joining</label> 
+                                    <input type="text" class="form-control" value="{{student.start_date}}" disabled>
+                                  </div>
+                                  
+                                
+                              </div>
+                              
+                              
+                            </form>
+                  </div>
+                </div>
+                    </div>
+                </div>
+                
+            </div>
+            <!--- End row -->
+
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

@@ -463,6 +463,8 @@ class Leads(View):
                 f.generator = staff
                 f.created_on = datetime.datetime.now()
                 f.save()
+                if f.status == 'Converted':
+                    return redirect('convert_lead',id=f.id)
                 msg = "Lead added successfully!"
                 context = {'staff':staff,'msg':msg}
             else:
@@ -582,14 +584,10 @@ class DeleteLMSProfile(View):
             lead = Lead.objects.get(id=id)
             try:    
                 student = Student.objects.get(email=lead.email)
-                print("test 0")
                 lead.status = "In Pipeline"
                 lead.save()
-                print(student.user)
                 user = User.objects.get(username=student.user)
-                print(user)
                 student.delete()
-                print("test 3")
                 user.delete()
                 msg = "Account deleted successfully"
                 context={'staff':staff,'msg':msg}
@@ -599,6 +597,79 @@ class DeleteLMSProfile(View):
             return render(request,'messages/sales/leads.html',context)
         else:
             return redirect('home')
+
+
+class Students(View):
+    def get(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            student = Student.objects.all().order_by('-start_date')
+            context={'staff':staff,'student':student}
+            return render(request,'common/students.html',context)
+        else:
+            return redirect('home')
+
+class ViewStudent(View):
+    def get(self, request,id):
+        x = NotTrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            student = Student.objects.get(id=id)
+            scd(request,student)
+            cd = StudentCourseData.objects.filter(student=student)
+            na = StudentCourseData.objects.filter(student=student,batch__status='1')
+            context={'staff':staff,'student':student,'cd':cd,'na':na}
+            return render(request,'common/student_profile.html',context)
+        else:
+            return redirect('home')
+
+class AddSCD(View):
+    def get(self, request,id):
+        x = NotTrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            student = Student.objects.get(id=id)
+            scd(request,student)
+            form = AddSCDForm()
+            context={'staff':staff,'form':form,'student':student}
+            return render(request,'operations/add_scd.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request,id):
+        x = NotTrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            student = Student.objects.get(id=id)
+            form = AddSCDForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.student = student
+                f.save()
+                msg = "Successfully added Course Data"
+                context={'staff':staff,'student':student,'msg':msg}
+            else:
+                alert = "Course adding failed!.Please review your edit."
+                context={'staff':staff,'alert':alert,'student':student}
+            return render(request,'messages/operations/student_profile.html',context)
+        else:
+            return redirect('home')
+
+class DeleteSCD(View):
+    def get(self, request,id):
+        x = NotTrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            scd = StudentCourseData.objects.get(id=id)
+            student = scd.student
+            scd.delete()
+            return redirect('view_student',id=student.id)
+        else:
+            return redirect('home')
+
+
+
 
 
             

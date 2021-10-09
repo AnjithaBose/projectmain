@@ -51,6 +51,11 @@ class LeadCreateForm(ModelForm):
         model = Lead
         fields = ['name','email','mobile','sex','status']
 
+class AddSCDForm(ModelForm):
+    class Meta:
+        model = StudentCourseData
+        fields = ['batch']
+
         
 
 

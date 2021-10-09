@@ -43,6 +43,9 @@ urlpatterns = [
     path('operations/batches/',ViewBatches.as_view(),name='view_batches'),
     path('operations/batch/view/<id>/',ViewBatch.as_view(),name='view_batch'),
     path('operations/batch/edit/<id>/',EditBatch.as_view(),name='edit_batch'),
+    path('operations/scd/add/<id>/',AddSCD.as_view(),name='add_scd'),
+    path('operations/scd/delete/<id>/',DeleteSCD.as_view(),name='delete_scd'),
+    path('operations/view/student/<id>/',ViewStudent.as_view(),name='view_student'),
 
     path('sales/leads/',Leads.as_view(),name='view_leads'),
     path('sales/closure/',ViewClosure.as_view(),name='view_closure'),
@@ -53,6 +56,7 @@ urlpatterns = [
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
+    path('staff/students/',Students.as_view(),name='view_students'),
     path('staff/message/<id>/',Message.as_view(),name='message'),
 ]
 

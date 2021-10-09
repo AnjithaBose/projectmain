@@ -121,7 +121,8 @@ class Batch(models.Model):
     to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='approved_by')
 
     def __str__(self):
-        return self.batch_code
+        s = "-"
+        return "%s %s %s %s %s %s %s" % (self.batch_code,s, self.trainer,s,self.start_date,s, self.start_time)
 
 class Reporting(models.Model):
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='staff')
@@ -198,5 +199,9 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+
+class StudentCourseData(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.PROTECT,related_name='student',null=True,blank=True)
+    batch = models.ForeignKey(Batch, on_delete=models.PROTECT,related_name='batch',limit_choices_to=(Q(status='1')|Q(status='2')),blank=True)
 
 
