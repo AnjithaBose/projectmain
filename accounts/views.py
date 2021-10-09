@@ -449,7 +449,61 @@ class Leads(View):
             return render(request,'sales/leads.html',context)
         else:
             return redirect('home')
-            
+
+    def post(self, request):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = LeadCreateForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.name = f.name.title()
+                f.email = f.email.casefold()
+                f.generator = staff
+                f.created_on = datetime.datetime.now()
+                f.save()
+                msg = "Lead added successfully!"
+                context = {'staff':staff,'msg':msg}
+            else:
+                alert = 'Lead adding failed.Please try again.'
+                context = {'alert':alert,'staff':staff}
+            return render(request,'messages/sales/leads.html',context)
+        else:
+            return redirect('home')
+
+class UpdateLead(View):
+    def get(self, request,id):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            lead = Lead.objects.get(id=id)
+            form = LeadCreateForm(instance = lead)
+            context={'staff':staff,'form':form,'lead':lead}
+            return render(request,'sales/update_lead.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request,id):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            lead = Lead.objects.get(id=id)
+            form = LeadCreateForm(request.POST,instance = lead)
+            if form.is_valid():
+                form.save()
+                msg = "Lead updated successfully."
+                context={'staff':staff,'msg':msg}
+            else:
+                alert="Lead updation failed!.Please review your edit."
+                context={'staff':staff,'alert':alert}
+            return render(request,'messages/sales/leads.html',context)
+        else:
+            return redirect('home')
+
+
+
+
+
 
 
 

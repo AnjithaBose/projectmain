@@ -45,6 +45,7 @@ urlpatterns = [
     path('operations/batch/edit/<id>/',EditBatch.as_view(),name='edit_batch'),
 
     path('sales/leads/',Leads.as_view(),name='view_leads'),
+    path('sales/update/lead/<id>/',UpdateLead.as_view(),name='update_lead'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
