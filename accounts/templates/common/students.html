@@ -91,11 +91,15 @@
                           <div class="dropdown">
                             <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
                               <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
-                                  <a class="dropdown-item" href="{% url 'view_batch' i.id %}"><i class="ti ti-info mr-2"></i>Info</a>
-                                  <a class="dropdown-item" href="{% url 'add_scd' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit Courses</a> 
-                                  <a class="dropdown-item" href="{% url 'edit_batch' i.id %}"><i class="ti ti-share mr-2"></i>Share Videos</a>
-                                  <a class="dropdown-item" href="{% url 'edit_batch' i.id %}"><i class="ti ti-rocket mr-2"></i>Send Message</a> 
-                                  <a class="dropdown-item" href="{% url 'edit_batch' i.id %}"><i class="ti ti-email mr-2"></i>Send Email</a> 
+                                  <a class="dropdown-item" href="{% url 'view_student' i.id %}"><i class="ti ti-info mr-2"></i>Info</a>
+                                  <a class="dropdown-item" href="{% url 'add_scd' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit Courses</a>
+                                  {% if i.shared == "No"  %} 
+                                  <a class="dropdown-item" href="{% url 'update_share' i.id %}"><i class="ti ti-share mr-2"></i>Share Videos</a>
+                                  {% else %}
+                                  <a class="dropdown-item" href="{% url 'update_share' i.id %}"><i class="ti ti-na mr-2"></i>Stop Share</a>
+                                  {% endif %}
+                                  <!-- <a class="dropdown-item" href="{% url 'message' i.id %}"><i class="ti ti-rocket mr-2"></i>Send Message</a>  -->
+                                  <a class="dropdown-item" href="{% url 'send_single_mail' i.id %}"><i class="ti ti-email mr-2"></i>Send Email</a> 
                                    
                               </div>
                           </div>

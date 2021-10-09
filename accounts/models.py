@@ -204,4 +204,6 @@ class StudentCourseData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.PROTECT,related_name='student',null=True,blank=True)
     batch = models.ForeignKey(Batch, on_delete=models.PROTECT,related_name='batch',limit_choices_to=(Q(status='1')|Q(status='2')),blank=True)
 
+    
+
 

@@ -390,7 +390,9 @@ class Message(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            
             receiver = Staff.objects.get(id=id)
+            
             try:
                 chatroom = ChatRoom.objects.get(user1=staff,user2=receiver)
             except:
@@ -698,6 +700,61 @@ class DeleteSCD(View):
             return redirect('view_student',id=student.id)
         else:
             return redirect('home')
+
+class UpdateShare(View):
+    def get(self, request,id):
+        x = NotTrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            student = Student.objects.get(id=id)
+            if student.shared == 'Yes':
+                student.shared = 'No'
+            elif student.shared == 'No':
+                student.shared = 'Yes'
+            student.save()
+            return redirect('view_students')
+        else:
+            return redirect('home')
+
+class SendSingleMail(View):
+    def get(self, request,id):
+        x = NotTrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            student = Student.objects.get(id=id)
+            mail = Email(to_address=student.email)
+            form = SendMailForm(instance=mail)
+            context = {'staff':staff,'form':form,'mail':mail}
+            return render(request,'admin/single_mail.html',context)
+
+    def post (self, request,id):
+        x = NotTrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            student = Student.objects.get(id=id)
+            mail = Email(to_address=student.email)
+            form = SendMailForm(request.POST,instance=mail)
+            if form.is_valid():
+                f = form .save(commit=False)
+                mailsend(request,f.subject,f.message,staff.email,student.email)
+                f.from_address = staff.email
+                f.time_stamp = datetime.datetime.now()
+                f.status = 'Mail'
+                f.save()
+                msg = "Mail send successfully"
+                context={'staff':staff,'mail':mail,'msg':msg}
+            else:
+                alert = "Mail send failed!.Please review your edit."
+                context={'staff':staff,'alert':alert,'mail':mail}
+            return render(request,'messages/common/students.html',context)
+        else:
+            return redirect('home')
+
+
+
+
+
+
 
 
 

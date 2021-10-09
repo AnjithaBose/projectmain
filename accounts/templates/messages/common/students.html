@@ -1,0 +1,82 @@
+{% extends 'common/main.html' %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'admin/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+
+            {% if msg %}
+            <div class="col-lg-6">
+                <div class="card m-b-30">
+                  <div class="card-header border-bottom">
+                  </div>
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading"><i class="far fa-check-circle"></i> Well done!</h4>
+                        <p>{{msg}}</p>
+                        <hr>
+                        <a class="btn btn-primary" href="{% url 'view_students' %}">OK</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            {% if alert %}
+            <div class="col-lg-6">
+                <div class="card m-b-30">
+                  <div class="card-header border-bottom">
+                  </div>
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading"><i class="far fa-times-circle"></i> Something went wrong!</h4>
+                        <p>{{alert}}</p>
+                        <hr>
+                        <a class="btn btn-primary" href="{% url 'view_students' %}">OK</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            {% if confirm %}
+            <div class="col-lg-6">
+                <div class="card m-b-30">
+                  <div class="card-header border-bottom">
+                  </div>
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading"><i class="ti ti-alert"></i> Are you sure <i class="ti ti-help"></i></h4>
+                        <p>{{confirm}}</p>
+                        <hr>
+                        <form method="post" action>
+                            {% csrf_token %}
+                            
+                        <a class="btn btn-secondary" href="{% url 'view_students' %}">Cancel</a>
+                        <button class="btn btn-danger" type="submit">OK</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            
+
+            
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+    </div>
+    
+    {% include 'common/footer.html' %}
+</div>
+{% endblock %}

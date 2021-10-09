@@ -63,10 +63,11 @@ def mailsend(request,subject,message,from_address,to):
         send_mail(
             subject,
             message,
-            from_address,
+            'techsupport@teqstories.com',
             [i],
             fail_silently=False,
         )
+    
 
 def StaffCheck(request):
     user = request.user
