@@ -175,4 +175,28 @@ class Lead(models.Model):
     def __str__(self):
         return self.name
 
+class Student(models.Model):
+    user= models.OneToOneField(User,on_delete=models.PROTECT,null=True,blank=True)
+    name = models.CharField(max_length=100,blank=True)
+    mobile = models.CharField(max_length=10,blank=True)
+    email = models.EmailField(max_length=200,blank=True)
+    sex = models.CharField(max_length=10,null=True,choices=sex_choices,blank=True)
+    dob = models.DateField(null=True, blank=True)
+    blood_group = models.CharField(max_length=100,null=True, blank=True,choices=groups)
+    house = models.CharField(max_length=100,null=True,blank=True)
+    street =models.CharField(max_length=100,null=True,blank=True)
+    street2 =models.CharField(max_length=100,null=True,blank=True)
+    city = models.CharField(max_length=100,null=True,blank=True)
+    state = models.CharField(max_length=100,null=True,choices=state,blank=True)
+    course_enrolled = models.CharField(max_length=1000,null=True,blank=True)
+    now_attending = models.CharField(max_length=1000,null=True,blank=True)
+    start_date = models.DateField(null=True,blank=True)
+    shared = models.CharField(max_length=100,choices=(('Yes', 'Yes'), ('No', 'No')),blank=True,null=True,default='No')
+    status = models.CharField(max_length=20,choices=(('Active','Active'),('Inactive','Inactive')),default='Active',blank=True)
+    profile_pic = models.ImageField(null=True,default='accounts/static/images/user1.png',blank=True, upload_to='images/dp/')
+    cv = models.FileField(blank=True, null=True,upload_to='data/cv/')
+
+    def __str__(self):
+        return self.name
+
 

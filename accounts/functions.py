@@ -1,6 +1,8 @@
 from .models import *
 from django.core.paginator import Paginator,EmptyPage
 from django.core.mail import send_mail
+from django.contrib.auth.models import User
+
 
 
 def AdminCheck(request):
@@ -93,6 +95,16 @@ def SalesOperation(request):
             return (False)
     else:
         return (False)
+
+def StudentConvert(request,lead):
+    user = User.objects.create_user(lead.email,lead.email,lead.mobile)
+    user.save()
+    student = Student(user=user,name=lead.name,email=lead.email,mobile=lead.mobile,sex=lead.sex,start_date=datetime.datetime.now())
+    student.save()
+    return (student)
+
+
+
 
 
 

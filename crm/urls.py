@@ -45,7 +45,11 @@ urlpatterns = [
     path('operations/batch/edit/<id>/',EditBatch.as_view(),name='edit_batch'),
 
     path('sales/leads/',Leads.as_view(),name='view_leads'),
+    path('sales/closure/',ViewClosure.as_view(),name='view_closure'),
+    path('sales/history/',ViewHistory.as_view(),name='view_history'),
     path('sales/update/lead/<id>/',UpdateLead.as_view(),name='update_lead'),
+    path('sales/convert/lead/<id>/',CreateStudentAccount.as_view(),name='convert_lead'),
+    path('sales/reverse/lead/<id>/',DeleteLMSProfile.as_view(),name='revert_lead'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),

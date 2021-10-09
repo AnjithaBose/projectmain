@@ -26,6 +26,8 @@
                   </div>
                   <div class="col-md-4 col-lg-4 mr-0">
                     <div class="widgetbar">
+                        <a href="{% url 'view_closure' %}" class="btn btn-primary"><i class="far fa-thumbs-up"></i> Closures</a>
+                        <a href="{% url 'view_history' %}" class="btn btn-primary"><i class="fas fa-history"></i> History</a>
                         <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
                     </div>
                   </div>
@@ -131,7 +133,6 @@
                             <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
                               <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
                                   <a class="dropdown-item" href="{% url 'update_lead' i.id %}"><i class="ti ti-pencil mr-2"></i>Update</a> 
-                                  <a class="dropdown-item" href="{% url 'view_batch' i.id %}"><i class="ti ti-info mr-2"></i>Create LMS Profile</a> 
                               </div>
                           </div>
                         </div>
@@ -145,8 +146,12 @@
                   <tfoot>
                     <tr class="active">
                       <td colspan="7"><div class="text-right">
-                          <ul class="pagination pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
-                          </ul>
+                        {% if new.has_previous %}
+                        <a href="{% url 'view_leads' %}?page={{ new.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
+                        {% endif %}
+                        {% if new.has_next %}
+                        <a href="{% url 'view_leads' %}?page={{ new.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
+                        {% endif %}
                         </div></td>
                     </tr>
                   </tfoot>
@@ -185,7 +190,6 @@
                             <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
                               <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
                                   <a class="dropdown-item" href="{% url 'update_lead' i.id %}"><i class="ti ti-pencil mr-2"></i>Update</a> 
-                                  <a class="dropdown-item" href="{% url 'view_batch' i.id %}"><i class="ti ti-info mr-2"></i>Create LMS Profile</a> 
                               </div>
                           </div>
                         </div>
@@ -199,8 +203,12 @@
                   <tfoot>
                     <tr class="active">
                       <td colspan="7"><div class="text-right">
-                          <ul class="pagination pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
-                          </ul>
+                        {% if pipe.has_previous %}
+                        <a href="{% url 'view_leads' %}?page={{ pipe.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
+                        {% endif %}
+                        {% if pipe.has_next %}
+                        <a href="{% url 'view_leads' %}?page={{ pipe.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
+                        {% endif %}
                         </div></td>
                     </tr>
                   </tfoot>

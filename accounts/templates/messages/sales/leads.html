@@ -69,6 +69,29 @@
                 </div>
               </div>
             {% endif %}
+            {% if process %}
+            <div class="col-lg-6">
+                <div class="card m-b-30">
+                  <div class="card-header border-bottom">
+                  </div>
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-primary" role="alert">
+                        <h4 class="alert-heading">Are you sure <i class="ti ti-help"></i></h4>
+                        <p>{{process}}</p>
+                        <hr>
+                        <form method="post" action>
+                            {% csrf_token %}
+                            
+                        <a class="btn btn-secondary-outline" href="{% url 'view_leads' %}">Cancel</a>
+                        <button class="btn btn-primary" type="submit">OK</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
             
 
             

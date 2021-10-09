@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
 
 from .functions import *
 from .models import *
@@ -490,7 +491,9 @@ class UpdateLead(View):
             lead = Lead.objects.get(id=id)
             form = LeadCreateForm(request.POST,instance = lead)
             if form.is_valid():
-                form.save()
+                f = form.save(commit=False)
+                if f.status == 'Converted':
+                    return redirect('convert_lead',id=lead.id)
                 msg = "Lead updated successfully."
                 context={'staff':staff,'msg':msg}
             else:
@@ -499,6 +502,109 @@ class UpdateLead(View):
             return render(request,'messages/sales/leads.html',context)
         else:
             return redirect('home')
+
+class ViewClosure(View):
+    def get(self, request):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            lead = Lead.objects.filter(status='Converted').order_by('-created_on')
+            page = Pagination(request,lead,10)
+            context={'staff':staff,'lead':page}
+            return render(request,'sales/closure.html',context)
+        else:
+            return redirect('home')
+
+class ViewHistory(View):
+    def get(self, request):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            lead = Lead.objects.all().order_by('-created_on')
+            page = Pagination(request,lead,10)
+            history = True
+            context={'staff':staff,'lead':page,'history':history}
+            return render(request,'sales/history.html',context)
+        else:
+            return redirect('home')
+
+class CreateStudentAccount(View):
+    def get(self, request,id):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            lead = Lead.objects.get(id=id)
+            process = "Are you sure you want to proceed?"
+            context={'staff':staff,'lead':lead,'process':process}
+            return render(request,'messages/sales/leads.html',context)
+        else:
+            return redirect('home')
+        
+    def post(self, request,id):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            lead = Lead.objects.get(id=id)
+            try:
+                student = StudentConvert(request,lead)
+                lead.status = "Converted"
+                lead.save()
+                subject="[TEQSTORIES]-ACCOUNT CREATED"
+                message =  "Hi Learner, \n\n\nYour account has created with https://lms.teqstories.com. Please login using your email as username and mobile number as password. \n\n\nIf you feel any difficulty please contact our representative or mail us as techsupport@teqstories.com. \n\n\nWith Regards,\nStudent Support Team,\nTeqstories "
+                from_address = 'techsupport@teqstories.com'
+                to = lead.email
+                mailsend(request,subject,message,from_address,to)
+                msg = "Student account has been created and mails have been sent."
+                context={'staff':staff,'msg':msg}
+            except:
+                alert = "Student account creation failed.Please try again"
+                context={'staff':staff,'alert':alert}
+            return render(request,'messages/sales/leads.html',context)
+        else:
+            return redirect('home')
+
+class DeleteLMSProfile(View):
+    def get(self, request,id):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            lead = Lead.objects.get(id=id)
+            confirm = "Are you sure you want to proceed?"
+            context={'staff':staff,'lead':lead,'confirm':confirm}
+            return render(request,'messages/sales/leads.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request,id):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            lead = Lead.objects.get(id=id)
+            try:    
+                student = Student.objects.get(email=lead.email)
+                print("test 0")
+                lead.status = "In Pipeline"
+                lead.save()
+                print(student.user)
+                user = User.objects.get(username=student.user)
+                print(user)
+                student.delete()
+                print("test 3")
+                user.delete()
+                msg = "Account deleted successfully"
+                context={'staff':staff,'msg':msg}
+            except:
+                alert = "Account deletion failed.Please try again"
+                context={'staff':staff,'alert':alert}
+            return render(request,'messages/sales/leads.html',context)
+        else:
+            return redirect('home')
+
+
+            
+
+
+
 
 
 
