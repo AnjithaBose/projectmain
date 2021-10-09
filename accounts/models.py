@@ -45,6 +45,12 @@ groups = (
     ('O-', 'O-'),
     )
 
+sex_choices = (
+    ('Male', 'Male'),
+    ('Female', 'Female'),
+    ('Others', 'Others'),
+)
+
 
 
 class Staff(models.Model):
@@ -62,7 +68,7 @@ class Staff(models.Model):
     empid = models.CharField(max_length=100,null=True, blank=True)
     mobile = models.CharField(max_length=10,null=True, blank=True)
     email = models.EmailField(max_length=200,null=True, blank=True)
-    sex = models.CharField(max_length=10,null=True,choices=(('Male','Male'),('Female','Female'),('Others','Others')), blank=True)
+    sex = models.CharField(max_length=10,null=True,choices=sex_choices, blank=True)
     dob = models.DateField(null=True, blank=True)
     doj = models.DateField(null=True, blank=True)
     blood_group = models.CharField(max_length=100,null=True, blank=True,choices=groups)
@@ -141,5 +147,32 @@ class ChatMessage(models.Model):
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True)
     message = models.CharField(max_length=5000,null=True, blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
+
+
+class Job(models.Model):
+    title = models.CharField(max_length=500,null=True, blank=True)
+    description = models.TextField(max_length=2000,null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
+    link = models.URLField(max_length=2000,null=True, blank=True)
+
+
+class Lead(models.Model):
+    groups = (
+    ('New', 'New'),
+    ('In Pipeline', 'In Pipeline'),
+    ('Converted', 'Converted'),
+    ('Lost', 'Lost'),
+    ('Not Interested', 'Not Interested'),
+    )
+    name = models.CharField(max_length=100,null=True, blank=True)
+    email = models.EmailField(max_length=200,null=True,blank=True)
+    mobile = models.CharField(max_length=10,null=True,blank=True)
+    sex = models.CharField(max_length=10,null=True,choices=sex_choices,blank=True,default="Male")
+    generator = models.ForeignKey(Staff,on_delete=models.PROTECT, blank=True,null=True)
+    created_on = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=100,null=True, blank=True,choices=groups,default="New")
+
+    def __str__(self):
+        return self.name
 
 

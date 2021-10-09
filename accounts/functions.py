@@ -80,4 +80,19 @@ def StaffCheck(request):
     else:
         return (False)
 
+def SalesOperation(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            staff = Staff.objects.get(user=user)
+            if staff.stype == '6' or staff.stype=='4' or staff.stype== '5' or staff.stype== '2':
+                return (True)
+            else:
+                return (False)
+        except:
+            return (False)
+    else:
+        return (False)
+
+
 

@@ -52,7 +52,8 @@ class Home(View):
                 elif s.stype == '2' :
                     return redirect('sales_dashboard')
                 elif s.stype == '3' :
-                    return redirect('trainer_dashboard')
+                    # return redirect('trainer_dashboard')
+                    return HttpResponse("Trainer dashboard")
                 elif s.stype == '4' :
                     return redirect('admin_dashboard')
                 else:
@@ -434,6 +435,23 @@ class CreateStaff(View):
         else:
             return redirect('home')
                 
+class Leads(View):
+    def get(self, request):
+        x = SalesOperation(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            new = Lead.objects.filter(status="New")
+            pipe = Lead.objects.filter(status="In Pipeline")
+            page = Pagination(request,new,10)
+            pages = Pagination(request,pipe,10)
+            form = LeadCreateForm()
+            context={'staff':staff,'form':form,'new':page,'pipe':pages}
+            return render(request,'sales/leads.html',context)
+        else:
+            return redirect('home')
+            
+
+
 
 
 

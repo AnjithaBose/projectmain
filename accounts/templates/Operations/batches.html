@@ -175,9 +175,14 @@
                   </tbody>
                   <tfoot>
                     <tr class="active">
-                      <td colspan="7"><div class="text-right">
-                          <ul class="pagination pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
-                          </ul>
+                      <td colspan="7">
+                        <div class="text-right">
+                          {% if course.has_previous %}
+                            <a href="{% url 'view_batches' %}?page={{ wdbatch.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
+                            {% endif %}
+                            {% if course.has_next %}
+                            <a href="{% url 'view_batches' %}?page={{ wdbatch.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
+                            {% endif %}
                         </div></td>
                     </tr>
                   </tfoot>
@@ -233,8 +238,12 @@
                   <tfoot>
                     <tr class="active">
                       <td colspan="7"><div class="text-right">
-                          <ul class="pagination pagination-split justify-content-end footable-pagination m-t-10 m-b-0">
-                          </ul>
+                        {% if course.has_previous %}
+                        <a href="{% url 'view_batches' %}?page={{ webatch.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
+                        {% endif %}
+                        {% if course.has_next %}
+                        <a href="{% url 'view_batches' %}?page={{ webatch.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
+                        {% endif %}
                         </div></td>
                     </tr>
                   </tfoot>

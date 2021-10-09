@@ -46,6 +46,11 @@ class CreateStaffForm(ModelForm):
         model = Staff
         fields = ['name','empid','mobile','email','sex','dob','doj','blood_group','house','street','street2','city','state','pin','stype','profile_pic','facebook','linkedin','instagram']
 
+class LeadCreateForm(ModelForm):
+    class Meta:
+        model = Lead
+        fields = ['name','email','mobile','sex','status']
+
         
 
 

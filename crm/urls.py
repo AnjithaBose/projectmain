@@ -44,9 +44,11 @@ urlpatterns = [
     path('operations/batch/view/<id>/',ViewBatch.as_view(),name='view_batch'),
     path('operations/batch/edit/<id>/',EditBatch.as_view(),name='edit_batch'),
 
+    path('sales/leads/',Leads.as_view(),name='view_leads'),
+
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
-    path('message/<id>/',Message.as_view(),name='message'),
+    path('staff/message/<id>/',Message.as_view(),name='message'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
