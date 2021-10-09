@@ -77,7 +77,7 @@
                                     <label for="exampleInputName1">Now Attending</label> 
                                         <ul type="disc">
                                         {% for i in na %}
-                                        <li><a href="" class="btn btn-primary-rgba">{{i.batch.batch_code}}</a></li>
+                                        <li><a href="{% url 'view_batch' i.batch.id %}" class="btn btn-primary-rgba">{{i.batch.batch_code}}</a></li>
                                         {% endfor %}
                                         </ul>
                                   </div>

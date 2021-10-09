@@ -42,6 +42,7 @@ urlpatterns = [
 
     path('operations/batches/',ViewBatches.as_view(),name='view_batches'),
     path('operations/batch/view/<id>/',ViewBatch.as_view(),name='view_batch'),
+    path('operations/batch/notification/<id>/',SendMailNotification.as_view(),name='send_mail_notification'),
     path('operations/batch/edit/<id>/',EditBatch.as_view(),name='edit_batch'),
     path('operations/scd/add/<id>/',AddSCD.as_view(),name='add_scd'),
     path('operations/scd/delete/<id>/',DeleteSCD.as_view(),name='delete_scd'),

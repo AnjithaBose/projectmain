@@ -215,7 +215,9 @@ class ViewBatch(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             batch = Batch.objects.get(id=id)
-            context={'staff':staff,'batch': batch}
+            scd = StudentCourseData.objects.filter(batch=batch)
+            form = SendMailForm()
+            context={'staff':staff,'batch': batch,'scd':scd,'form':form}
             return render(request,'operations/batch.html',context)
         else:
             return redirect('home')
@@ -315,6 +317,35 @@ class SendMail(View):
             return render(request,'messages/admin/view_mails.html',context)
         else:
             return redirect('home')
+
+class SendMailNotification(View):
+    def post(self, request,id):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = SendMailForm(request.POST)
+            batch = Batch.objects.get(id=id)
+            scd = StudentCourseData.objects.filter(batch=batch)
+            to=[]
+            for i in scd:
+                to.append(i.student.email)
+            if form.is_valid():
+                f = form.save(commit=False)
+                sub = f.subject
+                message = f.message
+                for i in to:
+                    mailsend(request,sub,message,staff.email,i)
+                msg = "Notifications send successfully!"
+                context={'staff':staff,'msg':msg,'batch':batch}
+            else:
+                alert = "Notification send failed!.Please review your edit."
+                context={'staff':staff,'alert':alert,'batch':batch}
+            return render(request,'messages/admin/batch.html',context)
+        else:
+            return redirect ('home')
+                
+
+
 
 class SendDraft(View):
     def get(self, request,id):
