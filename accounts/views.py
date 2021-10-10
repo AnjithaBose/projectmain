@@ -750,6 +750,53 @@ class SendSingleMail(View):
         else:
             return redirect('home')
 
+class Jobs(View):
+    def get(self, request):
+        user = request.user
+        if user.is_authenticated:
+            staff = Staff.objects.get(user=request.user)
+            job = Job.objects.filter(approval="Approved").order_by('-timestamp')
+            page = Pagination(request,job,10)
+            context = {'staff':staff,'job':page}
+            return render(request,'common/jobs.html',context)
+        else:
+            return redirect('home')
+
+class AddJob(View):
+    def get(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = AddJobForm()
+            context = {'staff':staff,'form':form}
+            return render(request,'common/add_job.html',context)
+        else:
+            return redirect('home')
+    def post(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = AddJobForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.timestamp = datetime.datetime.now()
+                f.approval = 'Approved'
+                f.save()
+                msg = 'Job added successfully.'
+                context={'staff':staff,'msg':msg}
+            else:
+                alert="Job reporting failed!.Please review your edit."
+                context={'staff':staff,'alert':alert}
+            return render(request,'messages/common/jobs.html',context)
+        else:
+            return redirect('home')
+            
+
+# class ViewTeqNews(View):
+
+
+            
+
 
 
 

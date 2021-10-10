@@ -51,6 +51,12 @@ sex_choices = (
     ('Others', 'Others'),
 )
 
+approval_choices =(
+    ('Approved', 'Approved'),
+    ('Rejected', 'Rejected'),
+    ('Pending', 'Pending'),
+)
+
 
 
 class Staff(models.Model):
@@ -151,10 +157,14 @@ class ChatMessage(models.Model):
 
 
 class Job(models.Model):
+    tags = models.CharField(max_length=500,null=True, blank=True)
     title = models.CharField(max_length=500,null=True, blank=True)
     description = models.TextField(max_length=2000,null=True, blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
     link = models.URLField(max_length=2000,null=True, blank=True)
+    approval = models.CharField(max_length=20,null=True, blank=True,choices=approval_choices)
+
+    
 
 
 class Lead(models.Model):
@@ -204,6 +214,16 @@ class StudentCourseData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.PROTECT,related_name='student',null=True,blank=True)
     batch = models.ForeignKey(Batch, on_delete=models.PROTECT,related_name='batch',limit_choices_to=(Q(status='1')|Q(status='2')),blank=True)
 
+
+class Post(models.Model):
+    title = models.CharField(max_length=1000, null=True, blank=True)
+    body = models.TextField(max_length=10000,null=True, blank=True)
+    cover = models.ImageField(null=True, blank=True, upload_to='images/blog/')
+    pic_1 = models.ImageField(null=True, blank=True, upload_to='images/blog/')
+    pic_2 = models.ImageField(null=True, blank=True, upload_to='images/blog/')
+    pic_3 = models.ImageField(null=True, blank=True, upload_to='images/blog/')
     
+
+
 
 

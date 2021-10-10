@@ -1,0 +1,103 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Oppurtunities</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Oppurtunities</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+           <!-- state start-->
+        <div class="row">
+            <!-- <div class="col-sm-4"> <a href="{% url 'add_job' %}" class="bttn btn-custom waves-effect waves-light mb-4" data-animation="fadein" data-plugin="custommodal"
+                                             data-overlaySpeed="200" data-overlayColor="#36404a"><i class="ti ti-plus"></i> Add Job</a> </div> -->
+            
+            <!-- end col --> 
+          </div>
+          
+          <!-- End row -->
+          <div class="row">
+            {% for i in job %}
+            
+            <!-- Start col -->
+            <div class="col-md-6 col-lg-6 col-xl-4">
+              <div class="card m-b-30">
+                <div class="card-header bg-primary-rgba">
+                  <h5 class="card-title text-primary" style="text-transform: uppercase;">{{i.tags}}</h5>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title font-18">{{i.title}}</h5>
+                  <p class="card-text">{{i.description|truncatechars:350}}</p>
+                  <a href="{{i.link}}" target='_blank' class="btn btn-primary"><i class="ti ti-new-window"></i> Apply On Site</a> </div>
+                <div class="card-footer bg-primary-rgba text-primary"> {{i.timestamp}} </div>
+              </div>
+            </div>
+            <!-- End col --> 
+            {% empty %}
+            
+            <div class="alert alert-danger" role="alert" style="margin-left: 15px;"> 
+              <p>No job postings found</p>
+            </div>
+                  
+            {% endfor %}
+            <!-- end col -->
+            
+             
+          </div>
+          <!-- End row -->
+          
+          
+          
+          <div class="row">
+            <div class="col-12">
+              <div class="text-right">
+                {% if jobs.has_previous %}
+                <a href="{% url 'jobs' %}?page={{ jobs.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
+                {% endif %}
+                {% if jobs.has_next %}
+                <a href="{% url 'jobs' %}?page={{ jobs.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
+                {% endif %}
+                
+              </div>
+            </div>
+          </div>
+          <!-- End row -->
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

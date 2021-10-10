@@ -56,6 +56,12 @@ class AddSCDForm(ModelForm):
         model = StudentCourseData
         fields = ['batch']
 
+class AddJobForm(ModelForm):
+    tags = forms.CharField(required=False)
+    class Meta:
+        model = Job
+        fields = ['tags','title','description','link']
+
         
 
 

@@ -61,6 +61,8 @@ urlpatterns = [
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
     path('staff/students/',Students.as_view(),name='view_students'),
     path('staff/message/<id>/',Message.as_view(),name='message'),
+    path('staff/jobs/',Jobs.as_view(),name='jobs'),
+    path('staff/jobs/add/',AddJob.as_view(),name='add_job'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
