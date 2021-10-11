@@ -756,7 +756,7 @@ class Jobs(View):
         if user.is_authenticated:
             staff = Staff.objects.get(user=request.user)
             job = Job.objects.filter(approval="Approved").order_by('-timestamp')
-            page = Pagination(request,job,10)
+            page = Pagination(request,job,6)
             context = {'staff':staff,'job':page}
             return render(request,'common/jobs.html',context)
         else:
@@ -792,7 +792,77 @@ class AddJob(View):
             return redirect('home')
             
 
-# class ViewTeqNews(View):
+class ViewTeqNews(View):
+    def get(self, request):
+        user = request.user
+        if user.is_authenticated:
+            staff = Staff.objects.get(user=request.user)
+            posts = Post.objects.all()
+            context={'staff':staff,'posts':posts}
+            return render(request,'common/blog.html',context)
+        else:
+            return redirect('home')
+
+class ViewProfile(View):
+    def get(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            context={'staff':staff}
+            return render(request,'common/profile.html',context)
+        else:
+            return redirect('home')
+
+class EditProfile(View):
+    def get(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            form = CreateStaffForm(instance=staff)
+            context={'staff':staff,'form':form}
+            return render(request,'common/edit_profile.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            name = staff.name
+            email = staff.email
+            empid = staff.empid
+            doj = staff.doj
+            stype = staff.stype
+            form = CreateStaffForm(request.POST,instance=staff)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.name = name
+                f.email = email
+                f.empid = empid
+                f.doj = doj
+                f.stype = stype
+                try:
+                    pic = request.FILES['pic']
+                    f.profile_pic = pic
+                    f.save()
+                except:
+                    f.save()
+                msg = "Profile updated successfully"
+                context={'staff':staff,'msg':msg}
+            else:
+                alert = "Profile updated failed!.Please review your edit."
+                context={'staff':staff,'alert':alert}
+            return render(request,'messages/common/profile.html',context)
+        else:
+            return redirect('home')
+
+
+
+
+        
+                
+
+
 
 
             

@@ -1,0 +1,158 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">{{staff}}</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{staff}}</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <a href="{% url 'edit_profile' %}" class="btn btn-primary"><i class="ti ti-pencil-alt"></i> Edit Data</a>
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+            <!-- state start-->
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-12">
+                    <div class="card">
+                        
+                        <div class="row">
+                            <div class="col-12 col-md-3">
+                              <center>
+                                <img class=" pro_pic" src="{{staff.profile_pic.url}}" alt="{{staff.name}}" style="width:80%;">
+                              </center>
+                            </div>
+                            <div class="col-12 col-md-9" >
+                                <div class="row">
+                                  <div class='col-12'>
+                                    <h4 class="m-t-0 header-title" style="padding:10px">{{staff}}</h4>
+                                  </div>
+                                  
+                                    <div class="col-12 col-md-6" style="padding:5px">
+                                        <label for="exampleInputName1">Email</label> 
+                                        <input type="text" class="form-control" value="{{staff.email}}" disabled>
+                                      </div>
+                                      <div class="col-12 col-md-6" style="padding:5px">
+                                        <label for="exampleInputName1">Mobile</label> 
+                                        <input type="text" class="form-control" value="{{staff.mobile}}" disabled>
+                                      </div>
+                                      <div class="col-12 col-md-6" style="padding:5px">
+                                        <label for="exampleInputName1">Employee Id</label> 
+                                        <input type="text" class="form-control" value="{{staff.empid}}" disabled>
+                                      </div>
+                                      <div class="col-12 col-md-6" style="padding:5px">
+                                        <label for="exampleInputName1">Status</label> 
+                                        <input type="text" class="form-control" value="{{staff.status}}" disabled>
+                                      </div>
+                                      
+                                </div>
+                            </div>
+                            <div class="container">
+                              <div class="row">
+                                <div class="col-12 col-md-3"  style="padding:5px">
+                                  <label for="exampleInputName1">House name</label> 
+                                  <input type="text" class="form-control" value="{{staff.house}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3"   style="padding:5px">
+                                  <label for="exampleInputName1">Address Line 1</label> 
+                                  <input type="text" class="form-control" value="{{staff.street}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3" style="padding:5px">
+                                  <label for="exampleInputName1"  >Address Line 2</label> 
+                                  <input type="text" class="form-control" value="{{staff.street2}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3"  style="padding:5px">
+                                  <label for="exampleInputName1">City</label> 
+                                  <input type="text" class="form-control" value="{{staff.city}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3"  style="padding:5px">
+                                  <label for="exampleInputName1">State</label> 
+                                  <input type="text" class="form-control" value="{{staff.state}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3"  style="padding:5px">
+                                  <label for="exampleInputName1">Pin</label> 
+                                  <input type="text" class="form-control" value="{{staff.pin}}" disabled>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="container">
+                              <div class="row">
+                                <div class="col-12 col-md-3"  style="padding:5px">
+                                  <label for="exampleInputName1">Gender</label> 
+                                  <input type="text" class="form-control" value="{{staff.sex}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3"   style="padding:5px">
+                                  <label for="exampleInputName1">Date of Birth</label> 
+                                  <input type="text" class="form-control" value="{{staff.dob}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3" style="padding:5px">
+                                  <label for="exampleInputName1"  >Blood Group</label> 
+                                  <input type="text" class="form-control" value="{{staff.blood_group}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-3"  style="padding:5px">
+                                  <label for="exampleInputName1">Date of Joining</label> 
+                                  <input type="text" class="form-control" value="{{staff.doj}}" disabled>
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div class="container">
+                              <div class="row">
+                                <div class="col-12 col-md-6"  style="padding:5px">
+                                  
+                                  <a href="{{staff.facebook}}" class="btn btn-primary"><i class="ti ti-facebook"></i> Facebook</a>
+                                  <a href="{{staff.instagram}}" class="btn btn-primary"><i class="ti ti-instagram"></i> Instagram</a>
+                                  <a href="{{staff.linkedin}}" class="btn btn-primary"><i class="ti ti-linkedin"></i> Linked In</a>
+                                </div>
+                                
+                              </div>
+                            </div>
+
+                            
+                        </div>
+                
+                </div>
+                    </div>
+                </div>
+                
+            </div>
+            <!--- End row -->
+
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

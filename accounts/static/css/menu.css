@@ -1,3 +1,4 @@
+@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css';
 /* Side_bar */
 
 .side_bar {
@@ -128,8 +129,10 @@
 	transition: all 0.3s;
 }
 .sidebar-menu li a.active .ti-angle-down:before {
-	content: "\e648";
-	font-family: 'themify';
+	/* content: "\e648";
+	font-family: 'themify'; */
+	content: "\f0de";
+	font-family: 'FontAwesome';
 }
 .sidebar-menu li a:hover i {
 	color: #954afe;

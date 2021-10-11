@@ -14,7 +14,13 @@
       <li> <a href="{% url 'view_students' %}"><i class="ti ti-user"></i> <span>Students</span></a></li>
       <li> <a href="{% url 'view_leads' %}"><i class="fas fa-book-medical"></i> <span>Leads</span></a></li>
       <li> <a href="{% url 'view_mails' %}"><i class="fa fa-envelope-o"></i> <span>Mail</span></a></li>
-      <li> <a href="{% url 'jobs' %}"><i class="ti ti-briefcase"></i> <span>Jobs</span></a></li>
+      <li class="menu_sub"> <a href="#"><i class="ti ti-briefcase"></i> <span>Jobs</span><span
+        class="ti ti-angle-down styleicon"></span></a>
+        <ul class="down_menu">
+          <li><a href="{% url 'jobs' %}">New Job Postings</a></li>
+          <li><a href="{% url 'add_job' %}">Add New Jobs</a></li>
+        </ul>
+      </li>
       <li> <a href="{% url 'jobs' %}"><i class="ti ti-rss"></i> <span>Teq News</span></a></li>
       <!-- <li class="menu_sub"> <a href="#"> <i class="ti ti-blackboard"></i> <span>UI Elements </span> <span
             class="badge badge-pill badge-danger float-right">New</span> </a>
