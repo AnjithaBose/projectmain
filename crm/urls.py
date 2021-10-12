@@ -38,6 +38,7 @@ urlpatterns = [
     path('administrator/mail/send/',SendMail.as_view(),name='send_mail'),
     path('administrator/draft/send/<id>/',SendDraft.as_view(),name='send_draft'),
     path('administrator/staff/add/',CreateStaff.as_view(),name='add_staff'),
+    path('administrator/staff/edit/<id>/',EditStaff.as_view(),name='edit_staff'),
 
     path('operations/home/',OperationsDashboard.as_view(),name='operations_dashboard'),
     path('operations/batches/',ViewBatches.as_view(),name='view_batches'),

@@ -945,6 +945,26 @@ class OperationsDashboard(View):
         else:
             return redirect('home')
 
+class EditStaff(View):
+    def get(self, request,id):
+        x = AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            profile = Staff.objects.get(id=id)
+            form = CreateStaffForm(instance=profile)
+            context={'staff':staff,'form':form,'profile':profile}
+            return render(request,'admin/edit_staff.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request,id):
+        x = AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            profile = Staff.objects.get(id=id)
+            form = CreateStaffForm(instance=profile)
+
+
 
 
 

@@ -62,6 +62,11 @@ class AddJobForm(ModelForm):
         model = Job
         fields = ['tags','title','description','link']
 
+class ReportingForm(ModelForm):
+    class Meta:
+        model = Reporting
+        fields = ['manager']
+
         
 
 

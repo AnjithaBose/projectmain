@@ -65,7 +65,10 @@
                     {% endif %}
                   </ul>
                   <a href="{% url 'message' i.id %}"><button type="button" class="btn btn-primary m-t-20 btn-rounded btn-bordered waves-effect w-md waves-light">Message Now</button></a>
-                  
+                  {% if staff.stype == '4' %}
+                  <hr>
+                  <a href="{% url 'edit_staff' i.id %}" class="btn btn-secondary-rgba" style="width: 100%;"><i class="ti ti-pencil-alt"></i>Edit Profile</a>
+                  {% endif %}
                 </div>
               </div>
             </div>
