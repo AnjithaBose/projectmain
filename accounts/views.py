@@ -178,10 +178,10 @@ class ViewBatches(View):
         x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            wdbatch = Batch.objects.filter(type="Weekday",approval='1')
+            wdbatch = Batch.objects.filter(type="Weekday",approval='1').order_by('status')
             for i in wdbatch:
                 i = BatchStrength(request,i.id)
-            webatch = Batch.objects.filter(type="Weekend",approval='1')
+            webatch = Batch.objects.filter(type="Weekend",approval='1').order_by('status')
             for i in wdbatch:
                 i = BatchStrength(request,i.id)
             page = Pagination(request,wdbatch,5)
@@ -215,12 +215,12 @@ class ViewBatches(View):
         else:
             return redirect('home')
 
-class ApprovalBatch(View):
-    def get(self,request):
-        x = ManagerCheck(request)
-        if x == True:
-            staff = Staff.objects.get(user=request.user)
-            batch = Batch.objects.filter()
+# class ApprovalBatch(View):
+#     def get(self,request):
+#         x = ManagerCheck(request)
+#         if x == True:
+#             staff = Staff.objects.get(user=request.user)
+#             batch = Batch.objects.filter()
 
 
 class ViewBatch(View):
@@ -255,7 +255,6 @@ class EditBatch(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             batch = Batch.objects.get(id=id)
-            temp = CopyBatch(batch)
             form = BatchCreateForm(request.POST,instance=batch)
             if form.is_valid():
                 f = form.save(commit=False)
@@ -263,10 +262,10 @@ class EditBatch(View):
                 f.last_edit_user = staff 
                 if staff.stype == '4' or staff.stype== '5':
                     f.approval = '1'
-                    temp.delete()
                     f.to_be_approved_by = staff
                     msg = "Batch edits have been updated"
                 else:
+                    temp = CopyBatch(request,batch)
                     f.approval = '2'
                     r = Reporting.objects.get(user=staff)
                     f.to_be_approved_by = r.manager
@@ -281,6 +280,65 @@ class EditBatch(View):
                 return render(request,'messages/operations/batches.html',context)
         else:
             return redirect('home')
+
+
+class ViewBatchEditApprovals(View):
+    def get(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            temp = TempBatch.objects.filter(to_be_approved_by=staff)
+            context={'staff':staff,'temp':temp}
+            return render(request,'operations/batch_approvals.html',context)
+        else:
+            return redirect('home')
+
+class ApproveBatch(View):
+    def get(self, request,id):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            temp = TempBatch.objects.get(id=id,to_be_approved_by= staff)
+            batch = temp.batch
+            batch.approval = '1'
+            batch.save()
+            temp.delete()
+            context={'staff':staff}
+            return redirect('batch_edit_approvals')
+        else:
+            return redirect('home')
+
+class RejectBatch(View):
+    def get(self, request,id):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            temp = TempBatch.objects.get(id=id,to_be_approved_by= staff)
+            batch = temp.batch
+            batch.subject = temp.subject
+            batch.batch_code = temp.batch_code
+            batch.trainer = temp.trainer
+            batch.start_date = temp.start_date
+            batch.end_date = temp.end_date
+            batch.start_time = temp.start_time
+            batch.end_time = temp.end_time
+            batch.link = temp.link
+            batch.passcode = temp.passcode
+            batch.type = temp.type
+            batch.status = temp.status
+            batch.approval = '1'
+            batch.save()
+            temp.delete()
+            context={'staff':staff}
+            return redirect('batch_edit_approvals')
+        else:
+            return redirect('home')
+
+
+
+
+
+
 
 
 class ViewMails(View):

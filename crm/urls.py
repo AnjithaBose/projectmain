@@ -49,6 +49,9 @@ urlpatterns = [
     path('operations/scd/add/<id>/',AddSCD.as_view(),name='add_scd'),
     path('operations/scd/delete/<id>/',DeleteSCD.as_view(),name='delete_scd'),
     path('operations/view/student/<id>/',ViewStudent.as_view(),name='view_student'),
+    path('operations/view/batch/approvals/',ViewBatchEditApprovals.as_view(),name='batch_edit_approvals'),
+    path('operations/batch/approve/<id>/',ApproveBatch.as_view(),name='approve_batch'),
+    path('operations/batch/reject/<id>/',RejectBatch.as_view(),name='reject_batch'),
 
     path('sales/leads/',Leads.as_view(),name='view_leads'),
     path('sales/closure/',ViewClosure.as_view(),name='view_closure'),

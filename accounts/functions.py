@@ -139,8 +139,10 @@ def BatchStrength(request,id):
     batch.save()
     return(batch)
 
-def CopyBatch(batch):
-    temp = TempBatch(batch=batch,subject=batch.subject,batch_code=batch.batch_code,trainer=batch.trainer,start_date=batch.start_date,end_date=batch.end_date,start_time=batch.start_time,end_time=batch.end_time,link=batch.link,passcode=batch.passcode,type=batch.type,status=batch.status)
+def CopyBatch(request,batch):
+    staff=Staff.objects.get(user=request.user)
+    reporting = Reporting.objects.get(user=staff)
+    temp = TempBatch(batch=batch,subject=batch.subject,batch_code=batch.batch_code,trainer=batch.trainer,start_date=batch.start_date,end_date=batch.end_date,start_time=batch.start_time,end_time=batch.end_time,link=batch.link,passcode=batch.passcode,type=batch.type,to_be_approved_by=reporting.manager)
     temp.save()
     return (temp)
 

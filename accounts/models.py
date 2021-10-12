@@ -129,11 +129,9 @@ class Batch(models.Model):
     last_edit_user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='edited_by')
     approval = models.CharField(max_length=100,null=True, blank=True,choices=approval_choices ,default='2')
     to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='approved_by')
-
     def __str__(self):
         s = "-"
         return "%s %s %s %s %s %s %s" % (self.batch_code,s, self.trainer,s,self.start_date,s, self.start_time)
-
 
 class TempBatch(models.Model):
     batch = models.ForeignKey(Batch, on_delete=models.PROTECT,null=True, blank=True)
@@ -148,6 +146,7 @@ class TempBatch(models.Model):
     passcode = models.CharField(max_length=250,null=True, blank=True)
     type = models.CharField(max_length=100,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
     status = models.CharField(max_length=100,choices=(('2','Yet to Start'),('1','Ongoing'),('3','Completed'),('4','Cancelled')),default='2')
+    to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='temp_approved_by')
 
 class Reporting(models.Model):
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='staff')
