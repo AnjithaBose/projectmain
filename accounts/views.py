@@ -441,11 +441,11 @@ class GetMessage(View):
         chatroom = ChatRoom.objects.get(id=cid)
         messages = ChatMessage.objects.filter(chatroom=chatroom)
         for i in messages:
-            i.username = i.user.profile_pic.url
+            i.username = i.user.name
+            i.pic = i.user.profile_pic.url
             i.save()
-        return JsonResponse({"messages":list(messages.values())})
-        # data = serializers.serialize('json', messages)
-        # return HttpResponse(data, content_type="application/json")
+        return JsonResponse({"messages":list(messages.values()),"staff":str(staff)})
+        
 
 
 

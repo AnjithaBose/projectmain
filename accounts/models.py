@@ -176,6 +176,7 @@ class ChatMessage(models.Model):
     chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.PROTECT)
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True)
     username = models.CharField(max_length=500,null=True, blank=True)
+    pic = models.CharField(max_length=2000,null=True, blank=True)
     message = models.CharField(max_length=5000,null=True, blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
 

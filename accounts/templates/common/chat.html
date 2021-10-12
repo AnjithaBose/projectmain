@@ -52,19 +52,20 @@
                                     <form method="post" action>  
                                         {% csrf_token %}
                                         <div class="row">
-                                        <div class="col-1">
+                                        <div class="col-1 col-md-1">
                                             <center>
                                             <img class="img-circle pro_pic" src="{{staff.profile_pic.url}}" alt="{{staff.name}}" style="width: 30px;height: 30px;">
                                         </center>
                                         </div>
-                                        <div class="col-8 col-md-10">
+                                        <div class="col-7 col-md-9">
                                         {% load widget_tweaks %}
                                         <!-- <input class="publisher-input" type="text" placeholder="Write something"> -->
                                         {% render_field form.message class="form-control publisher-input" required="true" colspan="300px" %}
                                         </div>
-                                        <div class="col-1">
+                                        <div class="col-2 col-md-2">
                                             <center>
                                             <button class="btn btn-primary" type="submit" ><i class="fa fa-paper-plane"></i></button>
+                                            <a class="btn btn-warning" type="submit" ><i class="far fa-flag"></i></a>
                                         </center>
                                         </div>
                                     </div>
@@ -90,8 +91,14 @@
                             console.log(response);
                             $("#chat-content").empty();
                             for (var key in response.messages)
-                            {
-                                var temp="<div class='media media-chat alert alert-primary left-chat' ><img class='avatar img-circle pro_pic' src="+response.messages[key].username+" style='width: 40px;height: 40px;'><br><div class='media-body'><p>"+response.messages[key].message+"</p><p class='meta'><time><small>"+response.messages[key].timestamp+"</small></time></p></div></div>";
+                            {   
+                                if (response.staff == response.messages[key].username ){
+                                    var temp="<div class='media media-chat alert alert-primary left-chat' ><img class='avatar img-circle pro_pic' src="+response.messages[key].pic+" style='width: 40px;height: 40px;'>&nbsp;&nbsp;&nbsp;<div class='media-body'><p>"+response.messages[key].message+"</p><p class='meta'><time><small>"+response.messages[key].timestamp+"</small></time></p></div></div>";
+                                }
+                                else{
+                                    var temp="<div class='media media-chat alert alert-success right-chat'><div class='media-body'><p><img class='avatar img-circle pro_pic' src="+response.messages[key].pic+" style='width: 40px;height: 40px;'>&nbsp;&nbsp;&nbsp;"+response.messages[key].message+"</p><p class='meta'><time><small>"+response.messages[key].timestamp+"</small></time></p></div></div>";
+                                }
+                                
                                 $("#chat-content").append(temp);
                             }
                         },
