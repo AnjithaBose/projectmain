@@ -52,9 +52,9 @@ sex_choices = (
 )
 
 approval_choices =(
-    ('Approved', 'Approved'),
-    ('Rejected', 'Rejected'),
-    ('Pending', 'Pending'),
+    ('1', 'Approved'),
+    ('3', 'Rejected'),
+    ('2', 'Pending'),
 )
 
 
@@ -96,6 +96,10 @@ class Staff(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        unique_together = [['name']]
+
+
     
 
 
@@ -123,16 +127,35 @@ class Batch(models.Model):
     strength = models.IntegerField(null=True, blank=True)
     last_edit_time = models.DateTimeField(null=True, blank=True)
     last_edit_user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='edited_by')
-    approval = models.BooleanField(null=True, blank=True, default=False)
+    approval = models.CharField(max_length=100,null=True, blank=True,choices=approval_choices ,default='2')
     to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='approved_by')
 
     def __str__(self):
         s = "-"
         return "%s %s %s %s %s %s %s" % (self.batch_code,s, self.trainer,s,self.start_date,s, self.start_time)
 
+
+class TempBatch(models.Model):
+    batch = models.ForeignKey(Batch, on_delete=models.PROTECT,null=True, blank=True)
+    subject = models.ForeignKey(Course,on_delete=models.PROTECT)
+    batch_code = models.CharField(max_length=500, blank=True)
+    trainer = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,limit_choices_to={'stype':"3"})
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    start_time = models.TimeField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
+    link = models.CharField(max_length=1000, null=True, blank=True)
+    passcode = models.CharField(max_length=250,null=True, blank=True)
+    type = models.CharField(max_length=100,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
+    status = models.CharField(max_length=100,choices=(('2','Yet to Start'),('1','Ongoing'),('3','Completed'),('4','Cancelled')),default='2')
+
 class Reporting(models.Model):
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='staff')
     manager = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='manager')
+
+class ApprovalCount(models.Model):
+    user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,limit_choices_to=(Q(stype='4')|Q(status='5')|Q(status='6')),)
+    count = models.CharField(max_length=100, null=True, blank=True)
 
 class Email(models.Model):
     subject = models.CharField(max_length=1000, null=True, blank=True)
@@ -152,8 +175,17 @@ class ChatRoom(models.Model):
 class ChatMessage(models.Model):
     chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.PROTECT)
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True)
+    username = models.CharField(max_length=500,null=True, blank=True)
     message = models.CharField(max_length=5000,null=True, blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
+
+    def __unicode__(self):
+            return "[%s] %s by user: %s" % (
+                self.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                self.message,
+                self.user,
+                self.chatroom
+            )
 
 
 class Job(models.Model):

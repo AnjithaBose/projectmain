@@ -135,6 +135,7 @@
                       <th>Trainer</th>
                       <th>Start & End Date</th>
                       <th>Timing</th>
+                      <th>Strength</th>
                       <th>Status</th>
                       <th class="text-right"></th>
                     </tr>
@@ -147,6 +148,7 @@
                       <td>{{i.trainer}}</td>
                       <td>{{i.start_date}}-{{i.end_date}}</td>
                       <td>{{i.start_time}}-{{i.end_time}}</td>
+                      <td>{{i.strength}}</td>
                       {% if i.status == "2" %}
                       <td><span class="badge label-table badge-secondary">Upcoming</span></td>
                       {% elif i.status == "1" %}
@@ -161,8 +163,8 @@
                           <div class="dropdown">
                             <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
                               <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
-                                  <a class="dropdown-item" href="{% url 'edit_batch' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a> 
                                   <a class="dropdown-item" href="{% url 'view_batch' i.id %}"><i class="ti ti-info mr-2"></i>Info</a> 
+                                  <a class="dropdown-item" href="{% url 'edit_batch' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a> 
                               </div>
                           </div>
                         </div>
@@ -175,7 +177,7 @@
                   </tbody>
                   <tfoot>
                     <tr class="active">
-                      <td colspan="7">
+                      <td colspan="8">
                         <div class="text-right">
                           {% if course.has_previous %}
                             <a href="{% url 'view_batches' %}?page={{ wdbatch.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
@@ -199,6 +201,7 @@
                       <th>Start & End Date</th>
                       <th>Timing</th>
                       <th>Status</th>
+                      <th>Status</th>
                       <th class="text-right"></th>
                     </tr>
                   </thead>
@@ -210,6 +213,7 @@
                       <td>{{i.trainer}}</td>
                       <td>{{i.start_date}}-{{i.end_date}}</td>
                       <td>{{i.start_time}}-{{i.end_time}}</td>
+                      <td>{{i.strength}}</td>
                       {% if i.status == "2" %}
                       <td><span class="badge label-table badge-secondary">Upcoming</span></td>
                       {% elif i.status == "1" %}
@@ -224,6 +228,7 @@
                           <div class="dropdown">
                             <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
                               <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
+                                  <a class="dropdown-item" href="{% url 'view_batch' i.id %}"><i class="ti ti-info mr-2"></i>Info</a> 
                                   <a class="dropdown-item" href="{% url 'edit_batch' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a> 
                               </div>
                           </div>
@@ -237,7 +242,7 @@
                   </tbody>
                   <tfoot>
                     <tr class="active">
-                      <td colspan="7"><div class="text-right">
+                      <td colspan="8"><div class="text-right">
                         {% if course.has_previous %}
                         <a href="{% url 'view_batches' %}?page={{ webatch.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
                         {% endif %}

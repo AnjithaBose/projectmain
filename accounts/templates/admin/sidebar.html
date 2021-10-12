@@ -8,6 +8,14 @@
     </div>
     <ul id="dc_accordion" class="sidebar-menu tree">
       <li> <a href="{% url 'admin_dashboard' %}" class=" active"> <i class="ti ti-home"></i> <span>Dashboard</span></a> </li>
+      <li class="menu_sub"> <a href="#"> <i class="ti ti-flag"></i> <span>Approvals </span> <span
+            class="badge badge-pill badge-danger float-right">6</span> </a>
+        <ul class="down_menu">
+          <li><a href="alerts.html">Alerts<span
+            class="badge badge-pill badge-danger float-right">6</span> </a></li>
+          <li><a href="badges.html">Badges </a></li>
+        </ul>
+      </li>
       <li> <a href="{% url 'view_courses' %}"><i class="ti ti-book"></i> <span>Courses</span></a></li>
       <li> <a href="{% url 'view_batches' %}"><i class="ti ti-blackboard"></i> <span>Batches</span></a></li>
       <li> <a href="{% url 'view_contacts' %}"><i class="ti ti-id-badge"></i> <span>Contacts</span></a></li>

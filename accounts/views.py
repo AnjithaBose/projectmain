@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect
 from django.views import View
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib.auth import authenticate,login,logout
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
+from django.core import serializers
 
 from .functions import *
 from .models import *
@@ -48,9 +49,9 @@ class Home(View):
         if user.is_authenticated:
             try:
                 s = Staff.objects.get(user=user)
-                if s.stype == '1' :
+                if s.stype == '1' or s.stype == '5':
                     return redirect('operations_dashboard')
-                elif s.stype == '2' :
+                elif s.stype == '2' or s.stype == '6' :
                     return redirect('sales_dashboard')
                 elif s.stype == '3' :
                     # return redirect('trainer_dashboard')
@@ -61,6 +62,7 @@ class Home(View):
                     return redirect('logout')
             except:
                 try:
+                    s =Student.objects.get(user=user)
                     return redirect('student_dashboard')
                 except:
                     return redirect('logout')
@@ -176,8 +178,12 @@ class ViewBatches(View):
         x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            wdbatch = Batch.objects.filter(type="Weekday",approval=True)
-            webatch = Batch.objects.filter(type="Weekend",approval=True)
+            wdbatch = Batch.objects.filter(type="Weekday",approval='1')
+            for i in wdbatch:
+                i = BatchStrength(request,i.id)
+            webatch = Batch.objects.filter(type="Weekend",approval='1')
+            for i in wdbatch:
+                i = BatchStrength(request,i.id)
             page = Pagination(request,wdbatch,5)
             pages = Pagination(request,webatch,5)
             form = BatchCreateForm()
@@ -196,9 +202,9 @@ class ViewBatches(View):
                 code = time.time()
                 f.batch_code = "%s_%d" % (f.subject.code, code)
                 if staff.stype == '4' or staff.stype== '5':
-                    f.approval = True
+                    f.approval = '1'
                 else:
-                    f.approval = False
+                    f.approval = '2'
                 f.save()
                 msg = 'Batch added successfully'
                 context={'staff':staff,'msg':msg}
@@ -209,12 +215,20 @@ class ViewBatches(View):
         else:
             return redirect('home')
 
+class ApprovalBatch(View):
+    def get(self,request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            batch = Batch.objects.filter()
+
+
 class ViewBatch(View):
     def get(self, request,id):
         x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            batch = Batch.objects.get(id=id)
+            batch = BatchStrength(request,id)
             scd = StudentCourseData.objects.filter(batch=batch)
             form = SendMailForm()
             context={'staff':staff,'batch': batch,'scd':scd,'form':form}
@@ -241,19 +255,22 @@ class EditBatch(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             batch = Batch.objects.get(id=id)
+            temp = CopyBatch(batch)
             form = BatchCreateForm(request.POST,instance=batch)
             if form.is_valid():
                 f = form.save(commit=False)
                 f.last_edit_time = datetime.datetime.now()
                 f.last_edit_user = staff 
                 if staff.stype == '4' or staff.stype== '5':
-                    f.approval = True
+                    f.approval = '1'
+                    temp.delete()
                     f.to_be_approved_by = staff
                     msg = "Batch edits have been updated"
                 else:
-                    f.approval = False
+                    f.approval = '2'
                     r = Reporting.objects.get(user=staff)
                     f.to_be_approved_by = r.manager
+                    print(f.to_be_approved_by)
                     msg = "Batch edits have been noted and send for approval"
                 f.save()
                 context={'staff':staff,'msg':msg}
@@ -390,17 +407,7 @@ class Message(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            
-            receiver = Staff.objects.get(id=id)
-            
-            try:
-                chatroom = ChatRoom.objects.get(user1=staff,user2=receiver)
-            except:
-                try:
-                    chatroom = ChatRoom.objects.get(user1=receiver,user2=staff)
-                except:
-                    chatroom = ChatRoom(user1 = staff, user2 = receiver)
-                    chatroom.save()
+            chatroom = FindRoom(request,staff,id)
             chatmessage = ChatMessage.objects.filter(chatroom=chatroom).order_by('timestamp')
             form = SendChatMessageForm()
             context={'staff':staff,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
@@ -427,6 +434,19 @@ class Message(View):
             return redirect('message',id=id)
         else:
             return redirect('home')
+
+class GetMessage(View):
+    def get(self, request,id,cid):
+        staff = Staff.objects.get(user=request.user)
+        chatroom = ChatRoom.objects.get(id=cid)
+        messages = ChatMessage.objects.filter(chatroom=chatroom)
+        for i in messages:
+            i.username = i.user.profile_pic.url
+            i.save()
+        return JsonResponse({"messages":list(messages.values())})
+        # data = serializers.serialize('json', messages)
+        # return HttpResponse(data, content_type="application/json")
+
 
 
 class CreateStaff(View):
@@ -855,6 +875,19 @@ class EditProfile(View):
             return render(request,'messages/common/profile.html',context)
         else:
             return redirect('home')
+
+
+class OperationsDashboard(View):
+    def get(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            context ={'staff':staff}
+            return render(request,'operations/dashboard.html',context)
+        else:
+            return redirect('home')
+
+
 
 
 

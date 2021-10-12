@@ -129,6 +129,34 @@ def scd(request,student):
     student.save()
         
 
+def BatchStrength(request,id):
+    batch = Batch.objects.get(id=id)
+    scd = StudentCourseData.objects.filter(batch=batch)
+    count =0
+    for i in scd:
+        count = count + 1
+    batch.strength = count
+    batch.save()
+    return(batch)
+
+def CopyBatch(batch):
+    temp = TempBatch(batch=batch,subject=batch.subject,batch_code=batch.batch_code,trainer=batch.trainer,start_date=batch.start_date,end_date=batch.end_date,start_time=batch.start_time,end_time=batch.end_time,link=batch.link,passcode=batch.passcode,type=batch.type,status=batch.status)
+    temp.save()
+    return (temp)
+
+def FindRoom(request,staff,id):
+    receiver = Staff.objects.get(id=id)       
+    try:
+        chatroom = ChatRoom.objects.get(user1=staff,user2=receiver)
+    except:
+        try:
+            chatroom = ChatRoom.objects.get(user1=receiver,user2=staff)
+        except:
+            chatroom = ChatRoom(user1 = staff, user2 = receiver)
+            chatroom.save()
+    return(chatroom)
+
+
 
 
 

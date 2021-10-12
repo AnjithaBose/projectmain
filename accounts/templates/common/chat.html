@@ -39,30 +39,7 @@
                             <div class="card">
                                 
                                 <div class="ps-container ps-theme-default ps-active-y" id="chat-content" onload="updateScroll()" style="overflow-y: scroll !important; height:350px !important;">
-                                    {% for i in chatmessage %}
-                                    {% if i.user == staff %}
-                                    <div class="media media-chat alert alert-primary" style="padding:10px;margin-right: 40%;">
-                                         <img class="avatar img-circle pro_pic" src="{{i.user.profile_pic.url}}" alt="{{staff.name}}" style="width: 40px;height: 40px;">
-                                        <div class="media-body">
-                                            <p>{{i.message}}</p>
-                                            <p class="meta"><time><small>{{i.timestamp}}</small></time></p>
-                                        </div>
-                                    </div>
-                                    {% else %}
-                                    <div class="media media-chat alert alert-success" style="padding:10px;margin-left: 40%;text-align: right;"> 
-                                        
-                                        <div class="media-body">
-                                            <p><img class="avatar img-circle pro_pic" src="{{i.user.profile_pic.url}}" alt="{{staff.name}}" style="width: 40px;height: 40px;">
-                                                {{i.message}}</p>
-                                            <p class="meta"><time><small>{{i.timestamp}}</small></time></p>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% empty %}
-                                    <div class="media media-chat">
-                                        <p>No chat history available</p>
-                                    </div>
-                                    {% endfor %}
+                                    
                                     
                                     <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
                                         <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
@@ -103,6 +80,29 @@
             
             <!-- state end-->
             <script>
+                $(document).ready(function(){
+
+                setInterval(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url : '{{chatroom.id}}',
+                        success: function(response){
+                            console.log(response);
+                            $("#chat-content").empty();
+                            for (var key in response.messages)
+                            {
+                                var temp="<div class='media media-chat alert alert-primary left-chat' ><img class='avatar img-circle pro_pic' src="+response.messages[key].username+" style='width: 40px;height: 40px;'><br><div class='media-body'><p>"+response.messages[key].message+"</p><p class='meta'><time><small>"+response.messages[key].timestamp+"</small></time></p></div></div>";
+                                $("#chat-content").append(temp);
+                            }
+                        },
+                        // error: function(response){
+                        //     alert('An error occured')
+                        // }
+                    });
+                },1000);
+                })
+            </script>
+            <!-- <script>
             setTimeout(function()
             {
                 window.location.reload(1);
@@ -113,7 +113,7 @@
                 var element = document.getElementById("chat-content");
                 element.scrollTop = scrollTo(0,element.scrollHeight);
                 }
-            </script>
+            </script> -->
         </div>
     </div>
     {% include 'common/footer.html' %}

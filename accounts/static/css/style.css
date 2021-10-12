@@ -2887,6 +2887,8 @@ input[type="checkbox"] {
 	border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+
+
 @media (max-width:767px) {
 /** breadcrumbbar Sec **/
 .breadcrumbbar .widgetbar {
