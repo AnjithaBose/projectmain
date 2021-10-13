@@ -261,7 +261,7 @@ class StudentPayments(models.Model):
     representative = models.ForeignKey(Staff, on_delete=models.PROTECT,null=True, blank=True)
 
     def __str__(self):
-        return self.spd
+        return self.spd.student.name
 
 
 

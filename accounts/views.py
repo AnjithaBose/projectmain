@@ -1020,11 +1020,35 @@ class GetStudentPaymentDetails(View):
                 spd = StudentPaymentData(student=student,total="0")
                 spd.save()
             payments = StudentPayments.objects.filter(spd=spd).order_by('-timestamp')
-            totalfeeform = UpdateTotalFee(instance=spd)
-            context ={'staff':staff,'student':student,'spd':spd,'payments':payments}
+            feeform = StudentPaymentForm()
+            context ={'staff':staff,'student':student,'spd':spd,'payments':payments,'feeform':feeform}
             return render(request,'sales/student_payments.html',context)
         else:
             return redirect('home')
+
+    def post(self, request,id):
+        x = SalesCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            student = Student.objects.get(id=id)
+            spd = StudentPaymentData.objects.get(student=student)
+            feeform = StudentPaymentForm(request.POST)
+            if feeform.is_valid():
+                f = feeform.save(commit=False)
+                f.spd = spd
+                f.timestamp = datetime.datetime.now()
+                f.representative = staff
+                f.save()
+                msg = "Fee details successfully updated."
+                context ={'staff':staff,'msg':msg,'student':student}
+            else:
+                alert = "Failed to update fee details. Please review your edits."
+                context ={'staff':staff,'alert':alert,'student':student}
+            return render(request,'messages/common/student_profile.html',context)
+        else:
+            return redirect('home')
+
+
 
 
 
