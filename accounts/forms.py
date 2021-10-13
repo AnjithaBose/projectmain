@@ -71,6 +71,16 @@ class ReportingForm(ModelForm):
         model = Reporting
         fields = ['manager']
 
+class UpdateTotalFee(ModelForm):
+    class Meta:
+        model = StudentPaymentData
+        fields = ['total']
+
+class StudentPaymentForm(ModelForm):
+    class Meta:
+        model = StudentPayments
+        fields = ['amount']
+
         
 
 

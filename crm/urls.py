@@ -54,12 +54,14 @@ urlpatterns = [
     path('operations/batch/approve/<id>/',ApproveBatch.as_view(),name='approve_batch'),
     path('operations/batch/reject/<id>/',RejectBatch.as_view(),name='reject_batch'),
 
+    path('sales/home/',SalesDashboard.as_view(),name='sales_dashboard'),
     path('sales/leads/',Leads.as_view(),name='view_leads'),
     path('sales/closure/',ViewClosure.as_view(),name='view_closure'),
     path('sales/history/',ViewHistory.as_view(),name='view_history'),
     path('sales/update/lead/<id>/',UpdateLead.as_view(),name='update_lead'),
     path('sales/convert/lead/<id>/',CreateStudentAccount.as_view(),name='convert_lead'),
     path('sales/reverse/lead/<id>/',DeleteLMSProfile.as_view(),name='revert_lead'),
+    path('sales/student/payments/<id>/',GetStudentPaymentDetails.as_view(),name='get_student_payments'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),

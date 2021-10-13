@@ -27,6 +27,9 @@
                     <div class="col-md-4 col-lg-4 mr-0">
                         <div class="widgetbar">
                             <a href="{% url 'add_scd' student.id %}" class="btn btn-primary"><i class="ti ti-plus"></i> Course Data</a>
+                            {% if staff.stype == '4' or staff.stype == '2' or staff.stype == '6' %}
+                            <a href="{% url 'get_student_payments' student.id %}" class="btn btn-primary"><i class="ti ti-money"></i> Payment Details</a>
+                            {% endif %}
                             <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
                         </div>
                     </div>
@@ -106,6 +109,62 @@
                   </div>
                 </div>
                     </div>
+                </div>
+
+
+
+                <div class="row ">
+                  <div class="col-12">
+                    <div class="card">
+      
+                    
+      
+                      
+                      
+                      <h4 class="m-t-0 header-title">Batches Attended</h4>
+                      
+                      <div class="table-responsive">
+                      <table id="demo-foo-filtering" class="table table-striped table-bordered toggle-circle m-b-0" >
+                        <thead>
+                          <tr>
+                            <th>Course</th>
+                            <th>Batch Code</th>
+                            <th>Trainer</th>
+                            <th>Start & End Date</th>
+                            <th>Timing</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for i in cd %}
+                          <tr>
+                            <td><img class="img-circle pro_pic" src="{{i.batch.subject.pic.url}}" alt="{{i.batch}}" style="width: 40px;height:40px">{{i.batch.subject}}</td>
+                            <td>{{i.batch.batch_code}}</td>
+                            <td>{{i.batch.trainer}}</td>
+                            <td>{{i.batch.start_date}}-{{i.batch.end_date}}</td>
+                            <td>{{i.batch.start_time}}-{{i.batch.end_time}}</td>
+                            {% if i.batch.status == "2" %}
+                            <td><span class="badge label-table badge-secondary">Upcoming</span></td>
+                            {% elif i.batch.status == "1" %}
+                            <td><span class="badge label-table badge-success">Active</span></td>
+                            {% elif i.batch.status == "3" %}
+                            <td><span class="badge label-table badge-danger">Completed</span></td>
+                            {% elif i.batch.status == "4" %}
+                            <td><span class="badge label-table badge-warning">Cancelled</span></td>
+                            {% endif %}
+                            {% empty %}
+                            <td colspan="7">Not added to any batches before</td>
+                          </tr>
+                          {% endfor %}
+                          
+                        </tbody>
+                        <tfoot>
+                          
+                        </tfoot>
+                      </table>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
             </div>

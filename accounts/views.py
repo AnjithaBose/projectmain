@@ -203,10 +203,15 @@ class ViewBatches(View):
                 f.batch_code = "%s_%d" % (f.subject.code, code)
                 if staff.stype == '4' or staff.stype== '5':
                     f.approval = '1'
+                    f.to_be_approved_by = staff
+                    msg = 'Batch added successfully'
                 else:
                     f.approval = '2'
+                    reporting = Reporting.objects.get(user=staff) 
+                    f.to_be_approved_by = reporting.manager
+                    msg = 'Batch added successfully and has been sent for approval'
                 f.save()
-                msg = 'Batch added successfully'
+                temp = CopyBatch(request,f)
                 context={'staff':staff,'msg':msg}
             else:
                 alert = 'Batch creation failed!.Please review your edit.'
@@ -937,7 +942,7 @@ class EditProfile(View):
 
 class OperationsDashboard(View):
     def get(self, request):
-        x = StaffCheck(request)
+        x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
             context ={'staff':staff}
@@ -970,7 +975,6 @@ class EditStaff(View):
             if form.is_valid():
                 f = form.save(commit=False)
                 f.email = email
-                print(f.email)
                 if form_manager.is_valid():
                     reporting = Reporting.objects.get(user=profile)
                     reporting.manager = form_manager.cleaned_data['manager']
@@ -992,6 +996,36 @@ class EditStaff(View):
             return render(request,'messages/admin/staff_profile.html',context)
         else:
             return redirect('home')
+
+
+class SalesDashboard(View):
+    def get(self, request):
+        x = SalesCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            context ={'staff':staff}
+            return render(request,'operations/dashboard.html',context)
+        else:
+            return redirect('home')
+
+class GetStudentPaymentDetails(View):
+    def get(self, request,id):
+        x = SalesCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            student = Student.objects.get(id=id)
+            try:
+                spd = StudentPaymentData.objects.get(student=student)
+            except:
+                spd = StudentPaymentData(student=student,total="0")
+                spd.save()
+            payments = StudentPayments.objects.filter(spd=spd).order_by('-timestamp')
+            totalfeeform = UpdateTotalFee(instance=spd)
+            context ={'staff':staff,'student':student,'spd':spd,'payments':payments}
+            return render(request,'sales/student_payments.html',context)
+        else:
+            return redirect('home')
+
 
 
 

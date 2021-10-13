@@ -67,6 +67,7 @@ class Staff(models.Model):
     ('4', 'Admin'),
     ('5', 'Operations Manager'),
     ('6', 'Sales Manager'),
+    ('7', 'Trainer Manager'),
 
     )
     user = models.OneToOneField(User,on_delete=models.PROTECT,null=True,blank=True)
@@ -245,6 +246,23 @@ class Student(models.Model):
 class StudentCourseData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.PROTECT,related_name='student',null=True,blank=True)
     batch = models.ForeignKey(Batch, on_delete=models.PROTECT,related_name='batch',limit_choices_to=(Q(status='1')|Q(status='2')),blank=True)
+
+class StudentPaymentData(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.PROTECT,related_name='student_payments',null=True,blank=True)
+    total = models.CharField(max_length=100,null=True, blank=True)
+
+    def __str__(self):
+        return self.student.name
+
+class StudentPayments(models.Model):
+    spd = models.ForeignKey(StudentPaymentData,on_delete=models.PROTECT,null=True, blank=True,related_name='student_payment')
+    amount = models.CharField(max_length=100,null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
+    representative = models.ForeignKey(Staff, on_delete=models.PROTECT,null=True, blank=True)
+
+    def __str__(self):
+        return self.spd
+
 
 
 class Post(models.Model):

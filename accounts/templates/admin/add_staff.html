@@ -17,11 +17,11 @@
                     <div class="col-md-8 col-lg-8">
                         <h4 class="page-title">Add Staff</h4>
                         <div class="breadcrumb-list">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{% url 'view_contacts' %}">Contacts</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Add Staff</li>
-                            </ol>
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'view_contacts' %}">Contacts</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Add Staff</li>
+                        </ol>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4 mr-0">
@@ -37,119 +37,117 @@
             <!-- state start-->
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-12">
-                    <div class="card">
+                    <div class="card" >
                         <h4 class="m-t-0 header-title">Add Staff</h4>
-                        
-
+                       
                         
                         <div class="card card-body">
-                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
-                                {% csrf_token %}
-                              <div class="form-group row">
-                                <div class="col-12 col-md-12">
-                                  <label for="exampleInputName1">Name<code>*</code></label> 
-                                  {% load widget_tweaks %}
-                                  {% render_field form.name class="form-control" required="true" placeholder="Enter candidate name" style="text-transform:capitalize;" %}
-                                </div>
-                                
+                          <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                            {% csrf_token %}
+                            <div class="form-group row">
+                              <div class="col-12 col-md-12">
+                                <label for="exampleInputName1">Name<code>*</code></label>
+                                {% load widget_tweaks %}
+                                {% render_field form.name class="form-control" required="true" placeholder="Enter candidate name" style="text-transform:capitalize;" %}
                               </div>
-                              <div class="form-group row">
-                                <div class="col-12 col-md-4">
-                                    <label for="exampleInputEmail3">Employee ID<code>*</code></label>
-                                    {% render_field form.empid class="form-control" required="true" placeholder="Employee ID" style="text-transform:uppercase;" %}
-                                </div>
-                                <div class="col-12 col-md-4">
-                                  <label for="exampleInputName1">Mobile</label>
-                                {% render_field form.mobile class="form-control" required="true" type="text" placeholder="Mobile number"  %}
-                                </div>
-                                <div class="col-12 col-md-4">
-                                  <label for="exampleInputEmail3">Email<code>*</code></label>
-                                {% render_field form.email class="form-control"  required="true" type="email" placeholder="Enter email" %}
-                                </div>
-                                <div class="col-12 col-md-3">
-                                  <label for="exampleInputEmail3">Gender<code>*</code></label>
-                                {% render_field form.sex class="form-control"  required="true" %}
-                                </div>
-                                <div class="col-12 col-md-3">
-                                  <label for="exampleInputEmail3">Date of Birth<code>*</code></label>
+                  
+                            </div>
+                            <div class="form-group row">
+                              <div class="col-12 col-md-4">
+                                <label for="exampleInputEmail3">Employee ID<code>*</code></label>
+                                {% render_field form.empid class="form-control" required="true" placeholder="Employee ID" style="text-transform:uppercase;" %}
+                              </div>
+                              <div class="col-12 col-md-4">
+                                <label for="exampleInputName1">Mobile</label>
+                                {% render_field form.mobile class="form-control" required="true" type="text" placeholder="Mobile number" %}
+                              </div>
+                              <div class="col-12 col-md-4">
+                                <label for="exampleInputEmail3">Email<code>*</code></label>
+                                {% render_field form.email class="form-control" required="true" type="email" placeholder="Enter email" %}
+                              </div>
+                              <div class="col-12 col-md-3">
+                                <label for="exampleInputEmail3">Gender<code>*</code></label>
+                                {% render_field form.sex class="form-control" required="true" %}
+                              </div>
+                              <div class="col-12 col-md-3">
+                                <label for="exampleInputEmail3">Date of Birth<code>*</code></label>
                                 {% render_field form.dob class="form-control" required="true" type="date" %}
-                                </div>
-                                <div class="col-12 col-md-3">
-                                    <label for="exampleInputEmail3">Date of Joining<code>*</code></label>
-                                  {% render_field form.doj class="form-control" required="true" type="date" %}
-                                  </div>
-                                  <div class="col-12 col-md-3">
-                                    <label for="exampleInputEmail3">Blood Group</label>
-                                  {% render_field form.blood_group class="form-control"  %}
-                                  </div>
                               </div>
-                              <div class="form-group row">
-                                <div class="col-12 col-md-6">
-                                  <label for="exampleInputName1">House Name</label>
-                                {% render_field form.house class="form-control" placeholder="Enter house name or flat no"  %}
-                                </div>
-                                <div class="col-12 col-md-6">
-                                  <label for="exampleInputEmail3">Address Line 1</label>
+                              <div class="col-12 col-md-3">
+                                <label for="exampleInputEmail3">Date of Joining<code>*</code></label>
+                                {% render_field form.doj class="form-control" required="true" type="date" %}
+                              </div>
+                              <div class="col-12 col-md-3">
+                                <label for="exampleInputEmail3">Blood Group</label>
+                                {% render_field form.blood_group class="form-control" %}
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <div class="col-12 col-md-6">
+                                <label for="exampleInputName1">House Name</label>
+                                {% render_field form.house class="form-control" placeholder="Enter house name or flat no" %}
+                              </div>
+                              <div class="col-12 col-md-6">
+                                <label for="exampleInputEmail3">Address Line 1</label>
                                 {% render_field form.street class="form-control" placeholder="Enter address line 1" %}
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="exampleInputName1">Address Line 2</label>
-                                  {% render_field form.street2 class="form-control" placeholder="Enter address line 2"  %}
-                                  </div>
-                                  <div class="col-12 col-md-6">
-                                    <label for="exampleInputEmail3">City</label>
-                                  {% render_field form.city class="form-control" placeholder="Enter city" %}
-                                  </div>
-                                  <div class="col-12 col-md-6">
-                                    <label for="exampleInputName1">State</label>
-                                  {% render_field form.state class="form-control"  %}
-                                  </div>
-                                  <div class="col-12 col-md-6">
-                                    <label for="exampleInputEmail3">Pincode</label>
-                                  {% render_field form.pin class="form-control" placeholder="Enter pincode" %}
-                                  </div>
                               </div>
-                              <div class="form-group row">
-                                  {% if staff.stype == '4' %}
-                                <div class="col-12 col-md-6">
-                                  <label for="exampleInputName1">Department</label>
-                                {% render_field form.stype class="form-control" required="true"  %}
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label for="exampleInputEmail3">Profile Pic</label>
-                                  {% render_field form.profile_pic class="form-control" type="file" %}
-                                  </div>
-                                  {% else %}
-                                  <div class="col-12 col-md-12">
-                                    <label for="exampleInputEmail3">Profile Pic</label>
-                                  {% render_field form.profile_pic class="form-control" type="file" %}
-                                  </div>
-                                {% endif %}
-                                
+                              <div class="col-12 col-md-6">
+                                <label for="exampleInputName1">Address Line 2</label>
+                                {% render_field form.street2 class="form-control" placeholder="Enter address line 2" %}
                               </div>
-
-
-                              <div class="form-group row">
-                                <div class="col-12 col-md-4">
-                                  <label for="exampleInputName1"><i class="ti ti-facebook"></i></label>
-                                {% render_field form.facebook class="form-control" placeholder="Enter your fb account link"  %}
-                                </div>
-                                <div class="col-12 col-md-4">
-                                  <label for="exampleInputEmail3"><i class="ti ti-linkedin"></i></label>
+                              <div class="col-12 col-md-6">
+                                <label for="exampleInputEmail3">City</label>
+                                {% render_field form.city class="form-control" placeholder="Enter city" %}
+                              </div>
+                              <div class="col-12 col-md-6">
+                                <label for="exampleInputName1">State</label>
+                                {% render_field form.state class="form-control" %}
+                              </div>
+                              <div class="col-12 col-md-6">
+                                <label for="exampleInputEmail3">Pincode</label>
+                                {% render_field form.pin class="form-control" placeholder="Enter pincode" %}
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              {% if staff.stype == '4' %}
+                              <div class="col-12 col-md-6">
+                                <label for="exampleInputName1">Department</label>
+                                {% render_field form.stype class="form-control" required="true" %}
+                              </div>
+                              <div class="col-12 col-md-6">
+                                <label for="exampleInputEmail3">Profile Pic</label>
+                                {% render_field form.profile_pic class="form-control" type="file" %}
+                              </div>
+                              {% else %}
+                              <div class="col-12 col-md-12">
+                                <label for="exampleInputEmail3">Profile Pic</label>
+                                {% render_field form.profile_pic class="form-control" type="file" %}
+                              </div>
+                              {% endif %}
+                  
+                            </div>
+                  
+                  
+                            <div class="form-group row">
+                              <div class="col-12 col-md-4">
+                                <label for="exampleInputName1"><i class="ti ti-facebook"></i></label>
+                                {% render_field form.facebook class="form-control" placeholder="Enter your fb account link" %}
+                              </div>
+                              <div class="col-12 col-md-4">
+                                <label for="exampleInputEmail3"><i class="ti ti-linkedin"></i></label>
                                 {% render_field form.linkedin class="form-control" placeholder="Enter your linkedin account link" %}
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label for="exampleInputName1"><i class="ti ti-instagram"></i></label>
-                                  {% render_field form.instagram class="form-control" placeholder="Enter your instagram account link"  %}
-                                  </div>
                               </div>
-                              
-                              <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                              <a href="{% url 'view_contacts' %}" class="btn btn-light">Cancel</a>
-                            </form>
-                  </div>
+                              <div class="col-12 col-md-4">
+                                <label for="exampleInputName1"><i class="ti ti-instagram"></i></label>
+                                {% render_field form.instagram class="form-control" placeholder="Enter your instagram account link" %}
+                              </div>
+                            </div>
+                  
+                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                            <a href="{% url 'view_contacts' %}" class="btn btn-light">Cancel</a>
+                          </form>
+                            
                 </div>
-                    </div>
                 </div>
                 
             </div>

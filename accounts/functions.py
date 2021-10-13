@@ -57,6 +57,20 @@ def ManagerCheck(request):
     else:
         return (False)
 
+def SalesCheck(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            staff = Staff.objects.get(user=user)
+            if staff.stype == '4' or staff.stype=='2' or staff.stype== '6':
+                return (True)
+            else:
+                return (False)
+        except:
+            return (False)
+    else:
+        return (False)
+
 def mailsend(request,subject,message,from_address,to):
     email_list = to.split(",")
     for i in email_list:
@@ -167,6 +181,8 @@ def CheckActive(f):
         user.is_active = True
     user.save()
     staff.save()
+
+
 
 
 
