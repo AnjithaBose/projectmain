@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="col-12 col-md-3">
                                     <label for="exampleInputEmail3">Date of Joining</label>
-                                    {% render_field form.doj class="form-control" required="true" type="text" disabled="true" %}
+                                    {% render_field form.doj class="form-control" required="true" type="date" %}
                                   </div>
                                   <div class="col-12 col-md-3">
                                     <label for="exampleInputEmail3">Blood Group</label>
@@ -127,6 +127,17 @@
                                   </div>
                                   </div>
                                 
+                              </div>
+
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputName1">Status</label>
+                                {% render_field form.status class="form-control" required="true"  %}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Reporting Manager</label>
+                                {% render_field form_manager.manager class="form-control" required="true" name="manager" %}
+                                </div>
                               </div>
 
 

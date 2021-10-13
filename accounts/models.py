@@ -150,7 +150,7 @@ class TempBatch(models.Model):
 
 class Reporting(models.Model):
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='staff')
-    manager = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='manager',limit_choices_to=(Q(stype='4')|Q(status='5')|Q(status='6')))
+    manager = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='manager',limit_choices_to=Q(stype='4')|Q(stype='5')|Q(stype='6'))
 
 class ApprovalCount(models.Model):
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,limit_choices_to=(Q(stype='4')|Q(status='5')|Q(status='6')),)

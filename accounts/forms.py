@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from .models import *
+from django.db.models import Q
 
 
 class CourseCreateForm(ModelForm):
@@ -31,6 +32,8 @@ class SendChatMessageForm(ModelForm):
         fields = ['message']
 
 class CreateStaffForm(ModelForm):
+    name = forms.CharField(required=False)
+    email = forms.EmailField(required=False)
     blood_group = forms.ChoiceField(required=False,choices = groups)
     house = forms.CharField(required=False)
     street = forms.CharField(required=False)
@@ -42,9 +45,10 @@ class CreateStaffForm(ModelForm):
     facebook = forms.CharField(required=False)
     linkedin = forms.CharField(required=False)
     instagram = forms.CharField(required=False)
+    status = forms.ChoiceField(required=False,choices=(('Active','Active'),('Inactive','Inactive')))
     class Meta:
         model = Staff
-        fields = ['name','empid','mobile','email','sex','dob','doj','blood_group','house','street','street2','city','state','pin','stype','profile_pic','facebook','linkedin','instagram']
+        fields = ['name','empid','mobile','email','sex','dob','doj','blood_group','house','street','street2','city','state','pin','stype','profile_pic','facebook','linkedin','instagram','status']
 
 class LeadCreateForm(ModelForm):
     class Meta:

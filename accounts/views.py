@@ -952,7 +952,9 @@ class EditStaff(View):
             staff = Staff.objects.get(user=request.user)
             profile = Staff.objects.get(id=id)
             form = CreateStaffForm(instance=profile)
-            context={'staff':staff,'form':form,'profile':profile}
+            reporting = Reporting.objects.get(user=profile)
+            form_manager = ReportingForm(instance=reporting)
+            context={'staff':staff,'form':form,'profile':profile,'form_manager':form_manager}
             return render(request,'admin/edit_staff.html',context)
         else:
             return redirect('home')
@@ -962,7 +964,40 @@ class EditStaff(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             profile = Staff.objects.get(id=id)
-            form = CreateStaffForm(instance=profile)
+            email = profile.email
+            form = CreateStaffForm(request.POST,instance=profile)
+            form_manager = ReportingForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.email = email
+                print(f.email)
+                if form_manager.is_valid():
+                    reporting = Reporting.objects.get(user=profile)
+                    reporting.manager = form_manager.cleaned_data['manager']
+                    try:
+                        reporting.save()
+                        f.save()
+                        CheckActive(f)
+                        msg = "Updated staff account successfully."
+                        context ={'staff':staff,'msg':msg,'profile':profile}
+                    except:
+                        alert="Failed to edit staff account. Please review your edits."
+                        context ={'alert':alert,'staff':staff,'profile':profile}
+                else:
+                    alert="Failed to edit staff account. Please review your edits."
+                    context ={'alert':alert,'staff':staff,'profile':profile}
+            else:
+                alert="Failed to edit staff account. Please review your edits."
+                context ={'alert':alert,'staff':staff}
+            return render(request,'messages/admin/staff_profile.html',context)
+        else:
+            return redirect('home')
+
+
+
+                
+
+
 
 
 

@@ -158,6 +158,15 @@ def FindRoom(request,staff,id):
             chatroom.save()
     return(chatroom)
 
+def CheckActive(f):
+    staff = Staff.objects.get(email=f.email)
+    user = staff.user
+    if f.status == 'Inactive' :
+        user.is_active = False
+    else:
+        user.is_active = True
+    user.save()
+    staff.save()
 
 
 
