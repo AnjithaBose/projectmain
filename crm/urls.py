@@ -62,6 +62,12 @@ urlpatterns = [
     path('sales/convert/lead/<id>/',CreateStudentAccount.as_view(),name='convert_lead'),
     path('sales/reverse/lead/<id>/',DeleteLMSProfile.as_view(),name='revert_lead'),
     path('sales/student/payments/<id>/',GetStudentPaymentDetails.as_view(),name='get_student_payments'),
+    path('sales/leads/pending/activation/',ListLMSApprovals.as_view(),name='list_lms_approvals'),
+    path('sales/leads/approve/activation/<id>/',ApproveLMSProfile.as_view(),name='approve_lms_activate'),
+    path('sales/leads/pending/deactivation/',ListLMSDeletion.as_view(),name='list_lms_revert'),
+    path('sales/leads/approve/deactivation/<id>/',ApproveDelLMSProfile.as_view(),name='approve_lms_revert'),
+    path('sales/leads/reject/deactivation/<id>/',RejectDelLMSProfile.as_view(),name='reject_lms_revert'),
+
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),

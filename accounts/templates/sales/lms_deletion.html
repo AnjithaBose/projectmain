@@ -16,19 +16,17 @@
                 <!-- Start row -->
                 <div class="row">
                   <div class="col-md-8 col-lg-8">
-                    <h4 class="page-title">History</h4>
+                    <h4 class="page-title">Deactivate LMS</h4>
                     <div class="breadcrumb-list">
                       <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'view_leads' %}">Lead Register</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">History</li>
+                        <li class="breadcrumb-item active" aria-current="page">Deactivate LMS</li>
                       </ol>
                     </div>
                   </div>
                   <div class="col-md-4 col-lg-4 mr-0">
                     <div class="widgetbar">
-                        <a href="{% url 'view_leads' %}" class="btn btn-primary"><i class="fas fa-book-medical"></i> Lead Register</a>
-                        <a href="{% url 'view_closure' %}" class="btn btn-primary"><i class="far fa-thumbs-up"></i> Closures</a>
+                        <a href="{% url 'list_lms_approvals' %}" class="btn btn-primary"><i class="far fa-thumbs-up"></i> LMS Activation</a>
                         <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
                     </div>
                   </div>
@@ -42,28 +40,7 @@
         <div class="row ">
             <div class="col-12">
               <div class="card">
-
-
-              
-
-                <h4 class="m-t-0 header-title">Lead History</h4>
-                <!-- <div class="mb-3">
-                  <div class="row">
-                    <div class="col-12 text-sm-center form-inline">
-                      <div class="form-group mr-2">
-                        <select id="demo-foo-filter-status" class="custom-select">
-                          <option value="">Show all</option>
-                          <option value="active">Active</option>
-                          <option value="disabled">Disabled</option>
-                          <option value="suspended">Suspended</option>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <input id="demo-foo-search" type="text" placeholder="Search" class="form-control" autocomplete="on">
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
+                <h4 class="m-t-0 header-title">Deactivate LMS</h4>
                 <div class="table-responsive">
                 <table id="demo-foo-filtering" class="table table-striped table-bordered toggle-circle m-b-0" >
                   <thead>
@@ -73,7 +50,6 @@
                       <th>Email</th>
                       <th>Mobile</th>
                       <th>Date Created</th>
-                      <th>Status</th>
                       {% if staff.stype == '4' or staff.stype == '6' %}
                       <th>Generator</th>
                       {% endif %}
@@ -83,23 +59,12 @@
                   <tbody>
                     {% for i in lead %}
                     <tr>
-                      <td>{{forloop.counter}}</td>
+                        <td>{{forloop.counter}}</td>
                       <td>{{i.name}}</td>
                       <td>{{i.email}}</td>
                       <td>{{i.mobile}}</td>
                       <td>{{i.created_on}}</td>
-                      {% if i.status == 'New' %}
-                      <td><span class="badge label-table badge-primary">{{i.status}}</span></td>
-                      {% elif i.status == 'In Pipeline' %}
-                      <td><span class="badge label-table badge-secondary">{{i.status}}</span></td>
-                      {% elif i.status == 'Converted' %}
-                      <td><span class="badge label-table badge-success">{{i.status}}</span></td>
-                      {% elif i.status == 'Lost' %}
-                      <td><span class="badge label-table badge-warning">{{i.status}}</span></td>
-                      {% elif i.status == 'Not Interested' %}
-                      <td><span class="badge label-table badge-danger">{{i.status}}</span></td>
-                      {% endif %}
-                      {% if staff.stype == '4' or staff.stype == '5'  %}
+                      {% if staff.stype == '4' or staff.stype == '6' %}
                       <td>{{i.generator}}</td>
                       {% endif %}
                       <td class="text-right">
@@ -107,33 +72,24 @@
                           <div class="dropdown">
                             <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
                               <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
-                                  <a class="dropdown-item" href="{% url 'update_lead' i.id %}"><i class="ti ti-pencil mr-2"></i>Update</a> 
+                                  <a class="dropdown-item" href="{% url 'approve_lms_revert' i.id %}"><i class="ti ti-check mr-2"></i>Approve</a> 
+                                  <a class="dropdown-item" href="{% url 'reject_lms_revert' i.id %}"><i class="ti ti-close mr-2"></i>Reject</a> 
                               </div>
                           </div>
                         </div>
                       </td>
-                      
                       {% empty %}
-                      <td colspan="7">No closure to show.</td>
+                      <td colspan="7">No leads awaiting lms deletion.</td>
                     </tr>
                     {% endfor %}
                     
                   </tbody>
                   <tfoot>
                     <tr class="active">
-                      <td colspan="7"><div class="text-right">
-                        {% if lead.has_previous %}
-                        <a href="{% url 'view_closure' %}?page={{ lead.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
-                        {% endif %}
-                        {% if lead.has_next %}
-                        <a href="{% url 'view_closure' %}?page={{ lead.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
-                        {% endif %}
-                        </div></td>
+                      
                     </tr>
                   </tfoot>
-                </table></div><br><br>
-                
-                </div>
+                </table></div>
               </div>
             </div>
           </div>

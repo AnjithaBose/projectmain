@@ -32,8 +32,9 @@ class LoginView(View):
         if user is not None:
             login(request, user)
             return redirect('home')
+            return render(request,'common/login.html',{'msg':msg})
         else:
-            msg ="Invalid login.Check your credentials!"
+            msg = CheckAccount(username)
             return render(request,'common/login.html',{'msg':msg})
 
 
@@ -63,7 +64,8 @@ class Home(View):
             except:
                 try:
                     s =Student.objects.get(user=user)
-                    return redirect('student_dashboard')
+                    # return redirect('student_dashboard')
+                    return HttpResponse("Student dashboard")
                 except:
                     return redirect('logout')
         else:
@@ -557,8 +559,12 @@ class Leads(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            new = Lead.objects.filter(status="New")
-            pipe = Lead.objects.filter(status="In Pipeline")
+            if staff.stype == '4' or staff.stype == '6':
+                new = Lead.objects.filter(status="New")
+                pipe = Lead.objects.filter(status="In Pipeline")
+            else:
+                new = Lead.objects.filter(status="New",generator=staff)
+                pipe = Lead.objects.filter(status="In Pipeline",generator=staff)
             page = Pagination(request,new,10)
             pages = Pagination(request,pipe,10)
             form = LeadCreateForm()
@@ -626,7 +632,10 @@ class ViewClosure(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            lead = Lead.objects.filter(status='Converted').order_by('-created_on')
+            if staff.stype == '4' or staff.stype == '6':
+                lead = Lead.objects.filter(status='Converted').order_by('-created_on')
+            else:
+                lead = Lead.objects.filter(status='Converted',generator=staff).order_by('-created_on')
             page = Pagination(request,lead,10)
             context={'staff':staff,'lead':page}
             return render(request,'sales/closure.html',context)
@@ -638,7 +647,10 @@ class ViewHistory(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            lead = Lead.objects.all().order_by('-created_on')
+            if staff.stype == '4' or staff.stype == '6':
+                lead = Lead.objects.all().order_by('-created_on')
+            else:
+                lead = Lead.objects.filter(generator=staff).order_by('-created_on')
             page = Pagination(request,lead,10)
             history = True
             context={'staff':staff,'lead':page,'history':history}
@@ -652,8 +664,15 @@ class CreateStudentAccount(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             lead = Lead.objects.get(id=id)
-            process = "Are you sure you want to proceed?"
-            context={'staff':staff,'lead':lead,'process':process}
+            try:
+                student = Student.objects.get(email=lead.email)
+                if student:
+                    ActivateStudent(student)
+                    msg = 'Student account successfully activated'
+                    context={'staff':staff,'lead':lead,'msg':msg} 
+            except:
+                process = "Are you sure you want to proceed?"
+                context={'staff':staff,'lead':lead,'process':process}
             return render(request,'messages/sales/leads.html',context)
         else:
             return redirect('home')
@@ -664,15 +683,16 @@ class CreateStudentAccount(View):
             staff = Staff.objects.get(user=request.user)
             lead = Lead.objects.get(id=id)
             try:
-                student = StudentConvert(request,lead)
                 lead.status = "Converted"
-                lead.save()
-                subject="[TEQSTORIES]-ACCOUNT CREATED"
-                message =  "Hi Learner, \n\n\nYour account has created with https://lms.teqstories.com. Please login using your email as username and mobile number as password. \n\n\nIf you feel any difficulty please contact our representative or mail us as techsupport@teqstories.com. \n\n\nWith Regards,\nStudent Support Team,\nTeqstories "
-                from_address = 'techsupport@teqstories.com'
-                to = lead.email
-                mailsend(request,subject,message,from_address,to)
-                msg = "Student account has been created and mails have been sent."
+                if staff.stype == '4' or staff.stype == '6':
+                    StudentAccountCreation(request,lead)
+                    msg = "Student account has been created and mails have been sent."
+                else:
+                    lead.approval = '2'
+                    manager = Manager(staff)
+                    lead.to_be_approved_by = manager
+                    lead.save()
+                    msg = "Student account has been created and have been sent for approval."
                 context={'staff':staff,'msg':msg}
             except:
                 alert = "Student account creation failed.Please try again"
@@ -680,6 +700,32 @@ class CreateStudentAccount(View):
             return render(request,'messages/sales/leads.html',context)
         else:
             return redirect('home')
+
+class ListLMSApprovals(View):
+    def get(self, request):
+        x = SalesManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            if staff.stype == '4':
+                leads = Lead.objects.filter(approval='2',lms=False).order_by('-created_on')
+            else:
+                leads = Lead.objects.filter(approval='2',lms= False,to_be_approved_by= staff).order_by('-created_on')
+            context={'staff':staff,'leads':leads}
+            return render(request,'sales/lms_approval.html',context)
+        else:
+            return redirect('home')
+
+
+class ApproveLMSProfile(View):
+    def get(self, request,id):
+        x = SalesManagerCheck(request)
+        if x == True:
+            return redirect('convert_lead',id=id)
+        else:
+            return redirect('home')
+
+
+
 
 class DeleteLMSProfile(View):
     def get(self, request,id):
@@ -698,14 +744,21 @@ class DeleteLMSProfile(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             lead = Lead.objects.get(id=id)
-            try:    
+            try:
                 student = Student.objects.get(email=lead.email)
-                lead.status = "In Pipeline"
-                lead.save()
-                user = User.objects.get(username=student.user)
-                student.delete()
-                user.delete()
-                msg = "Account deleted successfully"
+                if staff.stype == '4' or staff.stype== '6':
+                    DeleteStudent(student)
+                    lead.status = "Lost"
+                    lead.approval = '1'
+                    lead.save()
+                    msg = "Account deleted successfully"
+                else:
+                    lead.approval = '2'
+                    reporting = Reporting.objects.get(user=staff)
+                    print("test")
+                    lead.to_be_approved_by = reporting.manager
+                    lead.save()
+                    msg = "Account has been marked for deletion and has been sent for approval."
                 context={'staff':staff,'msg':msg}
             except:
                 alert = "Account deletion failed.Please try again"
@@ -713,6 +766,46 @@ class DeleteLMSProfile(View):
             return render(request,'messages/sales/leads.html',context)
         else:
             return redirect('home')
+
+class ListLMSDeletion(View):
+    def get(self, request):
+        x = SalesManagerCheck(request)
+        if x == True:
+            user = request.user
+            staff = Staff.objects.get(user=request.user)
+            if staff.stype == '4':
+                lead = Lead.objects.filter(approval='2',lms = True)
+            else:
+                lead = Lead.objects.filter(approval='2',lms=True,to_be_approved_by = staff)
+            context={'staff':staff,'lead':lead}
+            return render(request,'sales/lms_deletion.html',context)
+        else:
+            return redirect('home')
+
+
+class ApproveDelLMSProfile(View):
+    def get(self, request,id):
+        x = SalesManagerCheck(request)
+        if x == True:
+            return redirect('revert_lead', id=id)
+        else:
+            return redirect('home')
+
+class RejectDelLMSProfile(View):
+    def get(self, request,id):
+        x = SalesManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            lead = Lead.objects.get(id = id)
+            lead.approval = '1'
+            lead.to_be_approved_by = staff
+            lead.save()
+            return redirect('list_lms_revert')
+        else:
+            return redirect('home')
+
+
+
 
 
 class Students(View):

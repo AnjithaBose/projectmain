@@ -212,9 +212,12 @@ class Lead(models.Model):
     email = models.EmailField(max_length=200,null=True,blank=True)
     mobile = models.CharField(max_length=10,null=True,blank=True)
     sex = models.CharField(max_length=10,null=True,choices=sex_choices,blank=True,default="Male")
-    generator = models.ForeignKey(Staff,on_delete=models.PROTECT, blank=True,null=True)
+    generator = models.ForeignKey(Staff,on_delete=models.PROTECT, blank=True,null=True,related_name='representative')
     created_on = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=100,null=True, blank=True,choices=groups,default="New")
+    lms = models.BooleanField(default = False)
+    approval = models.CharField(max_length=100,null=True, blank=True,choices=approval_choices)
+    to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT, blank=True,null=True)
 
     def __str__(self):
         return self.name

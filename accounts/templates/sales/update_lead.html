@@ -41,9 +41,17 @@
                         <h4 class="m-t-0 header-title">Update Lead Status</h4>
                         <div class="text-right">
                             {% if lead.status == "Converted" %}
-                            <a class="btn btn-primary-rgba" href="{% url 'revert_lead' lead.id %}"><i class="fas fa-info-circle"></i> Delete LMS Profile</a>
-                            {% else %}
-                            <a class="btn btn-primary-rgba" href="{% url 'convert_lead' lead.id %}"><i class="fas fa-info-circle"></i> Create LMS Profile</a>
+                                {% if lead.approval == '1' %}
+                                    <a class="btn btn-primary-rgba" href="{% url 'revert_lead' lead.id %}"><i class="fas fa-info-circle"></i> Delete LMS Profile</a>
+                                {% else %}
+                                    <button class="btn btn-primary-rgba" onclick="alert('This lead is awaiting approval!')"><i class="fas fa-info-circle"></i> Pending Deletion</button>
+                                {% endif %}
+                            {% elif lead.status == "New" or lead.status == "In Pipeline" %}
+                                {% if lead.approval == "1" %}
+                                    <a class="btn btn-primary-rgba" href="{% url 'convert_lead' lead.id %}"><i class="fas fa-info-circle"></i> Create LMS Profile</a>
+                                {% endif %}
+                            {% elif lead.status == "Not Interested" or lead.status == "Lost" %}
+                                <button class="btn btn-primary-rgba" onclick="alert('Update the lead as converted and then try again.')"><i class="fas fa-info-circle"></i> Create LMS Profile</button>
                             {% endif %}   
                         </div>
 
@@ -62,7 +70,7 @@
                                 {% render_field form.email class="form-control" required="true" placeholder="Enter email" type="email"   style="text-transform: lowercase" %}
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label for="exampleInputEmail3">Mobile<code>** Dont include any extension or zeroes</code></label>
+                                    <label for="exampleInputEmail3">Mobile<code>** Dont include any extensions</code></label>
                                   {% render_field form.mobile class="form-control" required="true" maxlength="10" placeholder="Enter contact number" %}
                                   </div>
                                   <div class="col-12 col-md-4">

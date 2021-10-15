@@ -28,7 +28,7 @@
                   <div class="col-md-4 col-lg-4 mr-0">
                     <div class="widgetbar">
                         <a href="{% url 'view_leads' %}" class="btn btn-primary"><i class="fas fa-book-medical"></i> Lead Register</a>
-                        <a href="#" class="btn btn-primary"><i class="fas fa-history"></i> History</a>
+                        <a href="{% url 'view_history' %}" class="btn btn-primary"><i class="fas fa-history"></i> History</a>
                         <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
                     </div>
                   </div>
@@ -87,8 +87,9 @@
                       <td>{{i.email}}</td>
                       <td>{{i.mobile}}</td>
                       <td>{{i.created_on}}</td>
-                      {% if staff.stype == '4' or staff.stype == '5'  %}
+                      {% if staff.stype == '4' or staff.stype == '6'  %}
                       <td>{{i.generator}}</td>
+                      {% endif %}
                       <td class="text-right">
                         <div class="btn-group mr-2">
                           <div class="dropdown">
@@ -99,7 +100,7 @@
                           </div>
                         </div>
                       </td>
-                      {% endif %}
+                     
                       {% empty %}
                       <td colspan="7">No closure to show.</td>
                     </tr>
