@@ -80,7 +80,7 @@ class AdminDashboard(View):
             context={'staff':staff}
             return render(request,'admin/dashboard.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class ViewCourses(View):
@@ -94,7 +94,7 @@ class ViewCourses(View):
             context={'staff':staff,'course': page,'form':form}
             return render(request,'admin/courses.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request):
         x= AdminCheck(request)
@@ -112,7 +112,7 @@ class ViewCourses(View):
                 context={'staff':staff,'course': course,'form':form,'alert':alert}
                 return render(request,'messages/admin/courses.html',context)  
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class EditCourse(View):
     def get(self, request,id):
@@ -124,7 +124,7 @@ class EditCourse(View):
             context={'staff':staff,'course': course,'form':form}
             return render(request,'admin/edit_course.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x= AdminCheck(request)
@@ -148,7 +148,7 @@ class EditCourse(View):
                 context={'staff':staff,'course': course,'form':form,'msg':msg}
                 return render(request,'admin/edit_course.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class DeleteCourse(View):
     def get(self, request,id):
@@ -160,7 +160,7 @@ class DeleteCourse(View):
             context={'staff':staff,'course': course,'confirm':confirm}
             return render(request,'messages/admin/courses.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x= AdminCheck(request)
@@ -172,12 +172,12 @@ class DeleteCourse(View):
             context={'staff':staff,'course': course,'msg':msg}
             return render(request,'messages/admin/courses.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class ViewBatches(View):
     def get(self, request):
-        x = OperationsCheck(request)
+        x = MainOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
             wdbatch = Batch.objects.filter(type="Weekday",approval='1').order_by('status')
@@ -192,7 +192,7 @@ class ViewBatches(View):
             context={'staff':staff,'wdbatch': page,'webatch': pages,'form':form}
             return render(request,'operations/batches.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request):
         x = OperationsCheck(request)
@@ -220,7 +220,7 @@ class ViewBatches(View):
                 context={'staff':staff,'alert':alert}
             return render(request,'messages/operations/batches.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 # class ApprovalBatch(View):
 #     def get(self,request):
@@ -241,7 +241,7 @@ class ViewBatch(View):
             context={'staff':staff,'batch': batch,'scd':scd,'form':form}
             return render(request,'operations/batch.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 
@@ -255,7 +255,7 @@ class EditBatch(View):
             context={'staff':staff,'batch': batch,'form':form}
             return render(request,'operations/edit_batch.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x = OperationsCheck(request)
@@ -286,7 +286,7 @@ class EditBatch(View):
                 context={'staff':staff,'alert':alert}
                 return render(request,'messages/operations/batches.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class ViewBatchEditApprovals(View):
@@ -298,7 +298,7 @@ class ViewBatchEditApprovals(View):
             context={'staff':staff,'temp':temp}
             return render(request,'operations/batch_approvals.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class ApproveBatch(View):
     def get(self, request,id):
@@ -313,7 +313,7 @@ class ApproveBatch(View):
             context={'staff':staff}
             return redirect('batch_edit_approvals')
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class RejectBatch(View):
     def get(self, request,id):
@@ -339,7 +339,7 @@ class RejectBatch(View):
             context={'staff':staff}
             return redirect('batch_edit_approvals')
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 
@@ -359,7 +359,7 @@ class ViewMails(View):
             context={'staff':staff,'draft':draft,'mail':page}
             return render(request,'admin/view_mails.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class SendMail(View):
@@ -373,7 +373,7 @@ class SendMail(View):
             context={'staff':staff,'form':form,'draft':draft,'mail':mail}
             return render(request,'admin/send_mail.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request):
         x = ManagerCheck(request)
@@ -398,7 +398,7 @@ class SendMail(View):
                 context={'staff':staff,'alert':alert}
             return render(request,'messages/admin/view_mails.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class SendMailNotification(View):
     def post(self, request,id):
@@ -424,7 +424,7 @@ class SendMailNotification(View):
                 context={'staff':staff,'alert':alert,'batch':batch}
             return render(request,'messages/admin/batch.html',context)
         else:
-            return redirect ('home')
+            return render(request,'messages/common/permission_error.html')
                 
 
 
@@ -439,7 +439,7 @@ class SendDraft(View):
             context={'staff':staff,'form':form,'draft':draft}
             return render(request,'admin/send_mail.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class ViewMail(View):
@@ -452,7 +452,7 @@ class ViewMail(View):
             context={'staff':staff,'form':form,'mail':mail}
             return render(request,'admin/view_mail.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class ViewStaff(View):
@@ -465,7 +465,7 @@ class ViewStaff(View):
             context={'staff':staff,'contacts':contacts}
             return render(request,'common/contacts.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class Message(View):
     def get(self, request,id):
@@ -478,7 +478,7 @@ class Message(View):
             context={'staff':staff,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
             return render(request,'common/chat.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x = StaffCheck(request)
@@ -498,7 +498,7 @@ class Message(View):
                 f.save()
             return redirect('message',id=id)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class GetMessage(View):
     def get(self, request,id,cid):
@@ -523,7 +523,7 @@ class CreateStaff(View):
             context={'staff':staff,'form':form}
             return render(request,'admin/add_staff.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request):
         x = ManagerCheck(request)
@@ -552,7 +552,7 @@ class CreateStaff(View):
             else:
                 return redirect('view_contacts')
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
                 
 class Leads(View):
     def get(self, request):
@@ -571,7 +571,7 @@ class Leads(View):
             context={'staff':staff,'form':form,'new':page,'pipe':pages}
             return render(request,'sales/leads.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request):
         x = SalesOperation(request)
@@ -594,7 +594,7 @@ class Leads(View):
                 context = {'alert':alert,'staff':staff}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class UpdateLead(View):
     def get(self, request,id):
@@ -606,7 +606,7 @@ class UpdateLead(View):
             context={'staff':staff,'form':form,'lead':lead}
             return render(request,'sales/update_lead.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x = SalesOperation(request)
@@ -625,7 +625,7 @@ class UpdateLead(View):
                 context={'staff':staff,'alert':alert}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class ViewClosure(View):
     def get(self, request):
@@ -640,7 +640,7 @@ class ViewClosure(View):
             context={'staff':staff,'lead':page}
             return render(request,'sales/closure.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class ViewHistory(View):
     def get(self, request):
@@ -656,7 +656,7 @@ class ViewHistory(View):
             context={'staff':staff,'lead':page,'history':history}
             return render(request,'sales/history.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class CreateStudentAccount(View):
     def get(self, request,id):
@@ -675,7 +675,7 @@ class CreateStudentAccount(View):
                 context={'staff':staff,'lead':lead,'process':process}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
         
     def post(self, request,id):
         x = SalesOperation(request)
@@ -699,7 +699,7 @@ class CreateStudentAccount(View):
                 context={'staff':staff,'alert':alert}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class ListLMSApprovals(View):
     def get(self, request):
@@ -713,7 +713,7 @@ class ListLMSApprovals(View):
             context={'staff':staff,'leads':leads}
             return render(request,'sales/lms_approval.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class ApproveLMSProfile(View):
@@ -722,7 +722,7 @@ class ApproveLMSProfile(View):
         if x == True:
             return redirect('convert_lead',id=id)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 
@@ -737,7 +737,7 @@ class DeleteLMSProfile(View):
             context={'staff':staff,'lead':lead,'confirm':confirm}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x = SalesOperation(request)
@@ -765,7 +765,7 @@ class DeleteLMSProfile(View):
                 context={'staff':staff,'alert':alert}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class ListLMSDeletion(View):
     def get(self, request):
@@ -780,7 +780,7 @@ class ListLMSDeletion(View):
             context={'staff':staff,'lead':lead}
             return render(request,'sales/lms_deletion.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class ApproveDelLMSProfile(View):
@@ -789,7 +789,7 @@ class ApproveDelLMSProfile(View):
         if x == True:
             return redirect('revert_lead', id=id)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class RejectDelLMSProfile(View):
     def get(self, request,id):
@@ -802,7 +802,7 @@ class RejectDelLMSProfile(View):
             lead.save()
             return redirect('list_lms_revert')
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 
@@ -817,7 +817,7 @@ class Students(View):
             context={'staff':staff,'student':student}
             return render(request,'common/students.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class ViewStudent(View):
     def get(self, request,id):
@@ -831,7 +831,7 @@ class ViewStudent(View):
             context={'staff':staff,'student':student,'cd':cd,'na':na}
             return render(request,'common/student_profile.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class AddSCD(View):
     def get(self, request,id):
@@ -844,7 +844,7 @@ class AddSCD(View):
             context={'staff':staff,'form':form,'student':student}
             return render(request,'operations/add_scd.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x = NotTrainerCheck(request)
@@ -863,7 +863,7 @@ class AddSCD(View):
                 context={'staff':staff,'alert':alert,'student':student}
             return render(request,'messages/operations/student_profile.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class DeleteSCD(View):
     def get(self, request,id):
@@ -875,7 +875,7 @@ class DeleteSCD(View):
             scd.delete()
             return redirect('view_student',id=student.id)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class UpdateShare(View):
     def get(self, request,id):
@@ -890,7 +890,7 @@ class UpdateShare(View):
             student.save()
             return redirect('view_students')
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class SendSingleMail(View):
     def get(self, request,id):
@@ -924,7 +924,7 @@ class SendSingleMail(View):
                 context={'staff':staff,'alert':alert,'mail':mail}
             return render(request,'messages/common/students.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class Jobs(View):
     def get(self, request):
@@ -936,7 +936,7 @@ class Jobs(View):
             context = {'staff':staff,'job':page}
             return render(request,'common/jobs.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class AddJob(View):
     def get(self, request):
@@ -947,7 +947,7 @@ class AddJob(View):
             context = {'staff':staff,'form':form}
             return render(request,'common/add_job.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
     def post(self, request):
         x = StaffCheck(request)
         if x == True:
@@ -965,7 +965,7 @@ class AddJob(View):
                 context={'staff':staff,'alert':alert}
             return render(request,'messages/common/jobs.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
             
 
 class ViewTeqNews(View):
@@ -977,7 +977,7 @@ class ViewTeqNews(View):
             context={'staff':staff,'posts':posts}
             return render(request,'common/blog.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class ViewProfile(View):
     def get(self, request):
@@ -987,7 +987,7 @@ class ViewProfile(View):
             context={'staff':staff}
             return render(request,'common/profile.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class EditProfile(View):
     def get(self, request):
@@ -998,7 +998,7 @@ class EditProfile(View):
             context={'staff':staff,'form':form}
             return render(request,'common/edit_profile.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request):
         x = StaffCheck(request)
@@ -1030,7 +1030,7 @@ class EditProfile(View):
                 context={'staff':staff,'alert':alert}
             return render(request,'messages/common/profile.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class OperationsDashboard(View):
@@ -1041,7 +1041,7 @@ class OperationsDashboard(View):
             context ={'staff':staff}
             return render(request,'operations/dashboard.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class EditStaff(View):
     def get(self, request,id):
@@ -1055,7 +1055,7 @@ class EditStaff(View):
             context={'staff':staff,'form':form,'profile':profile,'form_manager':form_manager}
             return render(request,'admin/edit_staff.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x = AdminCheck(request)
@@ -1088,7 +1088,7 @@ class EditStaff(View):
                 context ={'alert':alert,'staff':staff}
             return render(request,'messages/admin/staff_profile.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 class SalesDashboard(View):
@@ -1099,7 +1099,7 @@ class SalesDashboard(View):
             context ={'staff':staff}
             return render(request,'operations/dashboard.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 class GetStudentPaymentDetails(View):
     def get(self, request,id):
@@ -1117,7 +1117,7 @@ class GetStudentPaymentDetails(View):
             context ={'staff':staff,'student':student,'spd':spd,'payments':payments,'feeform':feeform}
             return render(request,'sales/student_payments.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x = SalesCheck(request)
@@ -1139,7 +1139,7 @@ class GetStudentPaymentDetails(View):
                 context ={'staff':staff,'alert':alert,'student':student}
             return render(request,'messages/common/student_profile.html',context)
         else:
-            return redirect('home')
+            return render(request,'messages/common/permission_error.html')
 
 
 

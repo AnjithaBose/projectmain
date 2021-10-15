@@ -1,0 +1,40 @@
+{% extends 'common/main.html' %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            <center>
+            <div class="col-lg-6">
+                <div class="card m-b-30">
+                  <div class="card-header border-bottom">
+                  </div>
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-primary" role="alert">
+                        <h4 class="alert-heading"><i class="ti ti-info-alt"></i> You dont have the necessary permissions to access this page.</h4>
+                        <p><code>* This incident will be reported</code></p>
+                        <hr>
+                        <a class="btn btn-primary" href="{% url 'home' %}">OK</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </center>
+            
+
+            
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+    </div>
+    
+    {% include 'common/footer.html' %}
+</div>
+{% endblock %}
