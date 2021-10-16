@@ -34,8 +34,8 @@ urlpatterns = [
     path('administrator/course/edit/<id>/',EditCourse.as_view(),name='edit_course'),
     path('administrator/course/delete/<id>/',DeleteCourse.as_view(),name='delete_course'),
     path('administrator/mails/',ViewMails.as_view(),name='view_mails'),
-    path('administrator/mail/<id>/',ViewMail.as_view(),name='view_mail'),
     path('administrator/mail/send/',SendMail.as_view(),name='send_mail'),
+    path('administrator/mail/<id>/',ViewMail.as_view(),name='view_mail'),
     path('administrator/draft/send/<id>/',SendDraft.as_view(),name='send_draft'),
     path('administrator/staff/add/',CreateStaff.as_view(),name='add_staff'),
     path('administrator/staff/edit/<id>/',EditStaff.as_view(),name='edit_staff'),
@@ -67,6 +67,11 @@ urlpatterns = [
     path('sales/leads/pending/deactivation/',ListLMSDeletion.as_view(),name='list_lms_revert'),
     path('sales/leads/approve/deactivation/<id>/',ApproveDelLMSProfile.as_view(),name='approve_lms_revert'),
     path('sales/leads/reject/deactivation/<id>/',RejectDelLMSProfile.as_view(),name='reject_lms_revert'),
+
+
+    path('trainer/home/',TrainerDashboard.as_view(),name='trainer_dashboard'),
+    path('trainer/admin/home/',TrainerManagerDashboard.as_view(),name='trainer_manager_dashboard'),
+    path('trainer/batches/',MyBatches.as_view(),name='my_batches'),
 
 
 

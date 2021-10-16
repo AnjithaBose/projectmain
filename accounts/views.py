@@ -55,10 +55,11 @@ class Home(View):
                 elif s.stype == '2' or s.stype == '6' :
                     return redirect('sales_dashboard')
                 elif s.stype == '3' :
-                    # return redirect('trainer_dashboard')
-                    return HttpResponse("Trainer dashboard")
+                    return redirect('trainer_dashboard')
                 elif s.stype == '4' :
                     return redirect('admin_dashboard')
+                elif s.stype == '7':
+                    return redirect('trainer_manager_dashboard')
                 else:
                     return redirect('logout')
             except:
@@ -177,7 +178,7 @@ class DeleteCourse(View):
 
 class ViewBatches(View):
     def get(self, request):
-        x = MainOperation(request)
+        x = MainOperationTrainers(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
             wdbatch = Batch.objects.filter(type="Weekday",approval='1').order_by('status')
@@ -241,7 +242,15 @@ class ViewBatch(View):
             context={'staff':staff,'batch': batch,'scd':scd,'form':form}
             return render(request,'operations/batch.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            staff = Staff.objects.get(user=request.user)
+            if staff.stype == '7' or staff.stype == '3':
+                batch = BatchStrength(request,id)
+                scd = StudentCourseData.objects.filter(batch=batch)
+                context={'staff':staff,'batch': batch,'scd':scd}
+                return render(request,'operations/batch.html',context)
+            else:
+                return render(request,'messages/common/permission_error.html')
+            
 
 
 
@@ -255,7 +264,17 @@ class EditBatch(View):
             context={'staff':staff,'batch': batch,'form':form}
             return render(request,'operations/edit_batch.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            try:
+                staff = Staff.objects.get(user=request.user)
+                if staff.stype == '7' :
+                    batch = Batch.objects.get(id=id)
+                    form = BatchCreateForm(instance=batch)
+                    context={'staff':staff,'batch': batch,'form':form}
+                    return render(request,'operations/edit_batch.html',context)
+                else:
+                    return render(request,'messages/common/permission_error.html')
+            except:
+                return render(request,'messages/common/permission_error.html')
 
     def post(self, request,id):
         x = OperationsCheck(request)
@@ -265,18 +284,23 @@ class EditBatch(View):
             form = BatchCreateForm(request.POST,instance=batch)
             if form.is_valid():
                 f = form.save(commit=False)
+                if staff.stype == '5':
+                    f.trainer = batch.trainer
+                    f.link = batch.link
+                    f.passcode = batch.passcode
                 f.last_edit_time = datetime.datetime.now()
                 f.last_edit_user = staff 
                 if staff.stype == '4' or staff.stype== '5':
                     f.approval = '1'
                     f.to_be_approved_by = staff
+                    f.save()
                     msg = "Batch edits have been updated"
                 else:
                     temp = CopyBatch(request,batch)
                     f.approval = '2'
                     r = Reporting.objects.get(user=staff)
                     f.to_be_approved_by = r.manager
-                    print(f.to_be_approved_by)
+                    f.save()
                     msg = "Batch edits have been noted and send for approval"
                 f.save()
                 context={'staff':staff,'msg':msg}
@@ -286,7 +310,40 @@ class EditBatch(View):
                 context={'staff':staff,'alert':alert}
                 return render(request,'messages/operations/batches.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            try:
+                staff = Staff.objects.get(user=request.user)
+                if staff.stype == '7' :
+                    staff = Staff.objects.get(user=request.user)
+                    batch = Batch.objects.get(id=id)
+                    subject = batch.subject
+                    start_date = batch.start_date
+                    end_date = batch.end_date
+                    start_time = batch.start_time
+                    end_time = batch.end_time
+                    type = batch.type
+                    form = BatchCreateForm(request.POST,instance=batch)
+                    if form.is_valid():
+                        f = form.save(commit=False)
+                        f.subject = subject
+                        f.start_date = start_date
+                        f.end_date = end_date
+                        f.start_time = start_time
+                        f.end_time = end_time
+                        f.type = type
+                        f.last_edit_time = datetime.datetime.now()
+                        f.last_edit_user = staff 
+                        f.approval = '1'
+                        f.to_be_approved_by = staff
+                        f.save()
+                        msg = "Batch edits have been updated"
+                        context={'staff':staff,'msg':msg}
+                        return render(request,'messages/operations/batches.html',context)
+                    else:
+                        alert="Batch editing failed!.Please review your edit."
+                        context={'staff':staff,'alert':alert}
+                        return render(request,'messages/operations/batches.html',context)
+            except:
+                return render(request,'messages/common/permission_error.html')
 
 
 class ViewBatchEditApprovals(View):
@@ -368,9 +425,8 @@ class SendMail(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             form = SendMailForm()
-            draft = Email.objects.filter(status="Draft")
-            mail = Email.objects.filter(status="Mail")
-            context={'staff':staff,'form':form,'draft':draft,'mail':mail}
+            
+            context={'staff':staff,'form':form,}
             return render(request,'admin/send_mail.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1140,6 +1196,46 @@ class GetStudentPaymentDetails(View):
             return render(request,'messages/common/student_profile.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
+
+
+class TrainerDashboard(View):
+    def get(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            context ={'staff':staff}
+            if staff.stype == '4' or staff.stype== '7':
+                return redirect('trainer_manager_dashboard')
+            else:
+                return render(request,'trainer/dashboard.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+class TrainerManagerDashboard(View):
+    def get(self, request):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            context ={'staff':staff}
+            return render(request,'trainer/manager_dashboard.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+class MyBatches(View):
+    def get(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            wdbatch = Batch.objects.filter(trainer=staff,type="Weekday")
+            webatch = Batch.objects.filter(trainer=staff,type="Weekend")
+            wdpage = Pagination(request,wdbatch,5)
+            wepage = Pagination(request,webatch,5)
+            context={'staff':staff,'wdbatch':wdpage,'webatch':wepage}
+            return render(request,'trainer/my_batches.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+
 
 
 

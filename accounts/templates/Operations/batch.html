@@ -40,10 +40,12 @@
                     <div class="card">
                         <h4 class="m-t-0 header-title">View Batch</h4>
                         <p><code>Last updated time and last updated person will be only available for batches that have been updated atleast once.</code></p>
-                        <img class="img-circle pro_pic" src="{{batch.subject.pic.url}}" alt="{{batch.subject.name}}" style="width: 100px;height:100px">
+                        <div class="row col-11 col-md-3">
+                        <img class="img-circle pro_pic col-6" src="{{batch.subject.pic.url}}" alt="{{batch.subject.name}}" style="width: 100px;height:100px">
                         {% if batch.trainer %}
-                        <img class="img-circle pro_pic" src="{{batch.trainer.profile_pic.url}}" alt="{{batch.trainer.name}}" style="width: 100px;height:100px">
+                        <img class="img-circle pro_pic col-6" src="{{batch.trainer.profile_pic.url}}" alt="{{batch.trainer.name}}" style="width: 100px;height:100px">
                         {% endif %}
+                        </div>
 
                         
                         <div class="card card-body">
@@ -106,11 +108,12 @@
                                   <input type="text" class="form-control" value="{{batch.last_edit_user}}" disabled>
                                 </div>
                               </div>
-                              
+                              {% if staff.stype == '4' or staff.stype == '5' or staff.stype == '7' %}
                               <a class="btn btn-light" href="{% url 'edit_batch' batch.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a>
-                              <a href="{% url 'view_batches' %}" class="btn btn-light">Cancel</a>
-                              
+                              <a href="{% url 'view_batches' %}" class="btn btn-light">Go Back</a>
+                              {% endif %}
                             </form>
+                            {% if staff.stype == '4' or staff.stype == '5' or staff.stype == '7' %}
                             <div class="text-right">
                               <button class="btn btn-light" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="ti ti-email mr-2"></i>Send Mail</button>
                             </div>
@@ -135,6 +138,7 @@
                                       </form>
                               </div>
                             </div>
+                            {% endif %}
                   </div>
                 </div>
                 <div class="card">
@@ -168,7 +172,7 @@
                     </table></div>
                 </div>
                     </div>
-                </div>
+                
                 
             </div>
             <!--- End row -->

@@ -16,6 +16,11 @@ class BatchCreateForm(ModelForm):
     trainer = forms.ModelChoiceField(queryset=Staff.objects.filter(stype='3'),required=False)
     link = forms.CharField(required=False)
     passcode = forms.CharField(required=False)
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
+    start_time = forms.TimeField(required=False)
+    end_time = forms.TimeField(required=False)
+    type = forms.ChoiceField(required=False,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
     class Meta:
         model = Batch
         fields = ['subject','trainer','start_date','end_date','start_time','end_time','link','passcode','type','status']

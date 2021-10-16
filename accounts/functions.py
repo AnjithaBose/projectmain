@@ -33,6 +33,20 @@ def MainOperation(request):
     else:
         return (False)
 
+def MainOperationTrainers(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            staff = Staff.objects.get(user=user)
+            if staff.stype == '4' or staff.stype== '6' or staff.stype== '5' or staff.stype== '1' or staff.stype== '7':
+                return (True)
+            else:
+                return (False)
+        except:
+            return (False)
+    else:
+        return (False)
+
 
 def Pagination(request,object,count):
     p = Paginator(object,count)
@@ -267,6 +281,35 @@ def StudentAccountCreation(request,lead):
     from_address = 'techsupport@teqstories.com'
     to = lead.email
     mailsend(request,subject,message,from_address,to)
+
+def TrainerCheck(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            staff = Staff.objects.get(user=user)
+            if staff.stype == '3' or staff.stype=='4' or staff.stype== '7':
+                return (True)
+            else:
+                return (False)
+        except:
+            return (False)
+    else:
+        return (False)
+            
+
+def TrainerManagerCheck(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            staff = Staff.objects.get(user=user)
+            if staff.stype=='4' or staff.stype== '7':
+                return (True)
+            else:
+                return (False)
+        except:
+            return (False)
+    else:
+        return (False)
             
 
 
