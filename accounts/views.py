@@ -1310,6 +1310,64 @@ class UploadVideos(View):
         else:
             return render(request,'messages/common/permission_error.html')
 
+class UpdateVideo(View):
+    def get(self, request,id):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            video = BatchData.objects.get(id=id)
+            batch = Batch.objects.get(id=video.batch.id)
+            form = AddBatchDataForm(instance=video)
+            context={'staff':staff,'form':form,'video':video,'batch':batch}
+            return render(request,'trainer/update_video.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+    def post(self, request,id):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            video = BatchData.objects.get(id=id)
+            batch = Batch.objects.get(id=video.batch.id)
+            form = AddBatchDataForm(request.POST,instance=video)
+            if form.is_valid():
+                form.save()
+                msg = "Batch data updated successfully."
+                context ={'staff':staff,'msg':msg,'batch':batch}
+            else:
+                alert = "Failed to update batch data.Please review your edits."
+                context={'staff':staff,'alert':alert,'batch':batch}
+            return render(request,'messages/trainer/videos.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+class PlayVideo(View):
+    def get(self, request,id):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            batch_data = BatchData.objects.get(id=id)
+            batch = Batch.objects.get(id=batch_data.batch.id)
+            url = "trainer/upload/videos/"
+            context={'staff':staff,'batch_data':batch_data,'batch':batch,'url':url}
+            return render(request,'common/video_player.html',context)
+        else:
+            try:
+                student = Student.objects.get(user=request.user)
+                if student:
+                    batch_data = BatchData.objects.get(id=id)
+                    batch = Batch.objects.get(id=batch_data.batch.id)
+                    context={'student':student,'batch_data':batch_data,'batch':batch}
+                    return render(request,'common/video_player.html',context)
+                else:
+                    return render(request,'messages/common/permission_error.html')
+            except:
+                return render(request,'messages/common/permission_error.html')
+
+
+
+
+
 
 
 

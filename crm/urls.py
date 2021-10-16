@@ -75,6 +75,7 @@ urlpatterns = [
     path('trainer/students/',MyStudents.as_view(),name='my_students'),
     path('trainer/batch/current/',MyCurrentBatch.as_view(),name='my_current_batch'),
     path('trainer/upload/videos/<id>/',UploadVideos.as_view(),name='upload_videos'),
+    path('trainer/update/videos/<id>/',UpdateVideo.as_view(),name='update_video'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
@@ -86,6 +87,8 @@ urlpatterns = [
     path('staff/view/teqnews/',ViewTeqNews.as_view(),name='view_teqnews'),
     path('staff/view/profile/',ViewProfile.as_view(),name='view_profile'),
     path('staff/edit/profile/',EditProfile.as_view(),name='edit_profile'),
+
+    path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

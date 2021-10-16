@@ -47,26 +47,7 @@
                   <div class="card card-body">
       
                             <h4 class="header-title">Add new video</h4>
-                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
-                                {% csrf_token %}
-                              <div class="form-group row">
-                                <div class="col-12 col-md-12">
-                                    <label for="exampleInputName1">TimeStamp</label>
-                                  <input type="text" class="form-control" value="{{time}}" disabled>
-                                  </div>
-                                <div class="col-12 col-md-12">
-                                  <label for="exampleInputName1">Topic</label>
-                                {% load widget_tweaks %} 
-                                {% render_field form.topic class="form-control" required="true"  %}
-                                </div>
-                                <div class="col-12 col-md-12">
-                                  <label for="exampleInputEmail3">Link</label>
-                                {% render_field form.link class="form-control" %}
-                                </div>
-                              </div>
-                              <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                              <button class="btn btn-light my-1" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Cancel</button>
-                            </form>
+                            
                   </div>
                 </div><br><br>
               
@@ -79,6 +60,7 @@
                       <th>#</th>
                       <th>Date</th>
                       <th>Topic</th>
+                      <th>Link</th>
                       <th class="text-right"></th>
                     </tr>
                   </thead>
@@ -88,8 +70,18 @@
                       <td>{{forloop.counter}}</td>
                       <td>{{i.date}}</td>
                       <td>{{i.topic}}</td>
+                      <td>
+                        <a class="btn btn-round btn-primary" href="{% url 'video_player' i.id  %}"><i class="ti ti-control-play mr-2"></i> Play</a>
+                      </td>
                       <td class="text-right">
-                        <a class="btn btn-round btn-primary" href=""><i class="ti ti-control-play mr-2"></i> Play</a>
+                        <div class="btn-group mr-2">
+                            <div class="dropdown">
+                              <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                                <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4"> 
+                                    <a class="dropdown-item" href="{% url 'update_video' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a> 
+                                </div>
+                            </div>
+                          </div>
                       </td>
                       {% empty %}
                       <td colspan="7">No videos available.</td>
