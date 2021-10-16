@@ -1263,6 +1263,55 @@ class MyStudents(View):
         else:
             return render(request,'messages/common/permission_error.html')
 
+class MyCurrentBatch(View):
+    def get(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            wdbatch = Batch.objects.filter(trainer=staff,type="Weekday",status='1')
+            webatch = Batch.objects.filter(trainer=staff,type="Weekend",status='1')
+            context={'staff':staff,'wdbatch':wdbatch,'webatch':webatch}
+            return render(request,'trainer/upload_videos.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+
+class UploadVideos(View):
+    def get(self, request,id):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            batch = Batch.objects.get(id=id)
+            batch_data = BatchData.objects.filter(batch=batch)
+            form = AddBatchDataForm()
+            time = datetime.datetime.now()
+            context={'staff':staff,'batch':batch,'form':form,'batch_data':batch_data,'time':time}
+            return render(request,'trainer/videos.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+    def post(self, request,id):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            batch = Batch.objects.get(id=id)
+            form = AddBatchDataForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.batch = batch
+                f.date = datetime.datetime.now()
+                f.save()
+                msg = "Videos uploaded successfully and notifications send."
+                context={'staff':staff,'msg':msg,'batch':batch}
+            else:
+                alert = "Failed to upload video.Please try again."
+                context={'staff':staff,'alert':alert,'batch':batch}
+            return render(request,'messages/trainer/videos.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+
+
 
 
 

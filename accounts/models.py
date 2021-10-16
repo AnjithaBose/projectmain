@@ -149,6 +149,13 @@ class TempBatch(models.Model):
     status = models.CharField(max_length=100,choices=(('2','Yet to Start'),('1','Ongoing'),('3','Completed'),('4','Cancelled')),default='2')
     to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='temp_approved_by')
 
+class BatchData(models.Model):
+    batch = models.ForeignKey(Batch, on_delete=models.PROTECT,null=True, blank=True)
+    topic = models.CharField(max_length=1000, null=True, blank=True)
+    link = models.CharField(max_length=10000,null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    
+
 class Reporting(models.Model):
     user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='staff')
     manager = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='manager',limit_choices_to=Q(stype='4')|Q(stype='5')|Q(stype='6'))

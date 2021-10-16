@@ -73,7 +73,8 @@ urlpatterns = [
     path('trainer/admin/home/',TrainerManagerDashboard.as_view(),name='trainer_manager_dashboard'),
     path('trainer/batches/',MyBatches.as_view(),name='my_batches'),
     path('trainer/students/',MyStudents.as_view(),name='my_students'),
-
+    path('trainer/batch/current/',MyCurrentBatch.as_view(),name='my_current_batch'),
+    path('trainer/upload/videos/<id>/',UploadVideos.as_view(),name='upload_videos'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),

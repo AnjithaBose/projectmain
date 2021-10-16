@@ -16,6 +16,7 @@
             <li><a href="">Projects</a></li>
         </ul>
       </li>
+      <li> <a href="{% url 'my_current_batch' %}"><i class="ti ti-upload"></i> <span>Upload Videos</span></a></li>
       {% if staff.stype == '7' %}
       <li> <a href="{% url 'view_batches' %}"><i class="ti ti-blackboard"></i> <span>Batches</span></a></li>
       {% elif staff.stype == '3' %}
@@ -27,8 +28,6 @@
       {% elif staff.stype == '3' %}
       <li> <a href="{% url 'my_students' %}"><i class="ti ti-user"></i> <span>Students</span></a></li>
       {% endif %}
-      <li> <a href="{% url 'view_leads' %}"><i class="fas fa-book-medical"></i> <span>Leads</span></a></li>
-      <li> <a href="{% url 'view_mails' %}"><i class="fa fa-envelope-o"></i> <span>Mail</span></a></li>
       <li class="menu_sub"> <a href="#"><i class="ti ti-briefcase"></i> <span>Jobs</span><span
         class="ti ti-angle-down styleicon"></span></a>
         <ul class="down_menu">
