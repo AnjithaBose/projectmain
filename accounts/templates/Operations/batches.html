@@ -180,10 +180,10 @@
                     <tr class="active">
                       <td colspan="8">
                         <div class="text-right">
-                          {% if course.has_previous %}
+                          {% if wdbatch.has_previous %}
                             <a href="{% url 'view_batches' %}?page={{ wdbatch.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
                             {% endif %}
-                            {% if course.has_next %}
+                            {% if wdbatch.has_next %}
                             <a href="{% url 'view_batches' %}?page={{ wdbatch.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
                             {% endif %}
                         </div></td>
@@ -244,10 +244,10 @@
                   <tfoot>
                     <tr class="active">
                       <td colspan="8"><div class="text-right">
-                        {% if course.has_previous %}
+                        {% if webatch.has_previous %}
                         <a href="{% url 'view_batches' %}?page={{ webatch.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
                         {% endif %}
-                        {% if course.has_next %}
+                        {% if webatch.has_next %}
                         <a href="{% url 'view_batches' %}?page={{ webatch.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a>
                         {% endif %}
                         </div></td>

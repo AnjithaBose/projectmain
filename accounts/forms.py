@@ -90,6 +90,7 @@ class AddBatchDataForm(ModelForm):
     class Meta:
         model = BatchData
         fields = ['topic','link']
+        
 
         
 

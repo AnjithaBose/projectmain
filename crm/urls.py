@@ -37,8 +37,12 @@ urlpatterns = [
     path('administrator/mail/send/',SendMail.as_view(),name='send_mail'),
     path('administrator/mail/<id>/',ViewMail.as_view(),name='view_mail'),
     path('administrator/draft/send/<id>/',SendDraft.as_view(),name='send_draft'),
+    path('administrator/draft/delete/<id>/',DeleteDraft.as_view(),name='delete_draft'),
     path('administrator/staff/add/',CreateStaff.as_view(),name='add_staff'),
     path('administrator/staff/edit/<id>/',EditStaff.as_view(),name='edit_staff'),
+    path('administrator/staff/pending/',PendingStaff.as_view(),name='pending_staff'),
+    path('administrator/staff/approval/view/<id>/',ViewPendingStaff.as_view(),name='view_pending_staff'),
+    path('administrator/staff/approval/<id>/',ApproveStaff.as_view(),name='approve_staff'),
 
     path('operations/home/',OperationsDashboard.as_view(),name='operations_dashboard'),
     path('operations/batches/',ViewBatches.as_view(),name='view_batches'),
@@ -89,6 +93,7 @@ urlpatterns = [
     path('staff/edit/profile/',EditProfile.as_view(),name='edit_profile'),
 
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
+    path('user/notification/read/<id>/',MarkasRead.as_view(),name='mark_as_read'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

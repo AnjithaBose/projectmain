@@ -70,7 +70,7 @@ class Staff(models.Model):
     ('7', 'Trainer Manager'),
 
     )
-    user = models.OneToOneField(User,on_delete=models.PROTECT,null=True,blank=True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE,null=True,blank=True)
     name = models.CharField(max_length=100,null=True, blank=True)
     empid = models.CharField(max_length=100,null=True, blank=True)
     mobile = models.CharField(max_length=10,null=True, blank=True)
@@ -114,9 +114,9 @@ class Course(models.Model):
         return self.name
 
 class Batch(models.Model):
-    subject = models.ForeignKey(Course,on_delete=models.PROTECT)
+    subject = models.ForeignKey(Course,on_delete=models.CASCADE)
     batch_code = models.CharField(max_length=500, blank=True)
-    trainer = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,limit_choices_to={'stype':"3"})
+    trainer = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,limit_choices_to={'stype':"3"})
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
@@ -127,18 +127,18 @@ class Batch(models.Model):
     status = models.CharField(max_length=100,choices=(('2','Yet to Start'),('1','Ongoing'),('3','Completed'),('4','Cancelled')),default='2')
     strength = models.IntegerField(null=True, blank=True)
     last_edit_time = models.DateTimeField(null=True, blank=True)
-    last_edit_user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='edited_by')
+    last_edit_user = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name='edited_by')
     approval = models.CharField(max_length=100,null=True, blank=True,choices=approval_choices ,default='2')
-    to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='approved_by')
+    to_be_approved_by = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name='approved_by')
     def __str__(self):
         s = "-"
         return "%s %s %s %s %s %s %s" % (self.batch_code,s, self.trainer,s,self.start_date,s, self.start_time)
 
 class TempBatch(models.Model):
-    batch = models.ForeignKey(Batch, on_delete=models.PROTECT,null=True, blank=True)
-    subject = models.ForeignKey(Course,on_delete=models.PROTECT)
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE,null=True, blank=True)
+    subject = models.ForeignKey(Course,on_delete=models.CASCADE)
     batch_code = models.CharField(max_length=500, blank=True)
-    trainer = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,limit_choices_to={'stype':"3"})
+    trainer = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,limit_choices_to={'stype':"3"})
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
@@ -147,21 +147,21 @@ class TempBatch(models.Model):
     passcode = models.CharField(max_length=250,null=True, blank=True)
     type = models.CharField(max_length=100,choices=(('Weekend', 'Weekend'),('Weekday','Weekday')))
     status = models.CharField(max_length=100,choices=(('2','Yet to Start'),('1','Ongoing'),('3','Completed'),('4','Cancelled')),default='2')
-    to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='temp_approved_by')
+    to_be_approved_by = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name='temp_approved_by')
 
 class BatchData(models.Model):
-    batch = models.ForeignKey(Batch, on_delete=models.PROTECT,null=True, blank=True)
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE,null=True, blank=True)
     topic = models.CharField(max_length=1000, null=True, blank=True)
     link = models.CharField(max_length=10000,null=True, blank=True)
     date = models.DateField(null=True, blank=True)
-    
+
 
 class Reporting(models.Model):
-    user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='staff')
-    manager = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name='manager',limit_choices_to=Q(stype='4')|Q(stype='5')|Q(stype='6'))
+    user = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name='staff')
+    manager = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name='manager',limit_choices_to=Q(stype='4')|Q(stype='5')|Q(stype='6')|Q(stype='7'))
 
 class ApprovalCount(models.Model):
-    user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,limit_choices_to=(Q(stype='4')|Q(status='5')|Q(status='6')),)
+    user = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,limit_choices_to=(Q(stype='4')|Q(status='5')|Q(status='6')),)
     count = models.CharField(max_length=100, null=True, blank=True)
 
 class Email(models.Model):
@@ -176,12 +176,12 @@ class Email(models.Model):
         return self.subject
 
 class ChatRoom(models.Model):
-    user1 = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name="user1")
-    user2 = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True,related_name="user2")
+    user1 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name="user1")
+    user2 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name="user2")
 
 class ChatMessage(models.Model):
-    chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.PROTECT)
-    user = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True, blank=True)
+    chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.CASCADE)
+    user = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True)
     username = models.CharField(max_length=500,null=True, blank=True)
     pic = models.CharField(max_length=2000,null=True, blank=True)
     message = models.CharField(max_length=5000,null=True, blank=True)
@@ -219,18 +219,18 @@ class Lead(models.Model):
     email = models.EmailField(max_length=200,null=True,blank=True)
     mobile = models.CharField(max_length=10,null=True,blank=True)
     sex = models.CharField(max_length=10,null=True,choices=sex_choices,blank=True,default="Male")
-    generator = models.ForeignKey(Staff,on_delete=models.PROTECT, blank=True,null=True,related_name='representative')
+    generator = models.ForeignKey(Staff,on_delete=models.CASCADE, blank=True,null=True,related_name='representative')
     created_on = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=100,null=True, blank=True,choices=groups,default="New")
     lms = models.BooleanField(default = False)
     approval = models.CharField(max_length=100,null=True, blank=True,choices=approval_choices)
-    to_be_approved_by = models.ForeignKey(Staff,on_delete=models.PROTECT, blank=True,null=True)
+    to_be_approved_by = models.ForeignKey(Staff,on_delete=models.CASCADE, blank=True,null=True)
 
     def __str__(self):
         return self.name
 
 class Student(models.Model):
-    user= models.OneToOneField(User,on_delete=models.PROTECT,null=True,blank=True)
+    user= models.OneToOneField(User,on_delete=models.CASCADE,null=True,blank=True)
     name = models.CharField(max_length=100,blank=True)
     mobile = models.CharField(max_length=10,blank=True)
     email = models.EmailField(max_length=200,blank=True)
@@ -254,21 +254,21 @@ class Student(models.Model):
         return self.name
 
 class StudentCourseData(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.PROTECT,related_name='student',null=True,blank=True)
-    batch = models.ForeignKey(Batch, on_delete=models.PROTECT,related_name='batch',limit_choices_to=(Q(status='1')|Q(status='2')),blank=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='student',null=True,blank=True)
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE,related_name='batch',limit_choices_to=(Q(status='1')|Q(status='2')),blank=True)
 
 class StudentPaymentData(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.PROTECT,related_name='student_payments',null=True,blank=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='student_payments',null=True,blank=True)
     total = models.CharField(max_length=100,null=True, blank=True)
 
     def __str__(self):
         return self.student.name
 
 class StudentPayments(models.Model):
-    spd = models.ForeignKey(StudentPaymentData,on_delete=models.PROTECT,null=True, blank=True,related_name='student_payment')
+    spd = models.ForeignKey(StudentPaymentData,on_delete=models.CASCADE,null=True, blank=True,related_name='student_payment')
     amount = models.CharField(max_length=100,null=True, blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
-    representative = models.ForeignKey(Staff, on_delete=models.PROTECT,null=True, blank=True)
+    representative = models.ForeignKey(Staff, on_delete=models.CASCADE,null=True, blank=True)
 
     def __str__(self):
         return self.spd.student.name
@@ -282,6 +282,18 @@ class Post(models.Model):
     pic_1 = models.ImageField(null=True, blank=True, upload_to='images/blog/')
     pic_2 = models.ImageField(null=True, blank=True, upload_to='images/blog/')
     pic_3 = models.ImageField(null=True, blank=True, upload_to='images/blog/')
+
+
+class Notification(models.Model):
+    type = models.CharField(max_length=100,choices=(('1','Chat'), ('2','Account Creation'),('3','Batch Update'),('4','Query'),('5','General')))
+    user1 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True)
+    user2 = models.ForeignKey(Student,on_delete=models.CASCADE,null=True, blank=True)
+    message = models.CharField(max_length=500, null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
+    status = models.CharField(max_length=100,choices=(('1','Read'),('2','Unread')),default='2')
+
+
     
 
 

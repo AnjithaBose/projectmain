@@ -92,7 +92,7 @@ def ManagerCheck(request):
     if user.is_authenticated:
         try:
             staff = Staff.objects.get(user=user)
-            if staff.stype == '6' or staff.stype=='4' or staff.stype== '5':
+            if staff.stype == '6' or staff.stype=='4' or staff.stype== '5' or staff.stype== '7':
                 return (True)
             else:
                 return (False)
@@ -204,8 +204,11 @@ def BatchStrength(request,id):
 
 def CopyBatch(request,batch):
     staff=Staff.objects.get(user=request.user)
-    reporting = Reporting.objects.get(user=staff)
-    temp = TempBatch(batch=batch,subject=batch.subject,batch_code=batch.batch_code,trainer=batch.trainer,start_date=batch.start_date,end_date=batch.end_date,start_time=batch.start_time,end_time=batch.end_time,link=batch.link,passcode=batch.passcode,type=batch.type,to_be_approved_by=reporting.manager)
+    if staff.stype == '4':
+        manager = staff
+    else:
+        manager = Manager(staff)
+    temp = TempBatch(batch=batch,subject=batch.subject,batch_code=batch.batch_code,trainer=batch.trainer,start_date=batch.start_date,end_date=batch.end_date,start_time=batch.start_time,end_time=batch.end_time,link=batch.link,passcode=batch.passcode,type=batch.type,to_be_approved_by=manager)
     temp.save()
     return (temp)
 
@@ -314,6 +317,33 @@ def TrainerManagerCheck(request):
             return (False)
     else:
         return (False)
+
+def Uniquecode(request,subject_code,code):
+    code = str(code[-4:])
+    batch_code = "%s_%s" % (subject_code, code)
+    try:
+        batch = Batch.objects.get(batch_code=code)
+        if batch :
+            code = str(int(code)+1)
+            Uniquecode(subject_code, code)
+    except:
+        return (batch_code)
+
+def Notifications(staff):
+    notifications = Notification.objects.filter(user1=staff,status='2').order_by('-date').order_by('-time')
+    return notifications
+def CountNotifications(notifications):
+    count = 0
+    for i in notifications:
+        count = count +1 
+    return count
+
+def MarkAsRead(notify):
+    for i in notify:
+        i.status = '1'
+        i.save()
+
+
             
 
 

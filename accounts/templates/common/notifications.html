@@ -1,14 +1,20 @@
-<div class="dropdown dropdown-notification"> <a href="javascript:void(0)" class="dropdown-toggle"
+<div class="dropdown dropdown-notification"> <a href="javascript:void(0)" onclick="read()" class="dropdown-toggle"
     data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"> <i
-      class="fa fa-bell"></i> <span class="badge_coun"> 6 </span> </a>
+      class="fa fa-bell"></i> <span class="badge_coun"> {{count}} </span> </a>
   <ul class="dropdown-menu scroll_auto height_fixed">
     <li class="bigger">
       <h3><span class="bold">Notifications</span></h3>
-      <span class="notification-label">New 6</span>
+      <span class="notification-label">New {{count}}</span>
     </li>
     <li>
       <ul class="dropdown-menu-list">
-        <li> <a href="javascript:void(0)"> <span class="time">just now</span> <span class="details">
+        {% for i in notify %}
+        <li> <a href="{{i.id}}"> <span class="time">{{i.time}}</span> <span class="details">
+          <span class="notification-icon deepPink-bgcolor"> <i class="fa fa-check"></i> </span>
+          {{i.message}} </span> </a> </li>
+        {% endfor %}
+
+        <!-- <li> <a href="javascript:void(0)"> <span class="time">just now</span> <span class="details">
               <span class="notification-icon deepPink-bgcolor"> <i class="fa fa-check"></i> </span>
               Congratulations!. </span> </a> </li>
         <li> <a href="javascript:void(0)"> <span class="time">3 mins</span> <span class="details">
@@ -25,8 +31,24 @@
             </span> </a> </li>
         <li> <a href="javascript:void(0)"> <span class="time">10 hrs</span> <span class="details">
               <span class="notification-icon red"> <i class="fa fa-times"></i> </span> Application
-              error. </span> </a> </li>
+              error. </span> </a> </li> -->
       </ul>
     </li>
   </ul>
 </div>
+<script>
+  function read() {
+    setTimeout(function(){
+      $.ajax({
+          type: 'GET',
+          url : '/user/notification/read/{{staff.id}}',
+      
+      });
+      }, 3000);
+
+    setTimeout(function(){
+      window.location = window.location
+      }, 15000);
+    
+  }
+  </script>

@@ -72,13 +72,36 @@ class Home(View):
         else:
             return redirect('logout')
 
+class MarkasRead(View):
+    def get(self, request,id):
+        user = request.user
+        if user.is_authenticated:
+            try:
+                staff = Staff.objects.get(id=id)
+                notify = Notification.objects.filter(user1=staff)
+            except:
+                student = Student.objects.get(id=id)
+                notify = Notification.objects.filter(user2=student)
+            finally:
+                for i in notify:
+                    i.status = 'Read'
+                    i.save()
+            return HttpResponse(status = 200)
+         
+
+
+
 
 class AdminDashboard(View):
     def get(self, request):
         x = AdminCheck(request)
         if x == True: 
             staff = Staff.objects.get(user=request.user)
-            context={'staff':staff}
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            context={'count':count,'notify':notify,'staff':staff}
+            today = datetime.datetime.now()
+            print(today.strftime('%b'))
             return render(request,'admin/dashboard.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -89,10 +112,12 @@ class ViewCourses(View):
         x= AdminCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             course = Course.objects.all()
             page = Pagination(request,course,5)
             form = CourseCreateForm()
-            context={'staff':staff,'course': page,'form':form}
+            context={'count':count,'notify':notify,'staff':staff,'course': page,'form':form}
             return render(request,'admin/courses.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -101,16 +126,18 @@ class ViewCourses(View):
         x= AdminCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             course = Course.objects.all()
             form = CourseCreateForm(request.POST,request.FILES)
             if form.is_valid:
                 form.save()
                 msg = 'Course created successfully'
-                context={'staff':staff,'course': course,'form':form,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'course': course,'form':form,'msg':msg}
                 return render(request,'messages/admin/courses.html',context)
             else:
                 alert = 'Course creation failed'
-                context={'staff':staff,'course': course,'form':form,'alert':alert}
+                context={'count':count,'notify':notify,'staff':staff,'course': course,'form':form,'alert':alert}
                 return render(request,'messages/admin/courses.html',context)  
         else:
             return render(request,'messages/common/permission_error.html')
@@ -120,9 +147,11 @@ class EditCourse(View):
         x= AdminCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             course = Course.objects.get(id=id)
             form = CourseCreateForm(instance=course)
-            context={'staff':staff,'course': course,'form':form}
+            context={'count':count,'notify':notify,'staff':staff,'course': course,'form':form}
             return render(request,'admin/edit_course.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -131,6 +160,8 @@ class EditCourse(View):
         x= AdminCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             course = Course.objects.get(id=id)
             form = CourseCreateForm(request.POST,instance=course)
             if form.is_valid():
@@ -142,11 +173,11 @@ class EditCourse(View):
                     c.pic = course.pic
                 c.save()
                 msg = 'Course edited successfully'
-                context={'staff':staff,'course': course,'form':form,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'course': course,'form':form,'msg':msg}
                 return render(request,'messages/admin/courses.html',context)
             else:
                 msg = 'Course editing failed.Please review again.'
-                context={'staff':staff,'course': course,'form':form,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'course': course,'form':form,'msg':msg}
                 return render(request,'admin/edit_course.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -156,9 +187,11 @@ class DeleteCourse(View):
         x= AdminCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             course = Course.objects.get(id=id)
             confirm = "Are you sure you want to delete?.Once clicked on OK changes cant be reverted."
-            context={'staff':staff,'course': course,'confirm':confirm}
+            context={'count':count,'notify':notify,'staff':staff,'course': course,'confirm':confirm}
             return render(request,'messages/admin/courses.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -167,10 +200,12 @@ class DeleteCourse(View):
         x= AdminCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             course = Course.objects.get(id=id)
             course.delete()
             msg = 'Course deleted successfully!'
-            context={'staff':staff,'course': course,'msg':msg}
+            context={'count':count,'notify':notify,'staff':staff,'course': course,'msg':msg}
             return render(request,'messages/admin/courses.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -181,6 +216,8 @@ class ViewBatches(View):
         x = MainOperationTrainers(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             wdbatch = Batch.objects.filter(type="Weekday",approval='1').order_by('status')
             for i in wdbatch:
                 i = BatchStrength(request,i.id)
@@ -190,7 +227,7 @@ class ViewBatches(View):
             page = Pagination(request,wdbatch,5)
             pages = Pagination(request,webatch,5)
             form = BatchCreateForm()
-            context={'staff':staff,'wdbatch': page,'webatch': pages,'form':form}
+            context={'count':count,'notify':notify,'staff':staff,'wdbatch': page,'webatch': pages,'form':form}
             return render(request,'operations/batches.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -199,54 +236,52 @@ class ViewBatches(View):
         x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = BatchCreateForm(request.POST)
             if form.is_valid():
                 f=form.save(commit=False)
-                code = time.time()
-                f.batch_code = "%s_%d" % (f.subject.code, code)
+                code = str(time.time())
+                uniquecode = Uniquecode(request,f.subject.code,code)
+                f.batch_code = uniquecode
                 if staff.stype == '4' or staff.stype== '5':
                     f.approval = '1'
                     f.to_be_approved_by = staff
                     msg = 'Batch added successfully'
                 else:
                     f.approval = '2'
-                    reporting = Reporting.objects.get(user=staff) 
-                    f.to_be_approved_by = reporting.manager
+                    f.to_be_approved_by = Manager(staff)
                     msg = 'Batch added successfully and has been sent for approval'
                 f.save()
                 temp = CopyBatch(request,f)
-                context={'staff':staff,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
             else:
                 alert = 'Batch creation failed!.Please review your edit.'
-                context={'staff':staff,'alert':alert}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/operations/batches.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
-
-# class ApprovalBatch(View):
-#     def get(self,request):
-#         x = ManagerCheck(request)
-#         if x == True:
-#             staff = Staff.objects.get(user=request.user)
-#             batch = Batch.objects.filter()
-
 
 class ViewBatch(View):
     def get(self, request,id):
         x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             batch = BatchStrength(request,id)
             scd = StudentCourseData.objects.filter(batch=batch)
             form = SendMailForm()
-            context={'staff':staff,'batch': batch,'scd':scd,'form':form}
+            context={'count':count,'notify':notify,'staff':staff,'batch': batch,'scd':scd,'form':form}
             return render(request,'operations/batch.html',context)
         else:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             if staff.stype == '7' or staff.stype == '3':
                 batch = BatchStrength(request,id)
                 scd = StudentCourseData.objects.filter(batch=batch)
-                context={'staff':staff,'batch': batch,'scd':scd}
+                context={'count':count,'notify':notify,'staff':staff,'batch': batch,'scd':scd}
                 return render(request,'operations/batch.html',context)
             else:
                 return render(request,'messages/common/permission_error.html')
@@ -259,17 +294,21 @@ class EditBatch(View):
         x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             batch = Batch.objects.get(id=id)
             form = BatchCreateForm(instance=batch)
-            context={'staff':staff,'batch': batch,'form':form}
+            context={'count':count,'notify':notify,'staff':staff,'batch': batch,'form':form}
             return render(request,'operations/edit_batch.html',context)
         else:
             try:
                 staff = Staff.objects.get(user=request.user)
+                notify = Notifications(staff)
+                count = CountNotifications(notify)
                 if staff.stype == '7' or staff.stype == '3':
                     batch = Batch.objects.get(id=id)
                     form = BatchCreateForm(instance=batch)
-                    context={'staff':staff,'batch': batch,'form':form}
+                    context={'count':count,'notify':notify,'staff':staff,'batch': batch,'form':form}
                     return render(request,'operations/edit_batch.html',context)
                 else:
                     return render(request,'messages/common/permission_error.html')
@@ -280,6 +319,8 @@ class EditBatch(View):
         x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             batch = Batch.objects.get(id=id)
             trainer = batch.trainer
             link = batch.link
@@ -306,17 +347,21 @@ class EditBatch(View):
                     f.save()
                     msg = "Batch edits have been noted and send for approval"
                 f.save()
-                context={'staff':staff,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
                 return render(request,'messages/operations/batches.html',context)
             else:
                 alert="Batch editing failed!.Please review your edit."
-                context={'staff':staff,'alert':alert}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert}
                 return render(request,'messages/operations/batches.html',context)
         else:
             try:
                 staff = Staff.objects.get(user=request.user)
+                notify = Notifications(staff)
+                count = CountNotifications(notify)
                 if staff.stype == '7' or staff.stype == '3':
                     staff = Staff.objects.get(user=request.user)
+                    notify = Notifications(staff)
+                    count = CountNotifications(notify)
                     batch = Batch.objects.get(id=id)
                     subject = batch.subject
                     start_date = batch.start_date
@@ -346,11 +391,11 @@ class EditBatch(View):
                             f.passcode = passcode
                         f.save()
                         msg = "Batch edits have been updated"
-                        context={'staff':staff,'msg':msg}
+                        context={'count':count,'notify':notify,'staff':staff,'msg':msg}
                         return render(request,'messages/operations/batches.html',context)
                     else:
                         alert="Batch editing failed!.Please review your edit."
-                        context={'staff':staff,'alert':alert}
+                        context={'count':count,'notify':notify,'staff':staff,'alert':alert}
                         return render(request,'messages/operations/batches.html',context)
             except:
                 return render(request,'messages/common/permission_error.html')
@@ -361,8 +406,10 @@ class ViewBatchEditApprovals(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             temp = TempBatch.objects.filter(to_be_approved_by=staff)
-            context={'staff':staff,'temp':temp}
+            context={'count':count,'notify':notify,'staff':staff,'temp':temp}
             return render(request,'operations/batch_approvals.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -372,12 +419,14 @@ class ApproveBatch(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             temp = TempBatch.objects.get(id=id,to_be_approved_by= staff)
             batch = temp.batch
             batch.approval = '1'
             batch.save()
             temp.delete()
-            context={'staff':staff}
+            context={'count':count,'notify':notify,'staff':staff}
             return redirect('batch_edit_approvals')
         else:
             return render(request,'messages/common/permission_error.html')
@@ -387,6 +436,8 @@ class RejectBatch(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             temp = TempBatch.objects.get(id=id,to_be_approved_by= staff)
             batch = temp.batch
             batch.subject = temp.subject
@@ -403,7 +454,7 @@ class RejectBatch(View):
             batch.approval = '1'
             batch.save()
             temp.delete()
-            context={'staff':staff}
+            context={'count':count,'notify':notify,'staff':staff}
             return redirect('batch_edit_approvals')
         else:
             return render(request,'messages/common/permission_error.html')
@@ -420,10 +471,12 @@ class ViewMails(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             draft = Email.objects.filter(status="Draft").order_by('-time_stamp')
             mail = Email.objects.filter(status="Mail").order_by('-time_stamp')
             page = Pagination(request,mail,10)
-            context={'staff':staff,'draft':draft,'mail':page}
+            context={'count':count,'notify':notify,'staff':staff,'draft':draft,'mail':page}
             return render(request,'admin/view_mails.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -434,9 +487,11 @@ class SendMail(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = SendMailForm()
             
-            context={'staff':staff,'form':form,}
+            context={'count':count,'notify':notify,'staff':staff,'form':form,}
             return render(request,'admin/send_mail.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -445,6 +500,8 @@ class SendMail(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = SendMailForm(request.POST)
             if form.is_valid():
                 f = form.save(commit=False)
@@ -455,13 +512,13 @@ class SendMail(View):
                 else:
                     f.status = "Draft"
                     msg ="Mail successfully saved as draft." 
-                context={'staff':staff,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
                 f.time_stamp = datetime.datetime.now()
                 f.from_address = staff.email
                 f.save()
             else:
                 alert="Mail send failed!.Please try again."
-                context={'staff':staff,'alert':alert}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/admin/view_mails.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -471,6 +528,8 @@ class SendMailNotification(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = SendMailForm(request.POST)
             batch = Batch.objects.get(id=id)
             scd = StudentCourseData.objects.filter(batch=batch)
@@ -484,25 +543,25 @@ class SendMailNotification(View):
                 for i in to:
                     mailsend(request,sub,message,staff.email,i)
                 msg = "Notifications send successfully!"
-                context={'staff':staff,'msg':msg,'batch':batch}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg,'batch':batch}
             else:
                 alert = "Notification send failed!.Please review your edit."
-                context={'staff':staff,'alert':alert,'batch':batch}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert,'batch':batch}
             return render(request,'messages/admin/batch.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
                 
-
-
 
 class SendDraft(View):
     def get(self, request,id):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             draft = Email.objects.get(id=id)
             form = SendMailForm(instance=draft)
-            context={'staff':staff,'form':form,'draft':draft}
+            context={'count':count,'notify':notify,'staff':staff,'form':form,'draft':draft}
             return render(request,'admin/send_mail.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -513,12 +572,28 @@ class ViewMail(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             mail = Email.objects.get(id=id)
             form = SendMailForm(instance=mail)
-            context={'staff':staff,'form':form,'mail':mail}
+            context={'count':count,'notify':notify,'staff':staff,'form':form,'mail':mail}
             return render(request,'admin/view_mail.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
+
+class DeleteDraft(View):
+    def get(self, request,id):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            mail = Email.objects.get(id=id)
+            mail.delete()
+            return redirect('view_mails')
+        else:
+            return render(request,'messages/common/permission_error.html')
+
 
 
 class ViewStaff(View):
@@ -526,22 +601,71 @@ class ViewStaff(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            contacts = Staff.objects.filter(~Q(user=request.user))
-            # contacts = Staff.objects.all()
-            context={'staff':staff,'contacts':contacts}
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            contacts = Staff.objects.filter(~Q(user=request.user),approval=True)
+            context={'count':count,'notify':notify,'staff':staff,'contacts':contacts}
             return render(request,'common/contacts.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
+
+class PendingStaff(View):
+    def get(self, request):
+        x = AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            candidates = Staff.objects.filter(approval=False)
+            context={'count':count,'notify':notify,'staff':staff,'candidates':candidates}
+            return render(request,'admin/pending_staff.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+class ViewPendingStaff(View):
+    def get(self, request,id):
+        x = AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            profile = Staff.objects.get(id=id)
+            reporting = Reporting.objects.get(user=profile)
+            context={'count':count,'notify':notify,'staff':staff,'profile':profile,'reporting':reporting}
+            return render(request,'admin/pending_staff_profile.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+
+class ApproveStaff(View):
+    def get(self, request,id):
+        x = AdminCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            candidate = Staff.objects.get(id=id)
+            CheckActive(candidate)
+            candidate.approval=True
+            candidate.status = 'Active'
+            candidate.save()
+            return redirect('pending_staff')
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+
 
 class Message(View):
     def get(self, request,id):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             chatroom = FindRoom(request,staff,id)
             chatmessage = ChatMessage.objects.filter(chatroom=chatroom).order_by('timestamp')
             form = SendChatMessageForm()
-            context={'staff':staff,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
+            context={'count':count,'notify':notify,'staff':staff,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
             return render(request,'common/chat.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -550,6 +674,8 @@ class Message(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             receiver = Staff.objects.get(id=id)
             form = SendChatMessageForm(request.POST)
             if form.is_valid():
@@ -569,6 +695,8 @@ class Message(View):
 class GetMessage(View):
     def get(self, request,id,cid):
         staff = Staff.objects.get(user=request.user)
+        notify = Notifications(staff)
+        count = CountNotifications(notify)
         chatroom = ChatRoom.objects.get(id=cid)
         messages = ChatMessage.objects.filter(chatroom=chatroom)
         for i in messages:
@@ -585,8 +713,10 @@ class CreateStaff(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = CreateStaffForm()
-            context={'staff':staff,'form':form}
+            context={'count':count,'notify':notify,'staff':staff,'form':form}
             return render(request,'admin/add_staff.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -595,6 +725,8 @@ class CreateStaff(View):
         x = ManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = CreateStaffForm(request.POST)
             if form.is_valid():
                 f = form.save(commit=False)
@@ -606,25 +738,33 @@ class CreateStaff(View):
                     f.approval = True
                 else:
                     f.approval = False
+                    f.status = 'Inctive'
                     user.is_active = False
+                    user.save()
                 if staff.stype== '5':
                     f.stype == 'Operations'
-                else:
+                elif staff.stype== '6':
                     f.stype == 'Sales'
+                elif staff.stype == '7':
+                    f.stype == 'Trainer'
                 f.save()
-                relation = Reporting(user = f , manager = staff)
+                relation = Reporting(user=f,manager=staff)
                 relation.save()
                 return redirect('view_contacts')
             else:
                 return redirect('view_contacts')
         else:
             return render(request,'messages/common/permission_error.html')
+
+
                 
 class Leads(View):
     def get(self, request):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             if staff.stype == '4' or staff.stype == '6':
                 new = Lead.objects.filter(status="New")
                 pipe = Lead.objects.filter(status="In Pipeline")
@@ -634,7 +774,7 @@ class Leads(View):
             page = Pagination(request,new,10)
             pages = Pagination(request,pipe,10)
             form = LeadCreateForm()
-            context={'staff':staff,'form':form,'new':page,'pipe':pages}
+            context={'count':count,'notify':notify,'staff':staff,'form':form,'new':page,'pipe':pages}
             return render(request,'sales/leads.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -643,6 +783,8 @@ class Leads(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = LeadCreateForm(request.POST)
             if form.is_valid():
                 f = form.save(commit=False)
@@ -667,9 +809,11 @@ class UpdateLead(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             lead = Lead.objects.get(id=id)
             form = LeadCreateForm(instance = lead)
-            context={'staff':staff,'form':form,'lead':lead}
+            context={'count':count,'notify':notify,'staff':staff,'form':form,'lead':lead}
             return render(request,'sales/update_lead.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -678,6 +822,8 @@ class UpdateLead(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             lead = Lead.objects.get(id=id)
             form = LeadCreateForm(request.POST,instance = lead)
             if form.is_valid():
@@ -685,10 +831,10 @@ class UpdateLead(View):
                 if f.status == 'Converted':
                     return redirect('convert_lead',id=lead.id)
                 msg = "Lead updated successfully."
-                context={'staff':staff,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
             else:
                 alert="Lead updation failed!.Please review your edit."
-                context={'staff':staff,'alert':alert}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/sales/leads.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -698,12 +844,14 @@ class ViewClosure(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             if staff.stype == '4' or staff.stype == '6':
                 lead = Lead.objects.filter(status='Converted').order_by('-created_on')
             else:
                 lead = Lead.objects.filter(status='Converted',generator=staff).order_by('-created_on')
             page = Pagination(request,lead,10)
-            context={'staff':staff,'lead':page}
+            context={'count':count,'notify':notify,'staff':staff,'lead':page}
             return render(request,'sales/closure.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -713,13 +861,15 @@ class ViewHistory(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             if staff.stype == '4' or staff.stype == '6':
                 lead = Lead.objects.all().order_by('-created_on')
             else:
                 lead = Lead.objects.filter(generator=staff).order_by('-created_on')
             page = Pagination(request,lead,10)
             history = True
-            context={'staff':staff,'lead':page,'history':history}
+            context={'count':count,'notify':notify,'staff':staff,'lead':page,'history':history}
             return render(request,'sales/history.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -729,16 +879,18 @@ class CreateStudentAccount(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             lead = Lead.objects.get(id=id)
             try:
                 student = Student.objects.get(email=lead.email)
                 if student:
                     ActivateStudent(student)
                     msg = 'Student account successfully activated'
-                    context={'staff':staff,'lead':lead,'msg':msg} 
+                    context={'count':count,'notify':notify,'staff':staff,'lead':lead,'msg':msg} 
             except:
                 process = "Are you sure you want to proceed?"
-                context={'staff':staff,'lead':lead,'process':process}
+                context={'count':count,'notify':notify,'staff':staff,'lead':lead,'process':process}
             return render(request,'messages/sales/leads.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -747,6 +899,8 @@ class CreateStudentAccount(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             lead = Lead.objects.get(id=id)
             try:
                 lead.status = "Converted"
@@ -759,10 +913,10 @@ class CreateStudentAccount(View):
                     lead.to_be_approved_by = manager
                     lead.save()
                     msg = "Student account has been created and have been sent for approval."
-                context={'staff':staff,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
             except:
                 alert = "Student account creation failed.Please try again"
-                context={'staff':staff,'alert':alert}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/sales/leads.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -772,11 +926,13 @@ class ListLMSApprovals(View):
         x = SalesManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             if staff.stype == '4':
                 leads = Lead.objects.filter(approval='2',lms=False).order_by('-created_on')
             else:
                 leads = Lead.objects.filter(approval='2',lms= False,to_be_approved_by= staff).order_by('-created_on')
-            context={'staff':staff,'leads':leads}
+            context={'count':count,'notify':notify,'staff':staff,'leads':leads}
             return render(request,'sales/lms_approval.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -798,9 +954,11 @@ class DeleteLMSProfile(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             lead = Lead.objects.get(id=id)
             confirm = "Are you sure you want to proceed?"
-            context={'staff':staff,'lead':lead,'confirm':confirm}
+            context={'count':count,'notify':notify,'staff':staff,'lead':lead,'confirm':confirm}
             return render(request,'messages/sales/leads.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -809,6 +967,8 @@ class DeleteLMSProfile(View):
         x = SalesOperation(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             lead = Lead.objects.get(id=id)
             try:
                 student = Student.objects.get(email=lead.email)
@@ -825,10 +985,10 @@ class DeleteLMSProfile(View):
                     lead.to_be_approved_by = reporting.manager
                     lead.save()
                     msg = "Account has been marked for deletion and has been sent for approval."
-                context={'staff':staff,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
             except:
                 alert = "Account deletion failed.Please try again"
-                context={'staff':staff,'alert':alert}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/sales/leads.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -839,11 +999,13 @@ class ListLMSDeletion(View):
         if x == True:
             user = request.user
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             if staff.stype == '4':
                 lead = Lead.objects.filter(approval='2',lms = True)
             else:
                 lead = Lead.objects.filter(approval='2',lms=True,to_be_approved_by = staff)
-            context={'staff':staff,'lead':lead}
+            context={'count':count,'notify':notify,'staff':staff,'lead':lead}
             return render(request,'sales/lms_deletion.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -862,6 +1024,8 @@ class RejectDelLMSProfile(View):
         x = SalesManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             lead = Lead.objects.get(id = id)
             lead.approval = '1'
             lead.to_be_approved_by = staff
@@ -879,9 +1043,11 @@ class Students(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             student = Student.objects.all().order_by('-start_date')
             FindSCD(request,student)
-            context={'staff':staff,'student':student}
+            context={'count':count,'notify':notify,'staff':staff,'student':student}
             return render(request,'common/students.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -891,11 +1057,13 @@ class ViewStudent(View):
         x = NotTrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             student = Student.objects.get(id=id)
             scd(request,student)
             cd = StudentCourseData.objects.filter(student=student)
             na = StudentCourseData.objects.filter(student=student,batch__status='1')
-            context={'staff':staff,'student':student,'cd':cd,'na':na}
+            context={'count':count,'notify':notify,'staff':staff,'student':student,'cd':cd,'na':na}
             return render(request,'common/student_profile.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -905,10 +1073,12 @@ class AddSCD(View):
         x = NotTrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             student = Student.objects.get(id=id)
             scd(request,student)
             form = AddSCDForm()
-            context={'staff':staff,'form':form,'student':student}
+            context={'count':count,'notify':notify,'staff':staff,'form':form,'student':student}
             return render(request,'operations/add_scd.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -917,6 +1087,8 @@ class AddSCD(View):
         x = NotTrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             student = Student.objects.get(id=id)
             form = AddSCDForm(request.POST)
             if form.is_valid():
@@ -924,10 +1096,10 @@ class AddSCD(View):
                 f.student = student
                 f.save()
                 msg = "Successfully added Course Data"
-                context={'staff':staff,'student':student,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'student':student,'msg':msg}
             else:
                 alert = "Course adding failed!.Please review your edit."
-                context={'staff':staff,'alert':alert,'student':student}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert,'student':student}
             return render(request,'messages/operations/student_profile.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -937,6 +1109,8 @@ class DeleteSCD(View):
         x = NotTrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             scd = StudentCourseData.objects.get(id=id)
             student = scd.student
             scd.delete()
@@ -949,6 +1123,8 @@ class UpdateShare(View):
         x = NotTrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             student = Student.objects.get(id=id)
             if student.shared == 'Yes':
                 student.shared = 'No'
@@ -964,6 +1140,8 @@ class SendSingleMail(View):
         x = NotTrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             student = Student.objects.get(id=id)
             mail = Email(to_address=student.email)
             form = SendMailForm(instance=mail)
@@ -974,6 +1152,8 @@ class SendSingleMail(View):
         x = NotTrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             student = Student.objects.get(id=id)
             mail = Email(to_address=student.email)
             form = SendMailForm(request.POST,instance=mail)
@@ -985,10 +1165,10 @@ class SendSingleMail(View):
                 f.status = 'Mail'
                 f.save()
                 msg = "Mail send successfully"
-                context={'staff':staff,'mail':mail,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'mail':mail,'msg':msg}
             else:
                 alert = "Mail send failed!.Please review your edit."
-                context={'staff':staff,'alert':alert,'mail':mail}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert,'mail':mail}
             return render(request,'messages/common/students.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -998,6 +1178,8 @@ class Jobs(View):
         user = request.user
         if user.is_authenticated:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             job = Job.objects.filter(approval="Approved").order_by('-timestamp')
             page = Pagination(request,job,6)
             context = {'staff':staff,'job':page}
@@ -1010,6 +1192,8 @@ class AddJob(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = AddJobForm()
             context = {'staff':staff,'form':form}
             return render(request,'common/add_job.html',context)
@@ -1019,6 +1203,8 @@ class AddJob(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = AddJobForm(request.POST)
             if form.is_valid():
                 f = form.save(commit=False)
@@ -1026,10 +1212,10 @@ class AddJob(View):
                 f.approval = 'Approved'
                 f.save()
                 msg = 'Job added successfully.'
-                context={'staff':staff,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
             else:
                 alert="Job reporting failed!.Please review your edit."
-                context={'staff':staff,'alert':alert}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/common/jobs.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1040,8 +1226,10 @@ class ViewTeqNews(View):
         user = request.user
         if user.is_authenticated:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             posts = Post.objects.all()
-            context={'staff':staff,'posts':posts}
+            context={'count':count,'notify':notify,'staff':staff,'posts':posts}
             return render(request,'common/blog.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1051,7 +1239,9 @@ class ViewProfile(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
-            context={'staff':staff}
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            context={'count':count,'notify':notify,'staff':staff}
             return render(request,'common/profile.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1061,8 +1251,10 @@ class EditProfile(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             form = CreateStaffForm(instance=staff)
-            context={'staff':staff,'form':form}
+            context={'count':count,'notify':notify,'staff':staff,'form':form}
             return render(request,'common/edit_profile.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1071,6 +1263,8 @@ class EditProfile(View):
         x = StaffCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             name = staff.name
             email = staff.email
             empid = staff.empid
@@ -1091,10 +1285,10 @@ class EditProfile(View):
                 except:
                     f.save()
                 msg = "Profile updated successfully"
-                context={'staff':staff,'msg':msg}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
             else:
                 alert = "Profile updated failed!.Please review your edit."
-                context={'staff':staff,'alert':alert}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/common/profile.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1105,6 +1299,8 @@ class OperationsDashboard(View):
         x = OperationsCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             context ={'staff':staff}
             return render(request,'operations/dashboard.html',context)
         else:
@@ -1115,11 +1311,13 @@ class EditStaff(View):
         x = AdminCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             profile = Staff.objects.get(id=id)
             form = CreateStaffForm(instance=profile)
             reporting = Reporting.objects.get(user=profile)
             form_manager = ReportingForm(instance=reporting)
-            context={'staff':staff,'form':form,'profile':profile,'form_manager':form_manager}
+            context={'count':count,'notify':notify,'staff':staff,'form':form,'profile':profile,'form_manager':form_manager}
             return render(request,'admin/edit_staff.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1128,6 +1326,8 @@ class EditStaff(View):
         x = AdminCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             profile = Staff.objects.get(id=id)
             email = profile.email
             form = CreateStaffForm(request.POST,instance=profile)
@@ -1163,6 +1363,8 @@ class SalesDashboard(View):
         x = SalesCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             context ={'staff':staff}
             return render(request,'operations/dashboard.html',context)
         else:
@@ -1173,6 +1375,8 @@ class GetStudentPaymentDetails(View):
         x = SalesCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             student = Student.objects.get(id=id)
             try:
                 spd = StudentPaymentData.objects.get(student=student)
@@ -1190,6 +1394,8 @@ class GetStudentPaymentDetails(View):
         x = SalesCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             student = Student.objects.get(id=id)
             spd = StudentPaymentData.objects.get(student=student)
             feeform = StudentPaymentForm(request.POST)
@@ -1214,6 +1420,8 @@ class TrainerDashboard(View):
         x = TrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             context ={'staff':staff}
             if staff.stype == '4' or staff.stype== '7':
                 return redirect('trainer_manager_dashboard')
@@ -1227,6 +1435,8 @@ class TrainerManagerDashboard(View):
         x = TrainerManagerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             context ={'staff':staff}
             return render(request,'trainer/manager_dashboard.html',context)
         else:
@@ -1237,11 +1447,13 @@ class MyBatches(View):
         x = TrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             wdbatch = Batch.objects.filter(trainer=staff,type="Weekday")
             webatch = Batch.objects.filter(trainer=staff,type="Weekend")
             wdpage = Pagination(request,wdbatch,5)
             wepage = Pagination(request,webatch,5)
-            context={'staff':staff,'wdbatch':wdpage,'webatch':wepage}
+            context={'count':count,'notify':notify,'staff':staff,'wdbatch':wdpage,'webatch':wepage}
             return render(request,'trainer/my_batches.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1251,6 +1463,8 @@ class MyStudents(View):
         x = TrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             batch = Batch.objects.filter(trainer=staff)
             name = []
             scd = StudentCourseData.objects.filter(batch__in=batch)
@@ -1258,7 +1472,7 @@ class MyStudents(View):
                 name.append(i.student.name)
             students = Student.objects.filter(name__in=name).order_by('name')
             FindSCD(request,students)
-            context={'staff':staff,'students':students}
+            context={'count':count,'notify':notify,'staff':staff,'students':students}
             return render(request,'trainer/my_students.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1268,9 +1482,11 @@ class MyCurrentBatch(View):
         x = TrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             wdbatch = Batch.objects.filter(trainer=staff,type="Weekday",status='1')
             webatch = Batch.objects.filter(trainer=staff,type="Weekend",status='1')
-            context={'staff':staff,'wdbatch':wdbatch,'webatch':webatch}
+            context={'count':count,'notify':notify,'staff':staff,'wdbatch':wdbatch,'webatch':webatch}
             return render(request,'trainer/upload_videos.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1281,11 +1497,13 @@ class UploadVideos(View):
         x = TrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             batch = Batch.objects.get(id=id)
             batch_data = BatchData.objects.filter(batch=batch)
             form = AddBatchDataForm()
             time = datetime.datetime.now()
-            context={'staff':staff,'batch':batch,'form':form,'batch_data':batch_data,'time':time}
+            context={'count':count,'notify':notify,'staff':staff,'batch':batch,'form':form,'batch_data':batch_data,'time':time}
             return render(request,'trainer/videos.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1294,6 +1512,8 @@ class UploadVideos(View):
         x = TrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             batch = Batch.objects.get(id=id)
             form = AddBatchDataForm(request.POST)
             if form.is_valid():
@@ -1302,10 +1522,10 @@ class UploadVideos(View):
                 f.date = datetime.datetime.now()
                 f.save()
                 msg = "Videos uploaded successfully and notifications send."
-                context={'staff':staff,'msg':msg,'batch':batch}
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg,'batch':batch}
             else:
                 alert = "Failed to upload video.Please try again."
-                context={'staff':staff,'alert':alert,'batch':batch}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert,'batch':batch}
             return render(request,'messages/trainer/videos.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1315,10 +1535,12 @@ class UpdateVideo(View):
         x = TrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             video = BatchData.objects.get(id=id)
             batch = Batch.objects.get(id=video.batch.id)
             form = AddBatchDataForm(instance=video)
-            context={'staff':staff,'form':form,'video':video,'batch':batch}
+            context={'count':count,'notify':notify,'staff':staff,'form':form,'video':video,'batch':batch}
             return render(request,'trainer/update_video.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1327,6 +1549,8 @@ class UpdateVideo(View):
         x = TrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             video = BatchData.objects.get(id=id)
             batch = Batch.objects.get(id=video.batch.id)
             form = AddBatchDataForm(request.POST,instance=video)
@@ -1336,7 +1560,7 @@ class UpdateVideo(View):
                 context ={'staff':staff,'msg':msg,'batch':batch}
             else:
                 alert = "Failed to update batch data.Please review your edits."
-                context={'staff':staff,'alert':alert,'batch':batch}
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert,'batch':batch}
             return render(request,'messages/trainer/videos.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1346,10 +1570,12 @@ class PlayVideo(View):
         x = TrainerCheck(request)
         if x == True:
             staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
             batch_data = BatchData.objects.get(id=id)
             batch = Batch.objects.get(id=batch_data.batch.id)
             url = "trainer/upload/videos/"
-            context={'staff':staff,'batch_data':batch_data,'batch':batch,'url':url}
+            context={'count':count,'notify':notify,'staff':staff,'batch_data':batch_data,'batch':batch,'url':url}
             return render(request,'common/video_player.html',context)
         else:
             try:
@@ -1357,7 +1583,7 @@ class PlayVideo(View):
                 if student:
                     batch_data = BatchData.objects.get(id=id)
                     batch = Batch.objects.get(id=batch_data.batch.id)
-                    context={'student':student,'batch_data':batch_data,'batch':batch}
+                    context={'count':count,'notify':notify,'student':student,'batch_data':batch_data,'batch':batch}
                     return render(request,'common/video_player.html',context)
                 else:
                     return render(request,'messages/common/permission_error.html')
