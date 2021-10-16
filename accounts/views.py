@@ -266,7 +266,7 @@ class EditBatch(View):
         else:
             try:
                 staff = Staff.objects.get(user=request.user)
-                if staff.stype == '7' :
+                if staff.stype == '7' or staff.stype == '3':
                     batch = Batch.objects.get(id=id)
                     form = BatchCreateForm(instance=batch)
                     context={'staff':staff,'batch': batch,'form':form}
@@ -281,13 +281,16 @@ class EditBatch(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             batch = Batch.objects.get(id=id)
+            trainer = batch.trainer
+            link = batch.link
+            passcode = batch.passcode
             form = BatchCreateForm(request.POST,instance=batch)
             if form.is_valid():
                 f = form.save(commit=False)
                 if staff.stype == '5':
-                    f.trainer = batch.trainer
-                    f.link = batch.link
-                    f.passcode = batch.passcode
+                    f.trainer = trainer
+                    f.link = link
+                    f.passcode = passcode
                 f.last_edit_time = datetime.datetime.now()
                 f.last_edit_user = staff 
                 if staff.stype == '4' or staff.stype== '5':
@@ -312,14 +315,17 @@ class EditBatch(View):
         else:
             try:
                 staff = Staff.objects.get(user=request.user)
-                if staff.stype == '7' :
+                if staff.stype == '7' or staff.stype == '3':
                     staff = Staff.objects.get(user=request.user)
                     batch = Batch.objects.get(id=id)
                     subject = batch.subject
                     start_date = batch.start_date
                     end_date = batch.end_date
                     start_time = batch.start_time
-                    end_time = batch.end_time
+                    end_time = batch.end_time 
+                    trainer = batch.trainer
+                    link = batch.link
+                    passcode = batch.passcode
                     type = batch.type
                     form = BatchCreateForm(request.POST,instance=batch)
                     if form.is_valid():
@@ -329,11 +335,15 @@ class EditBatch(View):
                         f.end_date = end_date
                         f.start_time = start_time
                         f.end_time = end_time
-                        f.type = type
+                        f.type = type 
                         f.last_edit_time = datetime.datetime.now()
                         f.last_edit_user = staff 
                         f.approval = '1'
                         f.to_be_approved_by = staff
+                        if staff.stype == '3':
+                            f.trainer = trainer
+                            f.link = link
+                            f.passcode = passcode
                         f.save()
                         msg = "Batch edits have been updated"
                         context={'staff':staff,'msg':msg}
@@ -870,6 +880,7 @@ class Students(View):
         if x == True:
             staff = Staff.objects.get(user=request.user)
             student = Student.objects.all().order_by('-start_date')
+            FindSCD(request,student)
             context={'staff':staff,'student':student}
             return render(request,'common/students.html',context)
         else:
@@ -1234,6 +1245,24 @@ class MyBatches(View):
             return render(request,'trainer/my_batches.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
+
+class MyStudents(View):
+    def get(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            batch = Batch.objects.filter(trainer=staff)
+            name = []
+            scd = StudentCourseData.objects.filter(batch__in=batch)
+            for i in scd:
+                name.append(i.student.name)
+            students = Student.objects.filter(name__in=name).order_by('name')
+            FindSCD(request,students)
+            context={'staff':staff,'students':students}
+            return render(request,'trainer/my_students.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
 
 
 

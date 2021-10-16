@@ -72,6 +72,7 @@ urlpatterns = [
     path('trainer/home/',TrainerDashboard.as_view(),name='trainer_dashboard'),
     path('trainer/admin/home/',TrainerManagerDashboard.as_view(),name='trainer_manager_dashboard'),
     path('trainer/batches/',MyBatches.as_view(),name='my_batches'),
+    path('trainer/students/',MyStudents.as_view(),name='my_students'),
 
 
 

@@ -186,6 +186,10 @@ def scd(request,student):
         if i.batch.status == '1':
             student.now_attending.append(i.batch.batch_code)
     student.save()
+
+def FindSCD(request,students):
+    for stud in students:
+        scd(request,stud)
         
 
 def BatchStrength(request,id):
