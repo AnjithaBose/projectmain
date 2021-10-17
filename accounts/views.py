@@ -13,6 +13,10 @@ from .models import *
 from .forms import *
 import time
 import datetime
+
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
 # Create your views here.
 
 
@@ -106,7 +110,9 @@ class AdminDashboard(View):
             st = CurrentActiveStudents()
             pending_lms = Lead.objects.filter(approval='2').count()
             c3 = MonthlyRevenue()
-            context={'count':count,'notify':notify,'staff':staff,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'active_leads':active_leads,'closed_leads':closed_leads,'students':st,'pending_lms':pending_lms,'monthly_fee_collected':c3}
+            trainers = Staff.objects.filter(stype='3').order_by('doj')
+            leads = Lead.objects.filter(Q(status='New')|Q(status='In Pipeline'))
+            context={'count':count,'notify':notify,'staff':staff,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'active_leads':active_leads,'closed_leads':closed_leads,'students':st,'pending_lms':pending_lms,'monthly_fee_collected':c3,'trainers':trainers,'leads':leads}
             # print(today.strftime('%b'))
             return render(request,'admin/dashboard.html',context)
         else:
@@ -1595,6 +1601,133 @@ class PlayVideo(View):
                     return render(request,'messages/common/permission_error.html')
             except:
                 return render(request,'messages/common/permission_error.html')
+
+
+class SendLeadMail(View):
+    def get(self, request,id):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            lead = Lead.objects.get(id=id)
+            email = Email(to_address=lead.email)
+            form = SendMailForm(instance=email)
+            context={'count':count,'notify':notify,'staff':staff,'lead':lead,'form':form}
+            return render(request,'admin/send_mail.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+class ActiveWebinar(View):
+    def get(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            webinar = Webinar.objects.filter(status='Upcoming').order_by('-date')
+            context={'count':count,'notify':notify,'staff':staff,'webinar':webinar}
+            return render(request,'common/webinar.html',context)
+        else:
+            webinar = Webinar.objects.filter(status='Upcoming')
+            context={'webinar':webinar}
+            return render(request,'common/public_webinar.html',context)
+
+class AddWebinar(View):
+    def get(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            form = AddWebinarForm()
+            context ={'count':count,'notify':notify,'staff':staff,'form':form}
+            return render(request,'admin/add_webinar.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+    def post(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            form = AddWebinarForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                if f.public_url:
+                    pass
+                else:
+                    code = time.time()
+                    url = "%s_%d" % ("TEQ",code)
+                    if f.cover_pic:
+                        f.public_url = url
+                        f.save()
+                    else:
+                        f.public_url = url
+                        temp = DefaultPics.objects.get(id=3)
+                        img = Image.open(temp.webinar_cover)
+                        draw = ImageDraw.Draw(img)
+                        dt = str(f.date)
+                        tm = str(f.time)
+                        file_name = str("images/webinar_cover/"+f.public_url+".jpg")
+                        selectFont = ImageFont.truetype("arialbd.ttf", size = 40)
+                        courseFont = ImageFont.truetype("arialbd.ttf", size = 20)
+                        codeFont = ImageFont.truetype("arialbd.ttf", size = 20)
+                        draw.text( (395,369), f.topic, (255,255,255),anchor="ma",font=selectFont,align ="center")
+                        draw.text( (104,501), dt, (255,255,255),anchor="ma",font=courseFont,align ="center")
+                        draw.text( (695,501),tm, (255,255,255),anchor="ma",font=codeFont,align ="center")
+                        img.save( file_name, "JPEG", resolution=70.0)
+                        f.pic = img
+                        f.save()
+                msg = "Webinar published successfully."
+                context = {'count':count,'notify':notify,'staff':staff,'msg':msg}
+            else:
+                alert = "Webinar published failed!.Please review your edit."
+                context={'count':count,'notify':notify,'staff':staff,'alert':alert}
+            return render(request,'messages/admin/webinar.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')  
+
+class WebinarRegister(View):
+    def get(self, request,id):
+        webinar = Webinar.objects.get(public_url=id)
+        form = PublicLeadForm()
+        context = {'form':form, 'webinar':webinar}
+        return render(request,'common/public_register.html',context)
+
+    def post(self, request,id):
+        webinar = Webinar.objects.get(public_url=id)
+        form = PublicLeadForm(request.POST)
+        if form.is_valid():
+            f=form.save(commit=False)
+            f.status = 'New'
+            subject = "[TEQSTORIES] WEBINAR INVITATION"
+            message = "%s_%s_%s" %("Dear participant,\n\nThanks for attending this webinar conducted by Teqstories Solution Pvt.Ltd. Please proceed to the webinar using the following link.\n",webinar.meeting_link,"\n\nWith regards,\nStudent Support Team\nTeqstories")
+            from_address = "techsupport@teqstories.com"
+            to = f.email
+            mailsend(request,subject,message,from_address,to)
+            msg = "Meeting link has been sent to your email address."
+            context ={'webinar':webinar,'msg':msg}
+        else:
+            alert= "Error occured.Please review your details."
+            context = {'webinar':webinar,'alert':alert}
+        return render(request,'messages/common/public_register.html',context)
+
+            
+
+        
+
+           
+
+
+
+
+
+
+
+
+
 
 
 

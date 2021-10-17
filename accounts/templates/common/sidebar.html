@@ -6,4 +6,10 @@
 {% include 'trainer/sidebar.html' %}
 {% elif staff.stype == '4' %}
 {% include 'admin/sidebar.html' %}
+{% else %}
+    {% if student %}
+        {% include 'student/sidebar.html' %}
+    {% else %}
+        {% include 'common/public_sidebar.html' %}
+    {% endif %}
 {% endif %}

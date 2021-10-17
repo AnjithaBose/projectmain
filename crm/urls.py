@@ -43,6 +43,8 @@ urlpatterns = [
     path('administrator/staff/pending/',PendingStaff.as_view(),name='pending_staff'),
     path('administrator/staff/approval/view/<id>/',ViewPendingStaff.as_view(),name='view_pending_staff'),
     path('administrator/staff/approval/<id>/',ApproveStaff.as_view(),name='approve_staff'),
+    path('administrator/mail/lead/<id>/',SendLeadMail.as_view(),name='send_lead_mail'),
+    path('administrator/webinar/add/',AddWebinar.as_view(),name='add_webinar'),
 
     path('operations/home/',OperationsDashboard.as_view(),name='operations_dashboard'),
     path('operations/batches/',ViewBatches.as_view(),name='view_batches'),
@@ -57,6 +59,7 @@ urlpatterns = [
     path('operations/view/batch/approvals/',ViewBatchEditApprovals.as_view(),name='batch_edit_approvals'),
     path('operations/batch/approve/<id>/',ApproveBatch.as_view(),name='approve_batch'),
     path('operations/batch/reject/<id>/',RejectBatch.as_view(),name='reject_batch'),
+    
 
     path('sales/home/',SalesDashboard.as_view(),name='sales_dashboard'),
     path('sales/leads/',Leads.as_view(),name='view_leads'),
@@ -94,6 +97,8 @@ urlpatterns = [
 
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
     path('user/notification/read/<id>/',MarkasRead.as_view(),name='mark_as_read'),
+    path('webinar/',ActiveWebinar.as_view(),name='active_webinar'),
+    path('join/<id>/',WebinarRegister.as_view(),name='join'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

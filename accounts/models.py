@@ -5,6 +5,9 @@ from django.db.models import Q
 from django.utils import timezone
 # Create your models here.
 
+class DefaultPics(models.Model):
+    webinar_cover = models.ImageField(null=True, blank=True,upload_to='images/default/',default='accounts/static/images/webinar_cover.jpg')
+
 state = (
     ('Andhra Pradesh','Andhra Pradesh'),
     ('Arunachal Pradesh','Arunachal Pradesh'),
@@ -56,6 +59,14 @@ approval_choices =(
     ('3', 'Rejected'),
     ('2', 'Pending'),
 )
+
+groups = (
+    ('New', 'New'),
+    ('In Pipeline', 'In Pipeline'),
+    ('Converted', 'Converted'),
+    ('Lost', 'Lost'),
+    ('Not Interested', 'Not Interested'),
+    )
 
 
 
@@ -208,13 +219,6 @@ class Job(models.Model):
 
 
 class Lead(models.Model):
-    groups = (
-    ('New', 'New'),
-    ('In Pipeline', 'In Pipeline'),
-    ('Converted', 'Converted'),
-    ('Lost', 'Lost'),
-    ('Not Interested', 'Not Interested'),
-    )
     name = models.CharField(max_length=100,null=True, blank=True)
     email = models.EmailField(max_length=200,null=True,blank=True)
     mobile = models.CharField(max_length=10,null=True,blank=True)
@@ -292,6 +296,30 @@ class Notification(models.Model):
     date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
     status = models.CharField(max_length=100,choices=(('1','Read'),('2','Unread')),default='2')
+
+class Task(models.Model):
+    user = models.ForeignKey(Staff,null=True, blank=True,on_delete=models.CASCADE,related_name='task_for')
+    timestamp = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Pending','Pending'),('Complete','Complete')))
+    assigned_by = models.ForeignKey(Staff,null=True, blank=True,on_delete=models.CASCADE,related_name='assigned_by')
+
+class Webinar(models.Model):
+    topic = models.CharField(max_length=1000,null=True, blank=True)
+    description = models.TextField(max_length=3000,null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    time = models.TimeField(blank=True, null=True)
+    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Upcoming','Upcoming'),('Completed','Completed')),default='Upcoming')
+    strength = models.CharField(max_length=100,null=True, blank=True)
+    public_url = models.CharField(max_length=1000, null=True, blank=True)
+    meeting_link = models.CharField(max_length=1000, null=True, blank=True)
+    cover_pic = models.ImageField(null=True, blank=True,upload_to='images/webinar_cover/')
+
+    def __str__(self):
+        return self.topic
+
+
+
+
 
 
     

@@ -1,0 +1,92 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+
+            <div class="breadcrumbbar"> 
+                <!-- Start row -->
+                <div class="row">
+                  <div class="col-md-8 col-lg-8">
+                    <h4 class="page-title">Webinar</h4>
+                    <div class="breadcrumb-list">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Webinar</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 mr-0">
+                    <div class="widgetbar">
+                        <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Breadcrumbbar --> 
+              
+              
+             
+        <!-- state start-->
+        <div class="row ">
+            {% for i in webinar %}
+            <div class="col-md-12 col-lg-12 col-xl-8">
+                <div class="card m-b-30">
+                  <div class="row no-gutters">
+                    <div class="col-md-6">
+                      {% if i.cover_pic %}
+                        <img src="{{i.cover_pic.url}}" class="card-img h-100" alt="">
+                      {% else %}
+                      <img src="/media/images/webinar_cover/{{i.public_url}}.jpg" class="card-img h-100" alt="">
+                      {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card-body">
+                        <h5 class="card-title font-18">{{i.topic}}</h5>
+                        <p class="card-text">{{i.description}}</p>
+                        <p class="card-text"><i class="text-muted">On:{{i.date}}&nbsp;&nbsp;&nbsp;At:{{i.time}}</i></p>
+                        <a href="{{i.meeting_link}}" class="btn btn-primary" target="_blank"><i class="ti ti-new-window"></i> Join</a> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+            <div class="col-lg-6">
+                <div class="card m-b-30">
+                  <div class="card-header border-bottom">
+                  </div>
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-primary" role="alert">
+                        <h4 class="alert-heading"><i class="far fa-times-circle"></i> No upcoming webinar!</h4>
+                        {% if staff.stype == '4' or staff.stype == '5' or staff.stype == '6' or staff.stype == '7' %}
+                        <p><a href="{% url 'add_webinar' %}" class="btn btn-primary"><i class="ti ti-plus"></i> Create Webinar</a></p>
+                        {% endif %}
+                        <hr>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+        <!-- End row --> 
+
+
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+        
+    </div>
+    {% include 'common/footer.html' %}
+    
+</div>
+{% endblock %}

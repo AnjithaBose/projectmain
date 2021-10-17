@@ -90,6 +90,17 @@ class AddBatchDataForm(ModelForm):
     class Meta:
         model = BatchData
         fields = ['topic','link']
+
+class AddWebinarForm(ModelForm):
+    cover_pic = forms.ImageField(required=False)
+    class Meta:
+        model = Webinar
+        fields = ['topic','description','date','time','status','meeting_link','cover_pic']
+
+class PublicLeadForm(ModelForm):
+    class Meta:
+        model = Lead
+        fields = ['name','email','mobile']
         
 
         

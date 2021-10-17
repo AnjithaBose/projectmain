@@ -1,0 +1,81 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+
+            
+              <!-- End Breadcrumbbar --> 
+              
+              
+             
+        <!-- state start-->
+        <div class="row ">
+            <div class="col-md-12 col-lg-12 col-xl-12">
+                <div class="card m-b-30">
+                  <div class="row no-gutters">
+                    <div class="col-md-6">
+                      {% if webinar.cover_pic %}
+                        <img src="{{webinar.cover_pic.url}}" class="card-img h-100" alt="">
+                      {% else %}
+                      <img src="/media/images/webinar_cover/{{webinar.public_url}}.jpg" class="card-img h-100" alt="">
+                      {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card-body">
+                        <h5 class="card-title font-18">{{webinar.topic}}</h5>
+                        <p class="card-text">{{webinar.description}}</p>
+                        <p class="card-text"><i class="text-muted">On:{{webinar.date}}&nbsp;&nbsp;&nbsp;At:{{webinar.time}}</i></p>
+                        <button class="btn btn-primary" target="_blank" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="ti ti-new-window"></i> Join</button> </div>
+                        <div class="collapse" id="collapseExample">
+                            <div class="card card-body">
+                
+                                      <h4 class="header-title"></h4>
+                                      <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                                          {% csrf_token %}
+                                        <div class="form-group row">
+                                          <div class="col-12 col-md-12">
+                                            <label for="exampleInputName1">Name</label>
+                                          {% load widget_tweaks %} 
+                                          {% render_field form.name class="form-control" required="true" placeholder="Enter your name" %}
+                                          </div>
+                                          <div class="col-12 col-md-12">
+                                            <label for="exampleInputEmail3">Email</label>
+                                          {% render_field form.email class="form-control" required="true" type="email" placeholder="Enter your email" %}
+                                          </div>
+                                          <div class="col-12 col-md-12">
+                                            <label for="exampleInputEmail3">Mobile</label>
+                                          {% render_field form.mobile class="form-control" required="true" maxlength="10" placeholder="Enter contact number without extensions" %}
+                                          </div>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-primary mr-2">Register</button>
+                                        <button class="btn btn-light my-1" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Cancel</button>
+                                      </form>
+                            </div>
+                          </div><br><br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <!-- End row --> 
+
+
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+        
+    </div>
+    {% include 'common/footer.html' %}
+    
+</div>
+{% endblock %}

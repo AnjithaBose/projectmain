@@ -1,0 +1,14 @@
+{% load static %}
+<div class="side_bar scroll_auto">
+    <div class="user-panel">
+      <div class="user_image"> <img src="{% static 'images/logo.jpg' %}" class="img-circle mCS_img_loaded" alt=""> </div>
+      <div class="info">
+        <p>Teqstories Guest</p>
+        <a href="#"> <i class="fa fa-circle text-success"></i> Online</a>
+      </div>
+    </div>
+    <ul id="dc_accordion" class="sidebar-menu tree">
+      <li> <a href="https://www.teqstories.com" class=" active"> <i class="ti ti-world"></i> <span>Website</span></a> </li>
+      <li> <a href="{% url 'active_webinar' %}"><i class="ti ti-rss"></i> Webinar<span></span></a></li>
+    </ul>
+  </div>
