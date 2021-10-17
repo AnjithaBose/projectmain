@@ -69,8 +69,7 @@ class Home(View):
             except:
                 try:
                     s =Student.objects.get(user=user)
-                    # return redirect('student_dashboard')
-                    return HttpResponse("Student dashboard")
+                    return redirect('student_dashboard')
                 except:
                     return redirect('logout')
         else:
@@ -110,9 +109,10 @@ class AdminDashboard(View):
             st = CurrentActiveStudents()
             pending_lms = Lead.objects.filter(approval='2').count()
             c3 = MonthlyRevenue()
+            webinar = Webinar.objects.filter(status='Upcoming').count()
             trainers = Staff.objects.filter(stype='3').order_by('doj')
             leads = Lead.objects.filter(Q(status='New')|Q(status='In Pipeline'))
-            context={'count':count,'notify':notify,'staff':staff,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'active_leads':active_leads,'closed_leads':closed_leads,'students':st,'pending_lms':pending_lms,'monthly_fee_collected':c3,'trainers':trainers,'leads':leads}
+            context={'webinar':webinar,'count':count,'notify':notify,'staff':staff,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'active_leads':active_leads,'closed_leads':closed_leads,'students':st,'pending_lms':pending_lms,'monthly_fee_collected':c3,'trainers':trainers,'leads':leads}
             # print(today.strftime('%b'))
             return render(request,'admin/dashboard.html',context)
         else:
@@ -1625,11 +1625,11 @@ class ActiveWebinar(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            webinar = Webinar.objects.filter(status='Upcoming').order_by('-date')
+            webinar = Webinar.objects.filter(status='Upcoming').order_by('date')
             context={'count':count,'notify':notify,'staff':staff,'webinar':webinar}
             return render(request,'common/webinar.html',context)
         else:
-            webinar = Webinar.objects.filter(status='Upcoming')
+            webinar = Webinar.objects.filter(status='Upcoming').order_by('date')
             context={'webinar':webinar}
             return render(request,'common/public_webinar.html',context)
 
@@ -1713,6 +1713,47 @@ class WebinarRegister(View):
             alert= "Error occured.Please review your details."
             context = {'webinar':webinar,'alert':alert}
         return render(request,'messages/common/public_register.html',context)
+
+
+class StudentDashboard(View):
+    def get(self, request):
+        x =  StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            enrolled_courses = StudentCourseData.objects.filter(student=student).count()
+            active_courses = StudentCourseData.objects.filter(batch__status="1",student=student).count()
+            payments = StudentPayments.objects.filter(spd__student=student).count()
+            scd = StudentCourseData.objects.filter(student=student)
+            batch = []
+            trainer = []
+            for i in scd:
+                batch.append(i.batch.batch_code)
+                trainer.append(i.batch.trainer)
+            batches = Batch.objects.filter(batch_code__in=batch)
+            trainers = Staff.objects.filter(name__in=trainer)
+            context = {'trainers':trainers,'batches': batches,'student':student,'notify':notify,'count':count,'enrolled_courses':enrolled_courses,'active_courses':active_courses,'payments_done':payments}
+            return render(request,'student/dashboard.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+
+class MyClassroom(View):
+    def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            batches = StudentActiveBatches(student)
+            context = {'student':student,'batches':batches,'count':count,'notify':notify}
+            return render(request,'student/my_classroom.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+            
+
+
 
             
 

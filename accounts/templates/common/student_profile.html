@@ -78,11 +78,11 @@
                                   </div>
                                   <div class="col-12 col-md-6" style="padding:10px">
                                     <label for="exampleInputName1">Now Attending</label> 
-                                        <ul type="disc">
+                                        <div class="row">
                                         {% for i in na %}
-                                        <li><a href="{% url 'view_batch' i.batch.id %}" class="btn btn-primary-rgba">{{i.batch.batch_code}}</a></li>
+                                        <div class="col-2"><a href="{% url 'view_batch' i.batch.id %}" class="btn btn-primary-rgba">{{i.batch.batch_code}}</a></div>
                                         {% endfor %}
-                                        </ul>
+                                        </div>
                                   </div>
                                   <div class="col-6 col-md-3" style="padding:10px">
                                     <label for="exampleInputName1">Gender</label> 

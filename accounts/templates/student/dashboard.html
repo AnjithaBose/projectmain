@@ -1,0 +1,220 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+  {% include 'common/sidebar.html' %}
+  <div class="content_wrapper bg_homebefore">
+    <div class="container-fluid">
+      <div class="sec-title">
+        <div class="row d-flex align-items-center">
+          <div class="col-md-12">
+            <div class="heading_home">
+              <h2>Welcome back {{student.name}}</h2>
+              <p> </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-bar">
+        <!-- Start row -->
+        <div class="row">
+          <!-- Start col -->
+          <div class="col-12 col-md-12">
+            <div class="row">
+              <!-- start card -->
+              <div class="col-lg-3 col-md-4 col-12">
+                <div class="container">
+                  <div class="card col-12 m-b-20 ">
+                    <div class="card-body">
+                      <div class="row align-items-center no-gutters">
+                        <div class="col-8">
+                          <p class="font-15">Enrolled Courses</p>
+                          <h4 class="card-title mb-0 border-0">{{enrolled_courses}}</h4>
+                        </div>
+                        <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i
+                              class="fas fa-podcast line align-unset"></i></span> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end card -->
+               <!-- start card -->
+               <div class="col-lg-3 col-md-4  col-12">
+                <div class="container">
+                  <div class="card col-12 m-b-20 ">
+                    <div class="card-body">
+                      <div class="row align-items-center no-gutters">
+                        <div class="col-8">
+                          <p class="font-15">Active Courses</p>
+                          <h4 class="card-title mb-0 border-0">{{active_courses}}</h4>
+                        </div>
+                        <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i
+                              class="ti ti-blackboard line align-unset"></i></span> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end card -->
+               <!-- start card -->
+               <div class="col-lg-3 col-md-4  col-12">
+                <div class="container">
+                  <div class="card col-12 m-b-20 ">
+                    <div class="card-body">
+                      <div class="row align-items-center no-gutters">
+                        <div class="col-8">
+                          <p class="font-15">Payments Done</p>
+                          <h4 class="card-title mb-0 border-0">{{payments_done}}</h4>
+                        </div>
+                        <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i
+                              class="ti ti-money line align-unset"></i></span> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end card -->
+               <!-- start card -->
+               <div class="col-lg-3 col-md-4  col-12">
+                <div class="container">
+                  <div class="card col-12 m-b-20 ">
+                    <div class="card-body">
+                      <div class="row align-items-center no-gutters">
+                        <div class="col-8">
+                          <p class="font-15">Pending Assignments</p>
+                          <h4 class="card-title mb-0 border-0">{{pending_assignments}}</h4>
+                        </div>
+                        <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i
+                              class="fas fa-clipboard-check line align-unset"></i></span> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end card -->  
+            </div>
+  
+  
+          </div>
+          
+        </div>
+        <!-- End row -->
+
+        <!-- Start row -->
+        <div class="row customers">
+          <div class="col-lg-12 col-xl-3">
+            <div class="card  m-b-30 no-border">
+              <div class="card-header bg-white">
+                <h3 class="card-title float-left">Your Trainers</h3>
+                <div class="float-right"> <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"> <i class="lni-more-alt"></i> </a>
+                  <div class="dropdown-menu"> <a class="dropdown-item" href="#"><i class="ti ti-check m-r-10"></i> View</a>
+                    <a class="dropdown-item" href="#"><i class="lni-add-file m-r-10"></i></a> <a
+                      class="dropdown-item" href="#"><i class="lni-download m-r-10"></i></a> <a
+                      class="dropdown-item" href="#"><i class="lni-cog m-r-10"></i></a> <a class="dropdown-item"
+                      href="#"><i class="lni-archive m-r-10"></i> </a> </div>
+                </div>
+              </div>
+              <div class="card-body visitor-customer">
+                {% for i in trainers %}
+                <div class="media border-bottom p-b-15"> <img class="rounded-circle m-r-15 w-45"
+                    src="{{i.profile_pic.url}}" alt="widget">
+                  <div class="media-body">
+                    <div><strong>{{i.name}}</strong></div>
+                    
+                  </div>
+                  <div class="float-right">
+                    <h5><a class="badge badge-default" href="{% url 'message' i.id %}"><i class="ti ti-comments"></i> Chat</a></h5>
+                  </div>
+                </div>
+                {% empty %}
+                <div class="media border-bottom p-b-15">
+                          <div class="alert-list">
+                            <div class="alert alert-danger" role="alert">
+                              <h4 class="alert-heading"><i class="far fa-times-circle"></i> Batch Error!</h4>
+                              <p>You haven't joined any batch.</p>
+                            </div>
+                          </div>
+                </div>
+                {% endfor %}
+                
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12 col-xl-9">
+            <div class="card m-b-30 no-border recent-order">
+              <div class="card-header bg-white no-border border-bottom-transparent">
+                <h3 class="card-title float-left">Active Batches</h3>
+    
+              </div>
+            <div class="row">
+                {% for i in batches %}
+                <!-- Start col -->
+                <div class="col-md-6 col-lg-6 col-xl-3" style="margin-left:20px;margin-right:20px;">
+                    <div class="card m-b-30"> <img class=" card-img-top" src="{{i.subject.pic.url}}" alt="{{i.subject}}">
+                        <div class="card-body">
+                            <h5 class="card-title font-18">{{i.subject.code}}</h5>
+                            <p class="card-text mb-3">
+                                <table>
+                                    <tr><th>Trainer</th><td> : </td><td> {{i.trainer}}</td></tr>
+                                    <tr><th>Start Date</th><td> : </td><td> {{i.start_date}}</td></tr>
+                                    <tr><th>Timing</th><td> : </td><td> {{i.start_time}} - {{i.end_time}}</td></tr>
+                                </table>
+                            </p>
+                            <a href="#" class="btn btn-primary">View Recordings</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- End col -->
+                {% empty %}
+                <!-- Start col -->
+                <div class="col-md-6 col-lg-6 col-xl-3" style="margin-left:20px;margin-right:20px;">
+                    <div class="card m-b-30">
+                        <div class="card-header border-bottom">
+                        </div>
+                        <div class="card-body">
+                            <div class="alert-list">
+                                <div class="alert alert-danger" role="alert">
+                                    <h4 class="alert-heading"><i class="far fa-times-circle"></i> Batch Error!</h4>
+                                    <p>You are not part of any active batches.</p>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End col -->
+                {% endfor %}
+                
+                
+
+            </div>
+
+
+
+            </div>
+          </div>
+        </div>
+        <!-- End row -->
+
+        <!-- Start row -->
+        <!-- <div class="row">
+        </div> -->
+        <!-- End row -->
+        
+        
+      </div>
+      <!-- End Rightbar -->
+    </div>
+    
+  </div>
+  {% include 'common/footer.html' %}
+</div>
+</div>
+
+{% endblock %}

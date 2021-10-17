@@ -1,0 +1,27 @@
+<div class="side_bar scroll_auto">
+    <div class="user-panel">
+      <div class="user_image"> <img src="{{student.profile_pic.url}}" class="img-circle mCS_img_loaded" alt=""> </div>
+      <div class="info">
+        <p>{{student.name}}</p>
+        <a href="#"> <i class="fa fa-circle text-success"></i> Online</a>
+      </div>
+    </div>
+    <ul id="dc_accordion" class="sidebar-menu tree">
+      <li> <a href="{% url 'home' %}" class=" active"> <i class="ti ti-dashboard"></i> <span>Dashboard</span></a> </li>
+      <li> <a href="{% url 'my_classroom' %}"><i class="ti ti-blackboard"></i><span>My Classroom</span></a></li>
+      <li> <a href="{% url 'view_batches' %}"><i class="ti ti-video-clapper"></i> <span>My Recordings</span></a></li>
+      <li> <a href="{% url 'view_contacts' %}"><i class="ti ti-comments"></i> <span>Chat</span></a></li>
+      <li> <a href="{% url 'view_students' %}"><i class="ti ti-file"></i> <span>Assignments</span></a></li>
+      <li> <a href="{% url 'view_leads' %}"><i class="ti ti-envelope"></i> <span>Projects</span></a></li>
+      <li> <a href="{% url 'view_leads' %}"><i class="ti ti-medall-alt"></i> <span>My Certificates</span></a></li>
+      <li class="menu_sub"> <a href="#"><i class="ti ti-briefcase"></i> <span>Jobs</span><span
+        class="ti ti-angle-down styleicon"></span></a>
+        <ul class="down_menu">
+          <li><a href="{% url 'jobs' %}">Vacancies</a></li>
+          <li><a href="{% url 'add_job' %}">Report Vacancy</a></li>
+        </ul>
+      </li>
+      <li> <a href="{% url 'active_webinar' %}"><i class="ti ti-ticket"></i> <span>Webinar</span></a></li>
+      
+    </ul>
+  </div>

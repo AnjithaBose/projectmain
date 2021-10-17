@@ -95,10 +95,13 @@ urlpatterns = [
     path('staff/view/profile/',ViewProfile.as_view(),name='view_profile'),
     path('staff/edit/profile/',EditProfile.as_view(),name='edit_profile'),
 
+    path('student/home/',StudentDashboard.as_view(),name='student_dashboard'),
+    path('student/classrooms/',MyClassroom.as_view(),name='my_classroom'),
+
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
     path('user/notification/read/<id>/',MarkasRead.as_view(),name='mark_as_read'),
     path('webinar/',ActiveWebinar.as_view(),name='active_webinar'),
-    path('join/<id>/',WebinarRegister.as_view(),name='join'),
+    path('<id>/',WebinarRegister.as_view(),name='join'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

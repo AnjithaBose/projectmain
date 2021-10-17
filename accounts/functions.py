@@ -377,6 +377,43 @@ def ClosedLeads():
     cl = cl-c1
     return (cl)
 
+def StudentCheck(request):
+    user = request.user
+    if user.is_authenticated:
+        try:
+            student = Student.objects.get(user=user)
+            if student:
+                return (True)
+            else:
+                return (False)
+        except:
+            return (False)
+    else:
+        return (False)
+
+def StudentNotifications(student):
+    notifications = Notification.objects.filter(user2=student,status='2').order_by('-date').order_by('-time')
+    return notifications
+
+def StudentBatches(student):
+    scd = StudentCourseData.objects.filter(student=student)
+    batch = []
+    for i in scd:
+        batch.append(i.batch.batch_code)
+    batches = Batch.objects.filter(batch_code__in=batch)
+    return (batches)
+
+def StudentActiveBatches(student):
+    scd = StudentCourseData.objects.filter(student=student)
+    batch = []
+    for i in scd:
+        batch.append(i.batch.batch_code)
+    batches = Batch.objects.filter(batch_code__in=batch,status='1')
+    return (batches)
+
+
+
+
 
 
 

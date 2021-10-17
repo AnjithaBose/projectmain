@@ -295,6 +295,7 @@ class Notification(models.Model):
     message = models.CharField(max_length=500, null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=100,choices=(('1','Read'),('2','Unread')),default='2')
 
 class Task(models.Model):
