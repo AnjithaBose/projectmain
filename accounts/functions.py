@@ -2,7 +2,10 @@ from .models import *
 from django.core.paginator import Paginator,EmptyPage
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
+import time
+import datetime
 
+today = datetime.datetime.now()
 
 
 def AdminCheck(request):
@@ -342,6 +345,39 @@ def MarkAsRead(notify):
     for i in notify:
         i.status = '1'
         i.save()
+
+def MonthlyRevenue():
+    count = 0
+    sp = StudentPayments.objects.all()
+    for i in sp:
+        if i.timestamp.month == today.month:
+            count = int(count) + int(i.amount)
+    return(count)
+
+def CurrentActiveStudents():
+    count = 0
+    students = Student.objects.all()
+    for i in students:
+        if i.now_attending == "[]":
+            count = count + 1
+    st = students.count()
+    st = st - count
+    return (st)
+
+def ClosedLeads():
+    closed_leads = Lead.objects.filter(status='Converted')
+    c1 = 0
+    for i in closed_leads:
+        if str(i.created_on.strftime('%b'))== str(today.strftime('%b')):
+            pass
+        else:
+            c1 = c1 + 1
+            closed_leads.exclude(email=i.email)
+    cl=closed_leads.count()
+    cl = cl-c1
+    return (cl)
+
+
 
 
             

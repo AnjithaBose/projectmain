@@ -99,9 +99,15 @@ class AdminDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            context={'count':count,'notify':notify,'staff':staff}
-            today = datetime.datetime.now()
-            print(today.strftime('%b'))
+            current_batches = Batch.objects.filter(status='1').count()
+            upcoming_batches = Batch.objects.filter(status='2').count()
+            active_leads = Lead.objects.filter(Q(status='New')|Q(status='In Pipeline')).count()
+            closed_leads = ClosedLeads()
+            st = CurrentActiveStudents()
+            pending_lms = Lead.objects.filter(approval='2').count()
+            c3 = MonthlyRevenue()
+            context={'count':count,'notify':notify,'staff':staff,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'active_leads':active_leads,'closed_leads':closed_leads,'students':st,'pending_lms':pending_lms,'monthly_fee_collected':c3}
+            # print(today.strftime('%b'))
             return render(request,'admin/dashboard.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
