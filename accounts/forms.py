@@ -101,6 +101,16 @@ class PublicLeadForm(ModelForm):
     class Meta:
         model = Lead
         fields = ['name','email','mobile']
+
+class AddAssignmentForm(ModelForm):
+    link = forms.CharField(required=False)
+    attachment = forms.FileField(required=False)
+    class Meta:
+        model = Assignment
+        fields = ['topic','batch','description','link','attachment']
+
+
+
         
 
         

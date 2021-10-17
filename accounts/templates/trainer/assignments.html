@@ -1,0 +1,153 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+
+            <div class="breadcrumbbar"> 
+                <!-- Start row -->
+                <div class="row">
+                  <div class="col-md-8 col-lg-8">
+                    <h4 class="page-title">Assignments</h4>
+                    <div class="breadcrumb-list">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Assignments</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 mr-0">
+                    <div class="widgetbar">
+                        <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Breadcrumbbar --> 
+              
+              
+             
+        <!-- state start-->
+        <div class="row ">
+            <div class="col-12">
+              <div class="card">
+
+                
+                <p class=" text-right">
+                  <button class="btn btn-primary my-1" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="ti ti-plus"></i> Add Assignment</button>
+              </p>
+                <div class="collapse" id="collapseExample">
+                  <div class="card card-body">
+      
+                            <h4 class="header-title">Add new assignment</h4>
+                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                                {% csrf_token %}
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputName1">Batch</label>
+                                {% load widget_tweaks %} 
+                                {% render_field form.batch class="form-control" required="true"  %}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Topic</label>
+                                {% render_field form.topic class="form-control" required="true" %}
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                <div class="col-12 col-md-12">
+                                  <label for="exampleInputName1">Description</label>
+                                {% render_field form.description class="form-control" required="true"  %}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Link</label>
+                                {% render_field form.link class="form-control"  %}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Attachment</label>
+                                {% render_field form.attachment class="form-control"  %}
+                                </div>
+                              </div>
+                              
+                              <button type="submit" class="btn btn-primary mr-2"><i class="ti ti-save"></i> Save</button>
+                              <button class="btn btn-light my-1" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Cancel</button>
+                            </form>
+                  </div>
+                </div><br><br>
+
+
+                <h4 class="m-t-0 header-title">Assignments</h4>
+                <div class="table-responsive">
+                <table id="demo-foo-filtering" class="table table-striped table-bordered toggle-circle m-b-0" >
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Batch</th>
+                      <th>Date</th>
+                      <th>Topic</th>
+                      <th>Description</th>
+                      <th>Link</th>
+                      <th>Attachment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in assignments %}
+                    <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td>{{i.batch.batch_code}}</td>
+                      <td>{{i.date}}</td>
+                      <td>{{i.topic}}</td>
+                      <td>{{i.description}}</td>
+                      {% if i.link %}
+                      <td>{{i.link}}</td>
+                      {% else %}
+                      <td ><button class="btn btn-danger-rgba" onclick="alert('No link available!')"><i class="ti ti-new-window"></i> Open</button></td>
+                      {% endif %}
+                      {% if i.attachment %}
+                      <td><a href="/media/{{i.attachment}}" class="btn btn-primary" download><i class="ti ti-download"></i> Download</a></td>
+                      {% else %}
+                      <td><button class="btn btn-danger-rgba" onclick="alert('No attachment available!')"><i class="ti ti-download"></i> Download</button></td>
+                      {% endif %}
+                      {% empty %}
+                      <td colspan="7">No assignments to show.</td>
+                    </tr>
+                    {% endfor %}
+                    
+                  </tbody>
+                  <tfoot>
+                    
+                  </tfoot>
+                </table>
+            </div>
+              </div>
+            </div>
+          </div>
+          
+
+
+
+
+
+
+
+          
+          </div> 
+        <!-- End row --> 
+
+
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+        {% include 'common/footer.html' %}
+    </div>
+    
+    
+</div>
+{% endblock %}

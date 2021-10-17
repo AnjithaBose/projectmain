@@ -420,7 +420,10 @@ class ViewBatchEditApprovals(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            temp = TempBatch.objects.filter(to_be_approved_by=staff)
+            if staff.stype == '4':
+                temp = TempBatch.objects.all()
+            elif staff.stype == '5':
+                temp = TempBatch.objects.filter(to_be_approved_by=staff)
             context={'count':count,'notify':notify,'staff':staff,'temp':temp}
             return render(request,'operations/batch_approvals.html',context)
         else:
@@ -433,7 +436,7 @@ class ApproveBatch(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            temp = TempBatch.objects.get(id=id,to_be_approved_by= staff)
+            temp = TempBatch.objects.get(id=id)
             batch = temp.batch
             batch.approval = '1'
             batch.save()
@@ -1788,6 +1791,60 @@ class ClassRecordings(View):
             return render(request,'student/class_recordings.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
+
+class UploadAssignment(View):
+    def get(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            if staff.stype == '7' or staff.stype == '4':
+                assignment = Assignment.objects.all()
+            else:
+                assignment = Assignment.objects.filter(batch__trainer = staff)
+            form = AddAssignmentForm()
+            assignments = Assignment.objects.all().order_by('-date')
+            context ={'count':count,'notify':notify,'staff':staff,'form':form,'assignments':assignments}
+            return render(request,'trainer/assignments.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+    def post(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            form = AddAssignmentForm(request.POST,request.FILES)
+            if form.is_valid():
+                f = form.save(commit=False)
+                if staff.stype == '3':
+                    batch = Batch.objects.get(id=f.batch.id)
+                    if batch.trainer == staff:
+                        pass
+                    else:
+                        alert = "You are not allowed to add assignments to this batch."
+                        context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
+                        return render(request,'messages/trainer/assignments.html',context)
+        
+                f.date = datetime.datetime.now()
+                f.save()
+                msg = "Assignment added successfully."
+                context = {'count':count,'notify':notify,'staff':staff,'msg':msg}
+                return render(request,'messages/trainer/assignments.html',context)
+            else:
+                alert = "Failed to save assignment.Please try again"
+                context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
+                return render(request,'messages/trainer/assignments.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+
+
+
+            
+
 
 
 

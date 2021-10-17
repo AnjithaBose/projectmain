@@ -83,6 +83,7 @@ urlpatterns = [
     path('trainer/batch/current/',MyCurrentBatch.as_view(),name='my_current_batch'),
     path('trainer/upload/videos/<id>/',UploadVideos.as_view(),name='upload_videos'),
     path('trainer/update/videos/<id>/',UpdateVideo.as_view(),name='update_video'),
+    path('trainer/assignments/',UploadAssignment.as_view(),name='upload_assignments'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
