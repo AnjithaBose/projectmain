@@ -1800,11 +1800,10 @@ class UploadAssignment(View):
             notify = Notifications(staff)
             count = CountNotifications(notify)
             if staff.stype == '7' or staff.stype == '4':
-                assignment = Assignment.objects.all()
+                assignments = Assignment.objects.all().order_by('-date')
             else:
-                assignment = Assignment.objects.filter(batch__trainer = staff)
+                assignments = Assignment.objects.filter(batch__trainer = staff).order_by('-date')
             form = AddAssignmentForm()
-            assignments = Assignment.objects.all().order_by('-date')
             context ={'count':count,'notify':notify,'staff':staff,'form':form,'assignments':assignments}
             return render(request,'trainer/assignments.html',context)
         else:
@@ -1839,6 +1838,100 @@ class UploadAssignment(View):
                 return render(request,'messages/trainer/assignments.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
+
+class UploadProject(View):
+    def get(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            if staff.stype == '7' or staff.stype == '4':
+                projects = Project.objects.all().order_by('-date')
+            else:
+                projects = Project.objects.filter(batch__trainer = staff).order_by('-date')
+            form = AddProjectsForm()
+            context ={'count':count,'notify':notify,'staff':staff,'form':form,'projects':projects}
+            return render(request,'trainer/projects.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+    def post(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            form = AddProjectsForm(request.POST,request.FILES)
+            if form.is_valid():
+                f = form.save(commit=False)
+                if staff.stype == '3':
+                    batch = Batch.objects.get(id=f.batch.id)
+                    if batch.trainer == staff:
+                        pass
+                    else:
+                        alert = "You are not allowed to add assignments to this batch."
+                        context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
+                        return render(request,'messages/trainer/projects.html',context)
+        
+                f.date = datetime.datetime.now()
+                f.save()
+                msg = "Project added successfully."
+                context = {'count':count,'notify':notify,'staff':staff,'msg':msg}
+                return render(request,'messages/trainer/projects.html',context)
+            else:
+                alert = "Failed to save project.Please try again"
+                context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
+                return render(request,'messages/trainer/projects.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+class ViewAssignmentSubmissions(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            status = Status.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            bd = BatchData.objects.get(id=id)
+            batch = bd.batch
+
+class ViewAssignments(View):
+    def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            scd = StudentCourseData.objects.filter(student=student)
+            batch= []
+            for i in scd:
+                batch.append(i.batch)
+            assignments = Assignment.objects.filter(batch__in=batch)
+            context ={'count':count,'notify':notify,'student':student,'assignments': assignments}
+            return render(request,'student/assignments.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html') 
+
+
+class ViewProjects(View):
+    def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            scd = StudentCourseData.objects.filter(student=student)
+            batch= []
+            for i in scd:
+                batch.append(i.batch)
+            projects = Project.objects.filter(batch__in=batch)
+            context ={'count':count,'notify':notify,'student':student,'projects': projects}
+            return render(request,'student/projects.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html') 
+
+
 
 
 

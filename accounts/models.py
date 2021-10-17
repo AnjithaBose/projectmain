@@ -329,6 +329,33 @@ class Assignment(models.Model):
     def __str__(self):
         return self.topic
 
+class Project(models.Model):
+    batch = models.ForeignKey(Batch,on_delete=models.CASCADE,null=True,blank=True,limit_choices_to=(Q(status='1')|Q(status='3')))
+    description = models.TextField(max_length=5000,null=True, blank=True)
+    link = models.CharField(max_length=2000,null=True, blank=True)
+    attachment = models.FileField(null=True, blank=True,upload_to='images/project/')
+    date = models.DateField(null=True,blank=True)
+    final_date = models.DateField(null=True,blank=True)
+
+class StudentAssignmentData(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='candidate',null=True,blank=True)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE,null=True,blank=True,related_name='assignment')
+    link = models.CharField(max_length=1000,null=True, blank=True)
+    attachment = models.FileField(null=True, blank=True,upload_to='images/assignment/submissions/')
+    submitted_on = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Pending','Pending'),('Accepted','Accepted'),('Rejected','Rejected')))
+
+class StudentProjectData(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='submitted_by',null=True,blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE,null=True,blank=True,related_name='project')
+    link = models.CharField(max_length=1000,null=True, blank=True)
+    attachment = models.FileField(null=True, blank=True,upload_to='images/project/submissions/')
+    submitted_on = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Pending','Pending'),('Accepted','Accepted'),('Rejected','Rejected')))
+
+
+
+
 
 
 

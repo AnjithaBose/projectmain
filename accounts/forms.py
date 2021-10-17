@@ -109,6 +109,13 @@ class AddAssignmentForm(ModelForm):
         model = Assignment
         fields = ['topic','batch','description','link','attachment']
 
+class AddProjectsForm(ModelForm):
+    link = forms.CharField(required=False)
+    attachment = forms.FileField(required=False)
+    class Meta:
+        model = Project
+        fields = ['batch','description','link','attachment','final_date']
+
 
 
         

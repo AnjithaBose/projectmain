@@ -84,6 +84,7 @@ urlpatterns = [
     path('trainer/upload/videos/<id>/',UploadVideos.as_view(),name='upload_videos'),
     path('trainer/update/videos/<id>/',UpdateVideo.as_view(),name='update_video'),
     path('trainer/assignments/',UploadAssignment.as_view(),name='upload_assignments'),
+    path('trainer/projects/',UploadProject.as_view(),name='upload_projects'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
@@ -99,7 +100,9 @@ urlpatterns = [
     path('student/home/',StudentDashboard.as_view(),name='student_dashboard'),
     path('student/classrooms/',MyClassroom.as_view(),name='my_classroom'),
     path('student/recordings/',MyRecordings.as_view(),name='my_recordings'),
-    path('student/recordings/<id>',ClassRecordings.as_view(),name='class_recordings'),
+    path('student/recordings/<id>/',ClassRecordings.as_view(),name='class_recordings'),
+    path('student/assignments/',ViewAssignments.as_view(),name='view_assignments'),
+    path('student/projects/',ViewProjects.as_view(),name='view_projects'),
     
 
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),

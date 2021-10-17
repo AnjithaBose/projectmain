@@ -40,48 +40,6 @@
             <div class="col-12">
               <div class="card">
 
-                
-                <p class=" text-right">
-                  <button class="btn btn-primary my-1" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="ti ti-plus"></i> Add Assignment</button>
-              </p>
-                <div class="collapse" id="collapseExample">
-                  <div class="card card-body">
-      
-                            <h4 class="header-title">Add new assignment</h4>
-                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
-                                {% csrf_token %}
-                              <div class="form-group row">
-                                <div class="col-12 col-md-6">
-                                  <label for="exampleInputName1">Batch</label>
-                                {% load widget_tweaks %} 
-                                {% render_field form.batch class="form-control" required="true"  %}
-                                </div>
-                                <div class="col-12 col-md-6">
-                                  <label for="exampleInputEmail3">Topic</label>
-                                {% render_field form.topic class="form-control" required="true" %}
-                                </div>
-                              </div>
-                              <div class="form-group row">
-                                <div class="col-12 col-md-12">
-                                  <label for="exampleInputName1">Description</label>
-                                {% render_field form.description class="form-control" required="true"  %}
-                                </div>
-                                <div class="col-12 col-md-6">
-                                  <label for="exampleInputEmail3">Link</label>
-                                {% render_field form.link class="form-control"  %}
-                                </div>
-                                <div class="col-12 col-md-6">
-                                  <label for="exampleInputEmail3">Attachment</label>
-                                {% render_field form.attachment class="form-control"  %}
-                                </div>
-                              </div>
-                              
-                              <button type="submit" class="btn btn-primary mr-2"><i class="ti ti-save"></i> Save</button>
-                              <button class="btn btn-light my-1" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Cancel</button>
-                            </form>
-                  </div>
-                </div><br><br>
-
 
                 <h4 class="m-t-0 header-title">Assignments</h4>
                 <div class="table-responsive">
@@ -95,9 +53,7 @@
                       <th>Description</th>
                       <th>Link</th>
                       <th>Attachment</th>
-                      {% if staff.stype == '4' or staff.stype == '7' %}
                       <th class="text-right"></th>
-                      {% endif %}
                     </tr>
                   </thead>
                   <tbody>
@@ -119,11 +75,8 @@
                       {% else %}
                       <td><button class="btn btn-danger-rgba" onclick="alert('No attachment available!')"><i class="ti ti-download"></i> Download</button></td>
                       {% endif %}
-                      {% if staff.stype == '4' or staff.stype == '7' %}
-                        <td class="text-right" style="width:20%">
-                        <a href="" class="btn btn-danger-rgba" ><i class="ti ti-trash"></i> Remove</a>&nbsp;&nbsp;
-                        <a href="" class="btn btn-primary-rgba" ><i class="ti ti-file"></i> Submissions</a></td>
-                      {% endif %}
+                      <td class="text-right" style="width:10%"><a href="" class="btn btn-primary-rgba" ><i class="ti ti-file"></i> Submit</a></td>
+                      
                       {% empty %}
                       <td colspan="7">No assignments to show.</td>
                     </tr>
