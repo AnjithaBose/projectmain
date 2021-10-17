@@ -21,6 +21,8 @@
                                 <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
                                 {% if staff %}
                                 <li class="breadcrumb-item"><a href="{% url 'upload_videos' batch.id %}">Videos</a></li>
+                                {% elif student %}
+                                <li class="breadcrumb-item"><a href="{% url 'my_recordings' %}">My Recordings</a></li>
                                 {% endif %}
                                 <li class="breadcrumb-item active" aria-current="page">Play Video</li>
                             </ol>

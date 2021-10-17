@@ -1189,12 +1189,20 @@ class Jobs(View):
     def get(self, request):
         user = request.user
         if user.is_authenticated:
-            staff = Staff.objects.get(user=request.user)
-            notify = Notifications(staff)
-            count = CountNotifications(notify)
-            job = Job.objects.filter(approval="Approved").order_by('-timestamp')
-            page = Pagination(request,job,6)
-            context = {'staff':staff,'job':page}
+            try:
+                staff = Staff.objects.get(user=request.user)
+                notify = Notifications(staff)
+                count = CountNotifications(notify)
+                job = Job.objects.filter(approval="Approved").order_by('-timestamp')
+                page = Pagination(request,job,6)
+                context = {'staff':staff,'job':page,'notify':notify,'count':count}
+            except:
+                student= Student.objects.get(user=request.user)
+                notify = StudentNotifications(student)
+                count = CountNotifications(notify)
+                job = Job.objects.filter(approval="Approved").order_by('-timestamp')
+                page = Pagination(request,job,6)
+                context = {'student':student,'job':page,'notify':notify,'count':count}
             return render(request,'common/jobs.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
@@ -1593,6 +1601,8 @@ class PlayVideo(View):
             try:
                 student = Student.objects.get(user=request.user)
                 if student:
+                    notify = StudentNotifications(student)
+                    count = CountNotifications(notify)
                     batch_data = BatchData.objects.get(id=id)
                     batch = Batch.objects.get(id=batch_data.batch.id)
                     context={'count':count,'notify':notify,'student':student,'batch_data':batch_data,'batch':batch}
@@ -1751,6 +1761,38 @@ class MyClassroom(View):
             return render(request,'student/my_classroom.html',context)
         else:
             return render(request,'messages/common/permission_error.html')
+
+class MyRecordings(View):
+    def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            batches = StudentBatches(student)
+            context = {'student':student,'batches':batches,'count':count,'notify':notify}
+            return render(request,'student/my_recordings.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+class ClassRecordings(View):
+    def get(self, request,id):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            batch = Batch.objects.get(id=id)
+            batch_data = BatchData.objects.filter(batch=batch)
+            context={'count':count,'notify':notify,'student':student,'batch': batch,'batch_data':batch_data}
+            return render(request,'student/class_recordings.html',context)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+
+
+
+
             
 
 

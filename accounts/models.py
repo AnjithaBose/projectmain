@@ -318,6 +318,17 @@ class Webinar(models.Model):
     def __str__(self):
         return self.topic
 
+class Assignment(models.Model):
+    batch = models.ForeignKey(Batch,on_delete=models.CASCADE,null=True,blank=True,limit_choices_to={'status':"Ongoing"})
+    topic = models.CharField(max_length=1000,null=True, blank=True)
+    description = models.TextField(max_length=5000,null=True, blank=True)
+    link = models.CharField(max_length=2000,null=True, blank=True)
+    attachments = models.FileField(null=True, blank=True,upload_to='images/assignment/')
+    date = models.DateField(null=True,blank=True)
+
+    def __str__(self):
+        return self.topic
+
 
 
 

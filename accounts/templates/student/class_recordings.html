@@ -1,0 +1,110 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+
+            <div class="breadcrumbbar"> 
+                <!-- Start row -->
+                <div class="row">
+                  <div class="col-md-8 col-lg-8">
+                    <h4 class="page-title">{{batch}}</h4>
+                    <div class="breadcrumb-list">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'my_recordings' %}">My Recordings</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Recordings</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 mr-0">
+                    <div class="widgetbar">
+                        <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Breadcrumbbar --> 
+              
+              
+             
+        <!-- state start-->
+        <div class="row ">
+            <div class="col-12 col-md-6">
+              <div class="card">
+                
+              
+
+                <h4 class="m-t-0 header-title">Class Recordings</h4>
+                <div class="table-responsive">
+                <table id="demo-foo-filtering" class="table table-striped  toggle-circle m-b-0 table-hover" >
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Date</th>
+                      <th>Topic</th>
+                      <th>Link</th>
+                      <th class="text-right"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in batch_data %}
+                    <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td>{{i.date}}</td>
+                      <td>{{i.topic}}</td>
+                      <td>
+                        <a class="btn btn-round btn-primary" href="{% url 'video_player' i.id  %}"><i class="ti ti-control-play mr-2"></i> Play</a>
+                      </td>
+                      <td class="text-right">
+                        <div class="btn-group mr-2">
+                            <div class="dropdown">
+                              <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                                <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4"> 
+                                    <a class="dropdown-item" href="{% url 'update_video' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a> 
+                                </div>
+                            </div>
+                          </div>
+                      </td>
+                      {% empty %}
+                      <td colspan="7">No videos available.</td>
+                    </tr>
+                    {% endfor %}
+                    
+                  </tbody>
+                  <tfoot>
+                  </tfoot>
+                </table></div>
+              </div>
+            </div>
+          </div>
+          
+
+
+
+
+
+
+
+          
+          </div> 
+        <!-- End row --> 
+
+
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+        {% include 'common/footer.html' %}
+    </div>
+    
+    
+</div>
+{% endblock %}

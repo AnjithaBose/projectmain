@@ -97,6 +97,9 @@ urlpatterns = [
 
     path('student/home/',StudentDashboard.as_view(),name='student_dashboard'),
     path('student/classrooms/',MyClassroom.as_view(),name='my_classroom'),
+    path('student/recordings/',MyRecordings.as_view(),name='my_recordings'),
+    path('student/recordings/<id>',ClassRecordings.as_view(),name='class_recordings'),
+    
 
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
     path('user/notification/read/<id>/',MarkasRead.as_view(),name='mark_as_read'),
