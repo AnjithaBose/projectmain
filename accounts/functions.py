@@ -387,7 +387,11 @@ def StudentCheck(request):
             else:
                 return (False)
         except:
-            return (False)
+            staff = Staff.objects.get(user=user)
+            if staff.stype == '4':
+                return (True)
+            else:
+                return (False)
     else:
         return (False)
 

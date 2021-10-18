@@ -116,6 +116,22 @@ class AddProjectsForm(ModelForm):
         model = Project
         fields = ['batch','description','link','attachment','final_date']
 
+class SubmitAssignmentForm(ModelForm):
+    link = forms.CharField(required=False)
+    attachment = forms.FileField(required=False)
+    class Meta:
+        model = StudentAssignmentData
+        fields = ['link','attachment']
+
+class SubmitProject(ModelForm):
+    link = forms.CharField(required=False)
+    attachment = forms.FileField(required=False)
+    class Meta:
+        model = StudentProjectData
+        fields = ['link','attachment']
+
+
+
 
 
         

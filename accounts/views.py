@@ -76,14 +76,14 @@ class Home(View):
             return redirect('logout')
 
 class MarkasRead(View):
-    def get(self, request,id):
+    def get(self, request):
         user = request.user
         if user.is_authenticated:
             try:
-                staff = Staff.objects.get(id=id)
+                staff = Staff.objects.get(user=request.user)
                 notify = Notification.objects.filter(user1=staff)
             except:
-                student = Student.objects.get(id=id)
+                student = Student.objects.get(user=request.user)
                 notify = Notification.objects.filter(user2=student)
             finally:
                 for i in notify:
@@ -116,7 +116,10 @@ class AdminDashboard(View):
             # print(today.strftime('%b'))
             return render(request,'admin/dashboard.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class ViewCourses(View):
@@ -132,7 +135,10 @@ class ViewCourses(View):
             context={'count':count,'notify':notify,'staff':staff,'course': page,'form':form}
             return render(request,'admin/courses.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request):
         x= AdminCheck(request)
@@ -152,7 +158,10 @@ class ViewCourses(View):
                 context={'count':count,'notify':notify,'staff':staff,'course': course,'form':form,'alert':alert}
                 return render(request,'messages/admin/courses.html',context)  
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class EditCourse(View):
     def get(self, request,id):
@@ -166,7 +175,10 @@ class EditCourse(View):
             context={'count':count,'notify':notify,'staff':staff,'course': course,'form':form}
             return render(request,'admin/edit_course.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x= AdminCheck(request)
@@ -192,7 +204,10 @@ class EditCourse(View):
                 context={'count':count,'notify':notify,'staff':staff,'course': course,'form':form,'msg':msg}
                 return render(request,'admin/edit_course.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class DeleteCourse(View):
     def get(self, request,id):
@@ -206,7 +221,10 @@ class DeleteCourse(View):
             context={'count':count,'notify':notify,'staff':staff,'course': course,'confirm':confirm}
             return render(request,'messages/admin/courses.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x= AdminCheck(request)
@@ -220,7 +238,10 @@ class DeleteCourse(View):
             context={'count':count,'notify':notify,'staff':staff,'course': course,'msg':msg}
             return render(request,'messages/admin/courses.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class ViewBatches(View):
@@ -242,7 +263,10 @@ class ViewBatches(View):
             context={'count':count,'notify':notify,'staff':staff,'wdbatch': page,'webatch': pages,'form':form}
             return render(request,'operations/batches.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request):
         x = OperationsCheck(request)
@@ -272,7 +296,10 @@ class ViewBatches(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/operations/batches.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ViewBatch(View):
     def get(self, request,id):
@@ -296,7 +323,10 @@ class ViewBatch(View):
                 context={'count':count,'notify':notify,'staff':staff,'batch': batch,'scd':scd}
                 return render(request,'operations/batch.html',context)
             else:
-                return render(request,'messages/common/permission_error.html')
+                if request.user.is_authenticated:
+                    return render(request,'messages/common/permission_error.html')
+                else:
+                    return redirect('home')
             
 
 
@@ -323,9 +353,15 @@ class EditBatch(View):
                     context={'count':count,'notify':notify,'staff':staff,'batch': batch,'form':form}
                     return render(request,'operations/edit_batch.html',context)
                 else:
-                    return render(request,'messages/common/permission_error.html')
+                    if request.user.is_authenticated:
+                        return render(request,'messages/common/permission_error.html')
+                    else:
+                        return redirect('home')
             except:
-                return render(request,'messages/common/permission_error.html')
+                if request.user.is_authenticated:
+                    return render(request,'messages/common/permission_error.html')
+                else:
+                    return redirect('home')
 
     def post(self, request,id):
         x = OperationsCheck(request)
@@ -410,7 +446,10 @@ class EditBatch(View):
                         context={'count':count,'notify':notify,'staff':staff,'alert':alert}
                         return render(request,'messages/operations/batches.html',context)
             except:
-                return render(request,'messages/common/permission_error.html')
+                if request.user.is_authenticated:
+                    return render(request,'messages/common/permission_error.html')
+                else:
+                    return redirect('home')
 
 
 class ViewBatchEditApprovals(View):
@@ -427,7 +466,10 @@ class ViewBatchEditApprovals(View):
             context={'count':count,'notify':notify,'staff':staff,'temp':temp}
             return render(request,'operations/batch_approvals.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ApproveBatch(View):
     def get(self, request,id):
@@ -444,7 +486,10 @@ class ApproveBatch(View):
             context={'count':count,'notify':notify,'staff':staff}
             return redirect('batch_edit_approvals')
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class RejectBatch(View):
     def get(self, request,id):
@@ -472,7 +517,10 @@ class RejectBatch(View):
             context={'count':count,'notify':notify,'staff':staff}
             return redirect('batch_edit_approvals')
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 
@@ -494,7 +542,10 @@ class ViewMails(View):
             context={'count':count,'notify':notify,'staff':staff,'draft':draft,'mail':page}
             return render(request,'admin/view_mails.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class SendMail(View):
@@ -509,7 +560,10 @@ class SendMail(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form,}
             return render(request,'admin/send_mail.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request):
         x = ManagerCheck(request)
@@ -536,7 +590,10 @@ class SendMail(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/admin/view_mails.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class SendMailNotification(View):
     def post(self, request,id):
@@ -564,7 +621,10 @@ class SendMailNotification(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert,'batch':batch}
             return render(request,'messages/admin/batch.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
                 
 
 class SendDraft(View):
@@ -579,7 +639,10 @@ class SendDraft(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form,'draft':draft}
             return render(request,'admin/send_mail.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class ViewMail(View):
@@ -594,7 +657,10 @@ class ViewMail(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form,'mail':mail}
             return render(request,'admin/view_mail.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class DeleteDraft(View):
     def get(self, request,id):
@@ -607,7 +673,10 @@ class DeleteDraft(View):
             mail.delete()
             return redirect('view_mails')
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 
@@ -622,7 +691,10 @@ class ViewStaff(View):
             context={'count':count,'notify':notify,'staff':staff,'contacts':contacts}
             return render(request,'common/contacts.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class PendingStaff(View):
     def get(self, request):
@@ -635,7 +707,10 @@ class PendingStaff(View):
             context={'count':count,'notify':notify,'staff':staff,'candidates':candidates}
             return render(request,'admin/pending_staff.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ViewPendingStaff(View):
     def get(self, request,id):
@@ -649,7 +724,10 @@ class ViewPendingStaff(View):
             context={'count':count,'notify':notify,'staff':staff,'profile':profile,'reporting':reporting}
             return render(request,'admin/pending_staff_profile.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class ApproveStaff(View):
@@ -666,7 +744,10 @@ class ApproveStaff(View):
             candidate.save()
             return redirect('pending_staff')
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 
@@ -683,7 +764,10 @@ class Message(View):
             context={'count':count,'notify':notify,'staff':staff,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
             return render(request,'common/chat.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x = StaffCheck(request)
@@ -705,7 +789,10 @@ class Message(View):
                 f.save()
             return redirect('message',id=id)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class GetMessage(View):
     def get(self, request,id,cid):
@@ -734,7 +821,10 @@ class CreateStaff(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form}
             return render(request,'admin/add_staff.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request):
         x = ManagerCheck(request)
@@ -769,7 +859,10 @@ class CreateStaff(View):
             else:
                 return redirect('view_contacts')
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
                 
@@ -792,7 +885,10 @@ class Leads(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form,'new':page,'pipe':pages}
             return render(request,'sales/leads.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request):
         x = SalesOperation(request)
@@ -817,7 +913,10 @@ class Leads(View):
                 context = {'alert':alert,'staff':staff}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class UpdateLead(View):
     def get(self, request,id):
@@ -831,7 +930,10 @@ class UpdateLead(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form,'lead':lead}
             return render(request,'sales/update_lead.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x = SalesOperation(request)
@@ -852,7 +954,10 @@ class UpdateLead(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ViewClosure(View):
     def get(self, request):
@@ -869,7 +974,10 @@ class ViewClosure(View):
             context={'count':count,'notify':notify,'staff':staff,'lead':page}
             return render(request,'sales/closure.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ViewHistory(View):
     def get(self, request):
@@ -887,7 +995,10 @@ class ViewHistory(View):
             context={'count':count,'notify':notify,'staff':staff,'lead':page,'history':history}
             return render(request,'sales/history.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class CreateStudentAccount(View):
     def get(self, request,id):
@@ -908,7 +1019,10 @@ class CreateStudentAccount(View):
                 context={'count':count,'notify':notify,'staff':staff,'lead':lead,'process':process}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
         
     def post(self, request,id):
         x = SalesOperation(request)
@@ -934,7 +1048,10 @@ class CreateStudentAccount(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ListLMSApprovals(View):
     def get(self, request):
@@ -950,7 +1067,10 @@ class ListLMSApprovals(View):
             context={'count':count,'notify':notify,'staff':staff,'leads':leads}
             return render(request,'sales/lms_approval.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class ApproveLMSProfile(View):
@@ -959,7 +1079,10 @@ class ApproveLMSProfile(View):
         if x == True:
             return redirect('convert_lead',id=id)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 
@@ -976,7 +1099,10 @@ class DeleteLMSProfile(View):
             context={'count':count,'notify':notify,'staff':staff,'lead':lead,'confirm':confirm}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x = SalesOperation(request)
@@ -1006,7 +1132,10 @@ class DeleteLMSProfile(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/sales/leads.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ListLMSDeletion(View):
     def get(self, request):
@@ -1023,7 +1152,10 @@ class ListLMSDeletion(View):
             context={'count':count,'notify':notify,'staff':staff,'lead':lead}
             return render(request,'sales/lms_deletion.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class ApproveDelLMSProfile(View):
@@ -1032,7 +1164,10 @@ class ApproveDelLMSProfile(View):
         if x == True:
             return redirect('revert_lead', id=id)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class RejectDelLMSProfile(View):
     def get(self, request,id):
@@ -1047,7 +1182,10 @@ class RejectDelLMSProfile(View):
             lead.save()
             return redirect('list_lms_revert')
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 
@@ -1065,7 +1203,10 @@ class Students(View):
             context={'count':count,'notify':notify,'staff':staff,'student':student}
             return render(request,'common/students.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ViewStudent(View):
     def get(self, request,id):
@@ -1081,7 +1222,10 @@ class ViewStudent(View):
             context={'count':count,'notify':notify,'staff':staff,'student':student,'cd':cd,'na':na}
             return render(request,'common/student_profile.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class AddSCD(View):
     def get(self, request,id):
@@ -1096,7 +1240,10 @@ class AddSCD(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form,'student':student}
             return render(request,'operations/add_scd.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x = NotTrainerCheck(request)
@@ -1117,7 +1264,10 @@ class AddSCD(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert,'student':student}
             return render(request,'messages/operations/student_profile.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class DeleteSCD(View):
     def get(self, request,id):
@@ -1131,7 +1281,10 @@ class DeleteSCD(View):
             scd.delete()
             return redirect('view_student',id=student.id)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class UpdateShare(View):
     def get(self, request,id):
@@ -1148,7 +1301,10 @@ class UpdateShare(View):
             student.save()
             return redirect('view_students')
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class SendSingleMail(View):
     def get(self, request,id):
@@ -1186,7 +1342,10 @@ class SendSingleMail(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert,'mail':mail}
             return render(request,'messages/common/students.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class Jobs(View):
     def get(self, request):
@@ -1208,7 +1367,10 @@ class Jobs(View):
                 context = {'student':student,'job':page,'notify':notify,'count':count}
             return render(request,'common/jobs.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class AddJob(View):
     def get(self, request):
@@ -1221,7 +1383,10 @@ class AddJob(View):
             context = {'staff':staff,'form':form}
             return render(request,'common/add_job.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
     def post(self, request):
         x = StaffCheck(request)
         if x == True:
@@ -1241,7 +1406,10 @@ class AddJob(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/common/jobs.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
             
 
 class ViewTeqNews(View):
@@ -1255,7 +1423,10 @@ class ViewTeqNews(View):
             context={'count':count,'notify':notify,'staff':staff,'posts':posts}
             return render(request,'common/blog.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ViewProfile(View):
     def get(self, request):
@@ -1267,7 +1438,10 @@ class ViewProfile(View):
             context={'count':count,'notify':notify,'staff':staff}
             return render(request,'common/profile.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class EditProfile(View):
     def get(self, request):
@@ -1280,7 +1454,10 @@ class EditProfile(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form}
             return render(request,'common/edit_profile.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request):
         x = StaffCheck(request)
@@ -1314,7 +1491,10 @@ class EditProfile(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/common/profile.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class OperationsDashboard(View):
@@ -1327,7 +1507,10 @@ class OperationsDashboard(View):
             context ={'staff':staff}
             return render(request,'operations/dashboard.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class EditStaff(View):
     def get(self, request,id):
@@ -1343,7 +1526,10 @@ class EditStaff(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form,'profile':profile,'form_manager':form_manager}
             return render(request,'admin/edit_staff.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x = AdminCheck(request)
@@ -1378,7 +1564,10 @@ class EditStaff(View):
                 context ={'alert':alert,'staff':staff}
             return render(request,'messages/admin/staff_profile.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class SalesDashboard(View):
@@ -1391,7 +1580,10 @@ class SalesDashboard(View):
             context ={'staff':staff}
             return render(request,'operations/dashboard.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class GetStudentPaymentDetails(View):
     def get(self, request,id):
@@ -1411,7 +1603,10 @@ class GetStudentPaymentDetails(View):
             context ={'staff':staff,'student':student,'spd':spd,'payments':payments,'feeform':feeform}
             return render(request,'sales/student_payments.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x = SalesCheck(request)
@@ -1435,7 +1630,10 @@ class GetStudentPaymentDetails(View):
                 context ={'staff':staff,'alert':alert,'student':student}
             return render(request,'messages/common/student_profile.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class TrainerDashboard(View):
@@ -1451,7 +1649,10 @@ class TrainerDashboard(View):
             else:
                 return render(request,'trainer/dashboard.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class TrainerManagerDashboard(View):
     def get(self, request):
@@ -1463,7 +1664,10 @@ class TrainerManagerDashboard(View):
             context ={'staff':staff}
             return render(request,'trainer/manager_dashboard.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class MyBatches(View):
     def get(self, request):
@@ -1479,7 +1683,10 @@ class MyBatches(View):
             context={'count':count,'notify':notify,'staff':staff,'wdbatch':wdpage,'webatch':wepage}
             return render(request,'trainer/my_batches.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class MyStudents(View):
     def get(self, request):
@@ -1498,7 +1705,10 @@ class MyStudents(View):
             context={'count':count,'notify':notify,'staff':staff,'students':students}
             return render(request,'trainer/my_students.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class MyCurrentBatch(View):
     def get(self, request):
@@ -1512,7 +1722,10 @@ class MyCurrentBatch(View):
             context={'count':count,'notify':notify,'staff':staff,'wdbatch':wdbatch,'webatch':webatch}
             return render(request,'trainer/upload_videos.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class UploadVideos(View):
@@ -1529,7 +1742,10 @@ class UploadVideos(View):
             context={'count':count,'notify':notify,'staff':staff,'batch':batch,'form':form,'batch_data':batch_data,'time':time}
             return render(request,'trainer/videos.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x = TrainerCheck(request)
@@ -1551,7 +1767,10 @@ class UploadVideos(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert,'batch':batch}
             return render(request,'messages/trainer/videos.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class UpdateVideo(View):
     def get(self, request,id):
@@ -1566,7 +1785,10 @@ class UpdateVideo(View):
             context={'count':count,'notify':notify,'staff':staff,'form':form,'video':video,'batch':batch}
             return render(request,'trainer/update_video.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request,id):
         x = TrainerCheck(request)
@@ -1586,7 +1808,10 @@ class UpdateVideo(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert,'batch':batch}
             return render(request,'messages/trainer/videos.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class PlayVideo(View):
     def get(self, request,id):
@@ -1611,9 +1836,15 @@ class PlayVideo(View):
                     context={'count':count,'notify':notify,'student':student,'batch_data':batch_data,'batch':batch}
                     return render(request,'common/video_player.html',context)
                 else:
-                    return render(request,'messages/common/permission_error.html')
+                    if request.user.is_authenticated:
+                        return render(request,'messages/common/permission_error.html')
+                    else:
+                        return redirect('home')
             except:
-                return render(request,'messages/common/permission_error.html')
+                if request.user.is_authenticated:
+                    return render(request,'messages/common/permission_error.html')
+                else:
+                    return redirect('home')
 
 
 class SendLeadMail(View):
@@ -1629,7 +1860,10 @@ class SendLeadMail(View):
             context={'count':count,'notify':notify,'staff':staff,'lead':lead,'form':form}
             return render(request,'admin/send_mail.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ActiveWebinar(View):
     def get(self, request):
@@ -1657,7 +1891,10 @@ class AddWebinar(View):
             context ={'count':count,'notify':notify,'staff':staff,'form':form}
             return render(request,'admin/add_webinar.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request):
         x = ManagerCheck(request)
@@ -1700,7 +1937,10 @@ class AddWebinar(View):
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert}
             return render(request,'messages/admin/webinar.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')  
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')  
 
 class WebinarRegister(View):
     def get(self, request,id):
@@ -1749,7 +1989,10 @@ class StudentDashboard(View):
             context = {'trainers':trainers,'batches': batches,'student':student,'notify':notify,'count':count,'enrolled_courses':enrolled_courses,'active_courses':active_courses,'payments_done':payments}
             return render(request,'student/dashboard.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 
 class MyClassroom(View):
@@ -1763,7 +2006,10 @@ class MyClassroom(View):
             context = {'student':student,'batches':batches,'count':count,'notify':notify}
             return render(request,'student/my_classroom.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class MyRecordings(View):
     def get(self, request):
@@ -1776,7 +2022,10 @@ class MyRecordings(View):
             context = {'student':student,'batches':batches,'count':count,'notify':notify}
             return render(request,'student/my_recordings.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ClassRecordings(View):
     def get(self, request,id):
@@ -1790,7 +2039,10 @@ class ClassRecordings(View):
             context={'count':count,'notify':notify,'student':student,'batch': batch,'batch_data':batch_data}
             return render(request,'student/class_recordings.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class UploadAssignment(View):
     def get(self, request):
@@ -1807,7 +2059,10 @@ class UploadAssignment(View):
             context ={'count':count,'notify':notify,'staff':staff,'form':form,'assignments':assignments}
             return render(request,'trainer/assignments.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request):
         x = TrainerCheck(request)
@@ -1837,7 +2092,10 @@ class UploadAssignment(View):
                 context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
                 return render(request,'messages/trainer/assignments.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class UploadProject(View):
     def get(self, request):
@@ -1854,7 +2112,10 @@ class UploadProject(View):
             context ={'count':count,'notify':notify,'staff':staff,'form':form,'projects':projects}
             return render(request,'trainer/projects.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
     def post(self, request):
         x = TrainerCheck(request)
@@ -1884,7 +2145,10 @@ class UploadProject(View):
                 context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
                 return render(request,'messages/trainer/projects.html',context)
         else:
-            return render(request,'messages/common/permission_error.html')
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
 
 class ViewAssignmentSubmissions(View):
     def get(self, request,id):
@@ -1911,7 +2175,10 @@ class ViewAssignments(View):
             context ={'count':count,'notify':notify,'student':student,'assignments': assignments}
             return render(request,'student/assignments.html',context)
         else:
-            return render(request,'messages/common/permission_error.html') 
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
 
 
 class ViewProjects(View):
@@ -1929,7 +2196,96 @@ class ViewProjects(View):
             context ={'count':count,'notify':notify,'student':student,'projects': projects}
             return render(request,'student/projects.html',context)
         else:
-            return render(request,'messages/common/permission_error.html') 
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+class SubmitAssignment(View):
+    def get(self, request,id):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            assignment = Assignment.objects.get(id=id)
+            try:
+                sad = StudentAssignmentData.objects.filter(assignment=assignment).filter(Q(status='Pending')|Q(status='Approved'))
+                if sad:
+                    alert="You have alredy submitted this project."
+                    context={'count':count,'notify':notify,'student':student,'alert':alert,'assignment':assignment}
+                    return render(request,'messages/student/assignments.html',context)
+                else:
+                    pass
+            except:
+                pass
+            submissions = StudentAssignmentData.objects.filter(student=student)
+            form = SubmitAssignmentForm()
+            context ={'count':count,'student':student,'notify':notify,'form':form,'assignment':assignment,'submissions':submissions}
+            return render(request,'student/submit_assignment.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+    def post(self, request,id):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            assignment = Assignment.objects.get(id=id)
+            form = SubmitAssignmentForm(request.POST,request.FILES)
+            if form.is_valid:
+                f = form.save(commit=False)
+                if not f.link and not f.attachment:
+                    alert = "Please provide a valid link or a valid document"
+                    context={'count':count,'notify':notify,'student':student,'alert':alert,'assignment':assignment}
+                    return render(request,'messages/student/submit_assignment.html',context)
+                else:
+                    f.student = student
+                    f.assignment = assignment
+                    f.submitted_on = datetime.datetime.now()
+                    f.status = 'Pending'
+                    f.save()
+                    msg = "Assignment submitted successfully."
+                    context = {'count':count,'notify':notify,'student':student,'msg':msg}
+                    return render(request,'messages/student/assignments.html',context)
+            else:
+                alert = "Failed to submit assignment.Please try again."
+                context={'count':count,'notify':notify,'student':student,'alert':alert,'assignment':assignment}
+                return render(request,'messages/student/submit_assignment.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+
+class AssignemtSubmissions(View):
+     def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            sad = StudentAssignmentData.objects.filter(student=student).order_by('-submitted_on')
+            context={'count':count,'notify':notify,'student':student,'sad':sad}
+            return render(request,'student/assignment_submissions.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+
+
+
+            
+
+
+
 
 
 

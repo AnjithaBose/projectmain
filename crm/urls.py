@@ -103,10 +103,11 @@ urlpatterns = [
     path('student/recordings/<id>/',ClassRecordings.as_view(),name='class_recordings'),
     path('student/assignments/',ViewAssignments.as_view(),name='view_assignments'),
     path('student/projects/',ViewProjects.as_view(),name='view_projects'),
-    
+    path('student/submit/assignment/<id>/',SubmitAssignment.as_view(),name='submit_assignment'),
+    path('student/assignment/submissions/',AssignemtSubmissions.as_view(),name='assignment_submissions'),
 
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
-    path('user/notification/read/<id>/',MarkasRead.as_view(),name='mark_as_read'),
+    path('user/notification/read/',MarkasRead.as_view(),name='mark_as_read'),
     path('webinar/',ActiveWebinar.as_view(),name='active_webinar'),
     path('<id>/',WebinarRegister.as_view(),name='join'),
 ]
