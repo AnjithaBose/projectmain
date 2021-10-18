@@ -1,0 +1,101 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+
+            <div class="breadcrumbbar"> 
+                <!-- Start row -->
+                <div class="row">
+                  <div class="col-md-8 col-lg-8">
+                    <h4 class="page-title">My Certificates</h4>
+                    <div class="breadcrumb-list">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">My Certificates</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 mr-0">
+                    <div class="widgetbar">
+                        <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Breadcrumbbar --> 
+              
+              
+             
+        <!-- state start-->
+        <div class="row ">
+            <div class="col-12">
+              <div class="card">
+
+
+                <h4 class="m-t-0 header-title">My Certificates</h4>
+                <div class="table-responsive">
+                <table id="demo-foo-filtering" class="table table-striped table-bordered toggle-circle m-b-0" >
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Course</th>
+                      <th>Trainer</th>
+                      <th>Certificate ID</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in scd %}
+                        {% if i.certificate_id %}
+                            <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td><img class="img-circle pro_pic" src="{{i.batch.subject.pic.url}}" alt="{{i.batch.subject}}" style="width: 40px;height:40px">{{i.batch.subject}}</td>
+                            <td>{{i.batch.trainer}}</td>
+                            <td>{{i.certificate_id}}</td>
+                            <td><a href="/media/images/certificates/{{i.certificate_id}}.pdf" class="btn btn-primary-rgba" download><i class="ti ti-download"></i> Download</a></td>
+                        {% endif %}
+                      {% empty %}
+                      <td colspan="7">No certificates to show.</td>
+                    </tr>
+                    {% endfor %}
+                    
+                  </tbody>
+                  <tfoot>
+                    
+                  </tfoot>
+                </table>
+            </div>
+              </div>
+            </div>
+          </div>
+          
+
+
+
+
+
+
+
+          
+          </div> 
+        <!-- End row --> 
+
+
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+        {% include 'common/footer.html' %}
+    </div>
+    
+    
+</div>
+{% endblock %}

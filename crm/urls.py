@@ -113,11 +113,12 @@ urlpatterns = [
     path('student/assignment/submissions/',AssignemtSubmissions.as_view(),name='assignment_submissions'),
     path('student/submit/project/<id>/',SubmitProject.as_view(),name='submit_project'),
     path('student/project/submissions/',ProjectSubmissions.as_view(),name='project_submissions'),
+    path('student/certificates/',MyCertificates.as_view(),name='my_certificates'),
 
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
     path('user/notification/read/',MarkasRead.as_view(),name='mark_as_read'),
     path('webinar/',ActiveWebinar.as_view(),name='active_webinar'),
-    path('<id>/',WebinarRegister.as_view(),name='join'),
+    path('webinar/<id>/',WebinarRegister.as_view(),name='join'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

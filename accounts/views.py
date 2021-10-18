@@ -2554,6 +2554,24 @@ class RejectProject(View):
             else:
                 return redirect('home') 
 
+class MyCertificates(View):
+    def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            scd = StudentCourseData.objects.filter(student=student)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            context = {'count':count,'notify':notify,'student':student,'scd':scd}
+            return render(request,'student/my_certificates.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
+
 
 
 
