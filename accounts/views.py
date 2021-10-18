@@ -2212,7 +2212,7 @@ class SubmitAssignment(View):
             try:
                 sad = StudentAssignmentData.objects.filter(assignment=assignment).filter(Q(status='Pending')|Q(status='Approved'))
                 if sad:
-                    alert="You have alredy submitted this project."
+                    alert="You have alredy submitted this assignment."
                     context={'count':count,'notify':notify,'student':student,'alert':alert,'assignment':assignment}
                     return render(request,'messages/student/assignments.html',context)
                 else:
@@ -2273,6 +2273,83 @@ class AssignemtSubmissions(View):
             sad = StudentAssignmentData.objects.filter(student=student).order_by('-submitted_on')
             context={'count':count,'notify':notify,'student':student,'sad':sad}
             return render(request,'student/assignment_submissions.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+
+class SubmitProject(View):
+    def get(self, request,id):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            project = Project.objects.get(id=id)
+            try:
+                spd = StudentProjectData.objects.filter(project=project).filter(Q(status='Pending')|Q(status='Approved'))
+                if spd:
+                    alert="You have alredy submitted this project."
+                    context={'count':count,'notify':notify,'student':student,'alert':alert,'project':project}
+                    return render(request,'messages/student/projects.html',context)
+                else:
+                    pass
+            except:
+                pass
+            form = SubmitProjectForm()
+            context ={'count':count,'student':student,'notify':notify,'form':form,'project':project}
+            return render(request,'student/submit_project.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+    def post(self, request,id):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            project = Project.objects.get(id=id)
+            form = SubmitProjectForm(request.POST,request.FILES)
+            if form.is_valid:
+                f = form.save(commit=False)
+                if not f.link and not f.attachment:
+                    alert = "Please provide a valid link or a valid document"
+                    context={'count':count,'notify':notify,'student':student,'alert':alert,'project':project}
+                    return render(request,'messages/student/submit_project.html',context)
+                else:
+                    f.student = student
+                    f.project = project
+                    f.submitted_on = datetime.datetime.now()
+                    f.status = 'Pending'
+                    f.save()
+                    msg = "Project submitted successfully."
+                    context = {'count':count,'notify':notify,'student':student,'msg':msg}
+                    return render(request,'messages/student/projects.html',context)
+            else:
+                alert = "Failed to submit project.Please try again."
+                context={'count':count,'notify':notify,'student':student,'alert':alert,'project':project}
+                return render(request,'messages/student/submit_project.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+class ProjectSubmissions(View):
+     def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            spd = StudentProjectData.objects.filter(student=student).order_by('-submitted_on')
+            context={'count':count,'notify':notify,'student':student,'spd':spd}
+            return render(request,'student/project_submissions.html',context)
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')

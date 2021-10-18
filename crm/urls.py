@@ -105,6 +105,8 @@ urlpatterns = [
     path('student/projects/',ViewProjects.as_view(),name='view_projects'),
     path('student/submit/assignment/<id>/',SubmitAssignment.as_view(),name='submit_assignment'),
     path('student/assignment/submissions/',AssignemtSubmissions.as_view(),name='assignment_submissions'),
+    path('student/submit/project/<id>/',SubmitProject.as_view(),name='submit_project'),
+    path('student/project/submissions/',ProjectSubmissions.as_view(),name='project_submissions'),
 
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
     path('user/notification/read/',MarkasRead.as_view(),name='mark_as_read'),

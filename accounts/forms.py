@@ -123,7 +123,7 @@ class SubmitAssignmentForm(ModelForm):
         model = StudentAssignmentData
         fields = ['link','attachment']
 
-class SubmitProject(ModelForm):
+class SubmitProjectForm(ModelForm):
     link = forms.CharField(required=False)
     attachment = forms.FileField(required=False)
     class Meta:
