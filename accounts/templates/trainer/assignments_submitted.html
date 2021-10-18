@@ -20,7 +20,7 @@
                     <div class="breadcrumb-list">
                       <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'view_assignments' %}">Assignments</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'upload_assignments' %}">Assignments</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Assignment Submissions</li>
                       </ol>
                     </div>
@@ -51,18 +51,21 @@
                   <thead>
                     <tr>
                       <th>#</th>
+                      <th>Name</th>
                       <th>Batch</th>
                       <th>Date</th>
                       <th>Topic</th>
                       <th>Link</th>
                       <th>Attachment</th>
                       <th class="text-center">Status</th>
+                      <th class="text-right"></th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for i in sad %}
                     <tr>
                       <td>{{forloop.counter}}</td>
+                      <td>{{i.student.name}}</td>
                       <td>{{i.assignment.batch.batch_code}}</td>
                       <td>{{i.submitted_on}}</td>
                       <td>{{i.assignment.topic}}</td>
@@ -79,16 +82,28 @@
                       <td>N/A</td>
                       {% endif %}
                         
-                      {% if i.status == '1' %}
+                      {% if i.status == 'Pending' %}
                       <td class="text-center"><h5><span class="badge badge-warning">Pending</span></h5></td>
-                      {% elif i.status == '2' %}
+                      {% elif i.status == 'Accepted' %}
                       <td class="text-center"><h5><span class="badge badge-success">Accepted</span></h5></td>
-                      {% elif i.status == '3' %}
+                      {% elif i.status == 'Rejected' %}
                       <td class="text-center"><h5><span class="badge badge-danger">Rejected</span></h5></td>
                       {% endif %}
 
+                      <td class="text-right">
+                        <div class="btn-group mr-2">
+                            <div class="dropdown">
+                              <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                                <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
+                                    <a class="dropdown-item" href="{% url 'approve_assignment' i.id %}"><i class="ti ti-check mr-2"></i>Approve</a> 
+                                    <a class="dropdown-item" href=""><i class="ti ti-close mr-2"></i>Reject</a> 
+                                </div>
+                            </div>
+                          </div>
+                      </td>
+
                       {% empty %}
-                      <td colspan="8">No assignment submissions to show.</td>
+                      <td colspan="10">No assignment submissions to show.</td>
                     </tr>
                     {% endfor %}
                     

@@ -8,14 +8,15 @@
     </div>
     <ul id="dc_accordion" class="sidebar-menu tree">
       <li> <a href="{% url 'admin_dashboard' %}" class=" active"> <i class="ti ti-home"></i> <span>Dashboard</span></a> </li>
+      {% if staff.stype == '4' or staff.stype == '7' %}
       <li class="menu_sub"> <a href="#"> <i class="ti ti-flag"></i> <span>Approvals </span> <span
             class="badge badge-pill badge-danger float-right">6</span> </a>
         <ul class="down_menu">
-          <li><a href="{% url 'batch_edit_approvals' %}">Batches<span
-            class="badge badge-pill badge-danger float-right">6</span> </a></li>
-            <li><a href="">Projects</a></li>
+            <li><a href="{% url 'projects' 0 %}">Projects</a></li>
+            <li><a href="{% url 'assignments' 0  %}">Assignments</a></li>
         </ul>
       </li>
+      {% endif %}
       <li> <a href="{% url 'my_current_batch' %}"><i class="ti ti-upload"></i> <span>Upload Videos</span></a></li>
       {% if staff.stype == '7' %}
       <li> <a href="{% url 'view_batches' %}"><i class="ti ti-blackboard"></i> <span>Batches</span></a></li>

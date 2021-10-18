@@ -16,12 +16,12 @@
                 <!-- Start row -->
                 <div class="row">
                   <div class="col-md-8 col-lg-8">
-                    <h4 class="page-title">Assignment Submissions</h4>
+                    <h4 class="page-title">Project Submissions</h4>
                     <div class="breadcrumb-list">
                       <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'view_assignments' %}">Assignments</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Assignment Submissions</li>
+                        <li class="breadcrumb-item"><a href="{% url 'upload_projects' %}">Projects</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Project Submissions</li>
                       </ol>
                     </div>
                   </div>
@@ -43,29 +43,30 @@
 
                  
                
-
-
                 <h4 class="m-t-0 header-title">Submissions</h4>
                 <div class="table-responsive">
                 <table id="demo-foo-filtering" class="table table-striped table-bordered toggle-circle m-b-0" >
                   <thead>
                     <tr>
                       <th>#</th>
+                      <th>Name</th>
                       <th>Batch</th>
-                      <th>Date</th>
-                      <th>Topic</th>
+                      <th>Last Date</th>
+                      <th>Submitted On</th>
                       <th>Link</th>
                       <th>Attachment</th>
                       <th class="text-center">Status</th>
+                      <th class="text-right"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for i in sad %}
+                    {% for i in spd %}
                     <tr>
                       <td>{{forloop.counter}}</td>
-                      <td>{{i.assignment.batch.batch_code}}</td>
+                      <td>{{i.student.name}}</td>
+                      <td>{{i.project.batch.batch_code}}</td>
+                      <td>{{i.project.final_date}}</td>
                       <td>{{i.submitted_on}}</td>
-                      <td>{{i.assignment.topic}}</td>
 
                       {% if i.link %}
                       <td><a href="{{i.link}}" class="btn btn-primary-rgba" target="_blank"><i class="ti ti-new-window"></i>Open</a></td>
@@ -79,16 +80,28 @@
                       <td>N/A</td>
                       {% endif %}
                         
-                      {% if i.status == '1' %}
+                      {% if i.status == 'Pending' %}
                       <td class="text-center"><h5><span class="badge badge-warning">Pending</span></h5></td>
-                      {% elif i.status == '2' %}
+                      {% elif i.status == 'Accepted' %}
                       <td class="text-center"><h5><span class="badge badge-success">Accepted</span></h5></td>
-                      {% elif i.status == '3' %}
+                      {% elif i.status == 'Rejected' %}
                       <td class="text-center"><h5><span class="badge badge-danger">Rejected</span></h5></td>
                       {% endif %}
 
+                      <td class="text-right">
+                        <div class="btn-group mr-2">
+                            <div class="dropdown">
+                              <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                                <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
+                                    <a class="dropdown-item" href=""><i class="ti ti-check mr-2"></i>Approve</a> 
+                                    <a class="dropdown-item" href=""><i class="ti ti-close mr-2"></i>Reject</a> 
+                                </div>
+                            </div>
+                          </div>
+                      </td>
+
                       {% empty %}
-                      <td colspan="8">No assignment submissions to show.</td>
+                      <td colspan="10">No project submissions to show.</td>
                     </tr>
                     {% endfor %}
                     
@@ -98,6 +111,8 @@
                   </tfoot>
                 </table>
             </div>
+
+                
               </div>
             </div>
           </div>

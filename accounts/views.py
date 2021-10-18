@@ -1122,7 +1122,6 @@ class DeleteLMSProfile(View):
                 else:
                     lead.approval = '2'
                     reporting = Reporting.objects.get(user=staff)
-                    print("test")
                     lead.to_be_approved_by = reporting.manager
                     lead.save()
                     msg = "Account has been marked for deletion and has been sent for approval."
@@ -1643,7 +1642,7 @@ class TrainerDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            context ={'staff':staff}
+            context ={'staff':staff,'notify':notify,'count':count}
             if staff.stype == '4' or staff.stype== '7':
                 return redirect('trainer_manager_dashboard')
             else:
@@ -1661,7 +1660,7 @@ class TrainerManagerDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            context ={'staff':staff}
+            context ={'staff':staff,'notify':notify,'count':count}
             return render(request,'trainer/manager_dashboard.html',context)
         else:
             if request.user.is_authenticated:
@@ -2150,15 +2149,7 @@ class UploadProject(View):
             else:
                 return redirect('home')
 
-class ViewAssignmentSubmissions(View):
-    def get(self, request,id):
-        x = TrainerManagerCheck(request)
-        if x == True:
-            status = Status.objects.get(user=request.user)
-            notify = Notifications(staff)
-            count = CountNotifications(notify)
-            bd = BatchData.objects.get(id=id)
-            batch = bd.batch
+
 
 class ViewAssignments(View):
     def get(self, request):
@@ -2325,7 +2316,7 @@ class SubmitProject(View):
                     f.student = student
                     f.project = project
                     f.submitted_on = datetime.datetime.now()
-                    f.status = 'Pending'
+                    f.status = '1'
                     f.save()
                     msg = "Project submitted successfully."
                     context = {'count':count,'notify':notify,'student':student,'msg':msg}
@@ -2355,6 +2346,129 @@ class ProjectSubmissions(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home') 
+
+
+class Projects(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            id = id
+            if id == '0':
+                spd = StudentProjectData.objects.filter(status='Pending')
+                context = {'count':count,'notify':notify,'staff':staff,'spd':spd}
+            else:
+                project = Project.objects.get(id=id)
+                spd = StudentProjectData.objects.filter(project=project)
+                context = {'count':count,'notify':notify,'staff':staff,'spd':spd,'project':project}
+            return render(request,'trainer/projects_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+class Assignments(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            id = id
+            if id == '0':
+                sad = StudentAssignmentData.objects.filter(status='Pending')
+                context = {'count':count,'notify':notify,'staff':staff,'sad':sad}
+            else:
+                assignment = Assignment.objects.get(id=id)
+                sad = StudentAssignmentData.objects.filter(assignment=assignment)
+                context = {'count':count,'notify':notify,'staff':staff,'sad':sad,'assignment':assignment}
+            return render(request,'trainer/assignments_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+class ApproveAssignment(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            sad = StudentAssignmentData.objects.get(id=id)
+            process = "Are you sure you want to approve this assignment?"
+            context ={'count':count,'notify':notify,'staff':staff,'sad':sad,'process':process}
+            return render(request,'messages/trainer/assignments_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+    def post(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            sad = StudentAssignmentData.objects.get(id=id)
+            sad.status = '2'
+            sad.save()
+            msg = "Assignment successfully approved."
+            context ={'count':count,'notify':notify,'staff':staff,'sad':sad,'msg':msg}
+            return render(request,'messages/trainer/assignments_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+
+class RejectAssignment(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            sad = StudentAssignmentData.objects.get(id=id)
+            confirm = "Are you sure you want to reject this assignment?"
+            context ={'count':count,'notify':alert,'staff':staff,'sad':sad,'confirm':confirm}
+            return render(request,'messages/trainer/assignments_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+    def post(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            sad = StudentAssignmentData.objects.get(id=id)
+            sad.status = '3'
+            sad.save()
+            msg = "Assignment successfully rejected."
+            context ={'count':count,'notify':notify,'staff':staff,'sad':sad,'msg':msg}
+            return render(request,'messages/trainer/assignments_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+
+
+
+
+
+
 
 
 

@@ -343,7 +343,7 @@ class StudentAssignmentData(models.Model):
     link = models.CharField(max_length=1000,null=True, blank=True)
     attachment = models.FileField(null=True, blank=True,upload_to='images/assignment/submissions/')
     submitted_on = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Pending','Pending'),('Accepted','Accepted'),('Rejected','Rejected')))
+    status = models.CharField(max_length=100,null=True, blank=True,choices=(('1','Pending'),('2','Accepted'),('3','Rejected')))
 
 class StudentProjectData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='submitted_by',null=True,blank=True)
@@ -351,7 +351,7 @@ class StudentProjectData(models.Model):
     link = models.CharField(max_length=1000,null=True, blank=True)
     attachment = models.FileField(null=True, blank=True,upload_to='images/project/submissions/')
     submitted_on = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Pending','Pending'),('Accepted','Accepted'),('Rejected','Rejected')))
+    status = models.CharField(max_length=100,null=True, blank=True,choices=(('1','Pending'),('2','Accepted'),('3','Rejected')))
 
 
 

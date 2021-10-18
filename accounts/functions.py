@@ -160,7 +160,6 @@ def SalesOperation(request):
 
 def StudentConvert(request,lead):
     user = User.objects.create_user(lead.email,lead.email,lead.mobile)
-    print("test SC")
     user.save()
     student = Student(user=user,name=lead.name,email=lead.email,mobile=lead.mobile,sex=lead.sex,start_date=datetime.datetime.now())
     student.save()
@@ -278,13 +277,11 @@ def Manager(staff):
     return(reporting.manager) 
 
 def StudentAccountCreation(request,lead):
-    print("test SAC")
     student = StudentConvert(request,lead)
     lead.approval = '1'
     staff = Staff.objects.get(user=request.user)
     lead.to_be_approved_by = staff
     lead.lms = True
-    print("test 2")
     lead.save()
     subject="[TEQSTORIES]-ACCOUNT CREATED"
     message =  "Hi Learner, \n\n\nYour account has created with https://lms.teqstories.com. Please login using your email as username and mobile number as password. \n\n\nIf you feel any difficulty please contact our representative or mail us as techsupport@teqstories.com. \n\n\nWith Regards,\nStudent Support Team,\nTeqstories "

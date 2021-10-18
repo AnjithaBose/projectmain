@@ -85,6 +85,10 @@ urlpatterns = [
     path('trainer/update/videos/<id>/',UpdateVideo.as_view(),name='update_video'),
     path('trainer/assignments/',UploadAssignment.as_view(),name='upload_assignments'),
     path('trainer/projects/',UploadProject.as_view(),name='upload_projects'),
+    path('trainer/projects/submissions/<id>/',Projects.as_view(),name='projects'),
+    path('trainer/assignments/submissions/<id>/',Assignments.as_view(),name='assignments'),
+    path('trainer/assignments/approve/<id>/',ApproveAssignment.as_view(),name='approve_assignment'),
+    path('trainer/assignments/reject/<id>/',RejectAssignment.as_view(),name='reject_assignment'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
