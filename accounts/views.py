@@ -2280,7 +2280,11 @@ class SubmitProject(View):
             count = CountNotifications(notify)
             project = Project.objects.get(id=id)
             try:
-                spd = StudentProjectData.objects.filter(project=project).filter(Q(status='Pending')|Q(status='Approved'))
+                spd = StudentProjectData.objects.filter(project=project).filter(Q(status='1')|Q(status='2'))
+                # spd = StudentProjectData.objects.all()
+                # for i in spd:
+                #     print(i.status)
+                
                 if spd:
                     alert="You have alredy submitted this project."
                     context={'count':count,'notify':notify,'student':student,'alert':alert,'project':project}
@@ -2357,7 +2361,7 @@ class Projects(View):
             count = CountNotifications(notify)
             id = id
             if id == '0':
-                spd = StudentProjectData.objects.filter(status='Pending')
+                spd = StudentProjectData.objects.filter(status='1')
                 context = {'count':count,'notify':notify,'staff':staff,'spd':spd}
             else:
                 project = Project.objects.get(id=id)
@@ -2418,7 +2422,10 @@ class ApproveAssignment(View):
             sad = StudentAssignmentData.objects.get(id=id)
             sad.status = '2'
             sad.save()
-            msg = "Assignment successfully approved."
+            type = 6
+            message = "Assignment approved by Teqstories"
+            SendStudentNotification(type,sad.student,message)
+            msg = "Assignment successfully approved and notifications send"
             context ={'count':count,'notify':notify,'staff':staff,'sad':sad,'msg':msg}
             return render(request,'messages/trainer/assignments_submitted.html',context)
         else:
@@ -2454,6 +2461,9 @@ class RejectAssignment(View):
             sad = StudentAssignmentData.objects.get(id=id)
             sad.status = '3'
             sad.save()
+            type = 6
+            message = "Assignment rejected by Teqstories.Please upload again."
+            SendStudentNotification(type,sad.student,message)
             msg = "Assignment successfully rejected."
             context ={'count':count,'notify':notify,'staff':staff,'sad':sad,'msg':msg}
             return render(request,'messages/trainer/assignments_submitted.html',context)
@@ -2462,6 +2472,88 @@ class RejectAssignment(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home') 
+
+
+class ApproveProject(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            spd = StudentProjectData.objects.get(id=id)
+            process = "Are you sure you want to approve this project and create the certificate?"
+            context ={'count':count,'notify':notify,'staff':staff,'spd':spd,'process':process}
+            return render(request,'messages/trainer/projects_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+    def post(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            spd = StudentProjectData.objects.get(id=id)
+            spd.status = '2'
+            spd.save()
+            student = spd.student
+            scd = StudentCourseData.objects.get(student=student,batch=spd.project.batch)
+            CreateCertificate(student,scd)
+            type = 6
+            message = "Projects approved and certificates released."
+            SendStudentNotification(type,student,message)
+            msg = "Assignment successfully approved, certificates have been released and notifications send."
+            context ={'count':count,'notify':notify,'staff':staff,'spd':spd,'msg':msg}
+            return render(request,'messages/trainer/assignments_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+
+class RejectProject(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            spd = StudentProjectData.objects.get(id=id)
+            confirm = "Are you sure you want to reject this assignment?"
+            context ={'count':count,'notify':alert,'staff':staff,'spd':spd,'confirm':confirm}
+            return render(request,'messages/trainer/projects_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
+    def post(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            spd = StudentProjectData.objects.get(id=id)
+            spd.status = '3'
+            spd.save()
+            type = 6
+            message = "Project rejected by Teqstories.Please upload again."
+            SendStudentNotification(type,spd.student,message)
+            msg = "Assignment successfully rejected and notifications send."
+            context ={'count':count,'notify':notify,'staff':staff,'spd':spd,'msg':msg}
+            return render(request,'messages/trainer/projects_submitted.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home') 
+
 
 
 

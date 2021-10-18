@@ -7,6 +7,7 @@ from django.utils import timezone
 
 class DefaultPics(models.Model):
     webinar_cover = models.ImageField(null=True, blank=True,upload_to='images/default/',default='accounts/static/images/webinar_cover.jpg')
+    certificate = models.ImageField(null=True, blank=True,upload_to='images/default/',default='accounts/static/images/Certificate.jpg')
 
 state = (
     ('Andhra Pradesh','Andhra Pradesh'),
@@ -260,6 +261,7 @@ class Student(models.Model):
 class StudentCourseData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='student',null=True,blank=True)
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE,related_name='batch',limit_choices_to=(Q(status='1')|Q(status='2')),blank=True)
+    certificate_id = models.CharField(max_length=100,null=True, blank=True)
 
 class StudentPaymentData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='student_payments',null=True,blank=True)
@@ -289,7 +291,7 @@ class Post(models.Model):
 
 
 class Notification(models.Model):
-    type = models.CharField(max_length=100,choices=(('1','Chat'), ('2','Account Creation'),('3','Batch Update'),('4','Query'),('5','General')))
+    type = models.CharField(max_length=100,choices=(('1','Chat'), ('2','Account Creation'),('3','Batch Update'),('4','Query'),('5','General'),('6','Course')))
     user1 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True)
     user2 = models.ForeignKey(Student,on_delete=models.CASCADE,null=True, blank=True)
     message = models.CharField(max_length=500, null=True, blank=True)
@@ -352,6 +354,7 @@ class StudentProjectData(models.Model):
     attachment = models.FileField(null=True, blank=True,upload_to='images/project/submissions/')
     submitted_on = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=100,null=True, blank=True,choices=(('1','Pending'),('2','Accepted'),('3','Rejected')))
+    
 
 
 

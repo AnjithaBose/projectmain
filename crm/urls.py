@@ -89,6 +89,8 @@ urlpatterns = [
     path('trainer/assignments/submissions/<id>/',Assignments.as_view(),name='assignments'),
     path('trainer/assignments/approve/<id>/',ApproveAssignment.as_view(),name='approve_assignment'),
     path('trainer/assignments/reject/<id>/',RejectAssignment.as_view(),name='reject_assignment'),
+    path('trainer/projects/approve/<id>/',ApproveProject.as_view(),name='approve_project'),
+    path('trainer/projects/reject/<id>/',RejectProject.as_view(),name='reject_project'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),

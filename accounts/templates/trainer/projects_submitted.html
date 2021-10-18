@@ -80,11 +80,11 @@
                       <td>N/A</td>
                       {% endif %}
                         
-                      {% if i.status == 'Pending' %}
+                      {% if i.status == '1' %}
                       <td class="text-center"><h5><span class="badge badge-warning">Pending</span></h5></td>
-                      {% elif i.status == 'Accepted' %}
+                      {% elif i.status == '2' %}
                       <td class="text-center"><h5><span class="badge badge-success">Accepted</span></h5></td>
-                      {% elif i.status == 'Rejected' %}
+                      {% elif i.status == '3' %}
                       <td class="text-center"><h5><span class="badge badge-danger">Rejected</span></h5></td>
                       {% endif %}
 
@@ -93,8 +93,8 @@
                             <div class="dropdown">
                               <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
                                 <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
-                                    <a class="dropdown-item" href=""><i class="ti ti-check mr-2"></i>Approve</a> 
-                                    <a class="dropdown-item" href=""><i class="ti ti-close mr-2"></i>Reject</a> 
+                                    <a class="dropdown-item" href="{% url 'approve_project' i.id %}"><i class="ti ti-check mr-2"></i>Approve</a> 
+                                    <a class="dropdown-item" href="{% url 'reject_project' i.id %}"><i class="ti ti-close mr-2"></i>Reject</a> 
                                 </div>
                             </div>
                           </div>

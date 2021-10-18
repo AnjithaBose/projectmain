@@ -4,6 +4,9 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 import time
 import datetime
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
 
 today = datetime.datetime.now()
 
@@ -412,6 +415,33 @@ def StudentActiveBatches(student):
     batches = Batch.objects.filter(batch_code__in=batch,status='1')
     return (batches)
 
+def SendStudentNotification(type, student,message):
+    date = datetime.datetime.today()
+    time = datetime.datetime.now()
+    timestamp = datetime.datetime.now()
+    n=Notification(type=type,user2=student,message=message,date=date,time=time,timestamp=timestamp)
+    n.save()
+
+def CreateCertificate(student,scd):
+    epoch = time.time()
+    spd_id = "TS"
+    certificate_id = "%s_%d" % (spd_id, epoch)
+    template = DefaultPics.objects.get(id=3)
+    certificate_id = str(certificate_id)
+    date = str(datetime.datetime.now().date())
+    img = Image.open(template.certificate)
+    draw = ImageDraw.Draw(img)
+    file_name = str("images/certificates/"+certificate_id+".pdf")
+    selectFont = ImageFont.truetype("arialbd.ttf", size = 150)
+    courseFont = ImageFont.truetype("arialbd.ttf", size = 100)
+    codeFont = ImageFont.truetype("arialbd.ttf", size = 80)
+    draw.text( (1750,980), student.name, (1,91,153),anchor="ma",font=selectFont,align ="center")
+    draw.text( (1750,1430), scd.batch.subject.name, (1,1,1),anchor="ma",font=courseFont,align ="center")
+    draw.text( (746,1960),certificate_id, (1,1,1),anchor="ma",font=codeFont,align ="center")
+    draw.text( (1786,1960), date, (1,1,1),anchor="ma",font=codeFont,align ="center")
+    img.save( file_name, "PDF", resolution=70.0)
+    scd.certificate_id = certificate_id
+    scd.save()
 
 
 
