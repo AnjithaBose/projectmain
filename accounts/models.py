@@ -187,25 +187,6 @@ class Email(models.Model):
     def __str__(self):
         return self.subject
 
-class ChatRoom(models.Model):
-    user1 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name="user1")
-    user2 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name="user2")
-
-class ChatMessage(models.Model):
-    chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.CASCADE)
-    user = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True)
-    username = models.CharField(max_length=500,null=True, blank=True)
-    pic = models.CharField(max_length=2000,null=True, blank=True)
-    message = models.CharField(max_length=5000,null=True, blank=True)
-    timestamp = models.DateTimeField(null=True, blank=True)
-
-    def __unicode__(self):
-            return "[%s] %s by user: %s" % (
-                self.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
-                self.message,
-                self.user,
-                self.chatroom
-            )
 
 
 class Job(models.Model):
@@ -257,6 +238,28 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+
+class ChatRoom(models.Model):
+    user1 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name="user1")
+    user2 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name="user2")
+    student = models.ForeignKey(Student,on_delete=models.CASCADE,null=True, blank=True,related_name="client")
+
+class ChatMessage(models.Model):
+    chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.CASCADE)
+    user = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True)
+    username = models.CharField(max_length=500,null=True, blank=True)
+    pic = models.CharField(max_length=2000,null=True, blank=True)
+    message = models.CharField(max_length=5000,null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
+
+    def __unicode__(self):
+            return "[%s] %s by user: %s" % (
+                self.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                self.message,
+                self.user,
+                self.chatroom
+            )
+
 
 class StudentCourseData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='student',null=True,blank=True)

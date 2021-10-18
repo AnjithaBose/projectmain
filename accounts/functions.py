@@ -444,6 +444,14 @@ def CreateCertificate(student,scd):
     scd.save()
 
 
+def SendNotification(type, staff,message):
+    date = datetime.datetime.today()
+    time = datetime.datetime.now()
+    timestamp = datetime.datetime.now()
+    n=Notification(type=type,user1=staff,message=message,date=date,time=time,timestamp=timestamp)
+    n.save()
+
+
 
 
 

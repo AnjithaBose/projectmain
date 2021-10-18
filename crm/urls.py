@@ -115,6 +115,7 @@ urlpatterns = [
     path('student/project/submissions/',ProjectSubmissions.as_view(),name='project_submissions'),
     path('student/certificates/',MyCertificates.as_view(),name='my_certificates'),
 
+    path('user/chat/notify/<id>/',SendChatNotification.as_view(),name='chat_notification'),
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
     path('user/notification/read/',MarkasRead.as_view(),name='mark_as_read'),
     path('webinar/',ActiveWebinar.as_view(),name='active_webinar'),

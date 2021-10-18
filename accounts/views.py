@@ -36,7 +36,6 @@ class LoginView(View):
         if user is not None:
             login(request, user)
             return redirect('home')
-            return render(request,'common/login.html',{'msg':msg})
         else:
             msg = CheckAccount(username)
             return render(request,'common/login.html',{'msg':msg})
@@ -1503,7 +1502,7 @@ class OperationsDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            context ={'staff':staff}
+            context ={'staff':staff,'notify':notify,'count':count}
             return render(request,'operations/dashboard.html',context)
         else:
             if request.user.is_authenticated:
@@ -2569,6 +2568,27 @@ class MyCertificates(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+class SendChatNotification(View):
+    def get(self, request,id):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            chatroom = ChatRoom.objects.get(id=id)
+            type = 1
+            if chatroom.user1 == staff:
+                msg = "%s-%s" % ("New message from ",str(staff))
+                SendNotification(type,chatroom.user2,msg)
+            elif chatroom.user2 == staff:
+                msg = "%s-%s" % ("New message from ",str(staff))
+                SendNotification(type,chatroom.user1,msg)
+            return HttpResponse(status = 200)
+        else:
+            return HttpResponse(status = 404)
+
+
+
+
 
 
 
