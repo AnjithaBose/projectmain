@@ -470,6 +470,38 @@ def ActiveLeads():
 def UpcomingWebinar():
     return Webinar.objects.filter(status='Upcoming')
 
+def UnallocatedStudents():
+    stud = Student.objects.all()
+    name = []
+    for i in stud:
+        if i.course_enrolled :
+            pass
+        else:
+            name.append(i.name)
+    students = Student.objects.filter(name__in=name)
+    return (students)
+
+def PendingTask(staff):
+    return Task.objects.filter(user=staff,complete=False)
+
+def Managing(staff):
+    name = []
+    reporting = Reporting.objects.all()
+    for i in reporting:
+        if i.manager == staff:
+            name.append(i.user)
+    staff_members = Staff.objects.filter(name__in=name)
+    return(staff_members)
+
+def StaffBirthdays():
+    name = []
+    staff = Staff.objects.all()
+    for i in staff:
+        if i.dob.month == today.month and i.dob.day > today.day:
+            name.append(i.name)
+    birthdays = Staff.objects.filter(name__in=name)
+    return (birthdays)
+
 
 
 

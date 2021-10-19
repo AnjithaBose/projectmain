@@ -1510,7 +1510,12 @@ class OperationsDashboard(View):
             current_batches = CurrentBatches().count()
             upcoming_batches = UpcomingBatches().count()
             upcoming_webinar = UpcomingWebinar().count()
-            context ={'staff':staff,'notify':notify,'count':count,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'upcoming_webinar':upcoming_webinar}
+            pending_task = PendingTask(staff).count()
+            staff_members = Managing(staff)
+            birthdays = StaffBirthdays()
+            active_batches = CurrentBatches()
+            coming_batches = UpcomingBatches()
+            context ={'coming_batches':coming_batches,'active_batches':active_batches,'staff':staff,'notify':notify,'count':count,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'upcoming_webinar':upcoming_webinar,'pending_task':pending_task,'staff_members':staff_members,'birthdays':birthdays}
             return render(request,'operations/dashboard.html',context)
         else:
             if request.user.is_authenticated:

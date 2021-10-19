@@ -308,6 +308,7 @@ class Task(models.Model):
     timestamp = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=100,null=True, blank=True)
     assigned_by = models.ForeignKey(Staff,null=True, blank=True,on_delete=models.CASCADE,related_name='assigned_by')
+    complete = models.BooleanField(default=False)
 
 class Webinar(models.Model):
     topic = models.CharField(max_length=1000,null=True, blank=True)
