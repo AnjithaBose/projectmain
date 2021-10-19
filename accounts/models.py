@@ -304,9 +304,9 @@ class Notification(models.Model):
     status = models.CharField(max_length=100,choices=(('1','Read'),('2','Unread')),default='2')
 
 class Task(models.Model):
-    user = models.ForeignKey(Staff,null=True, blank=True,on_delete=models.CASCADE,related_name='task_for')
+    user = models.ForeignKey(Staff,null=True, blank=True,on_delete=models.CASCADE,related_name='task_for',limit_choices_to=(~Q(stype='4')))
     timestamp = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=100,null=True, blank=True,choices=(('Pending','Pending'),('Complete','Complete')))
+    status = models.CharField(max_length=100,null=True, blank=True)
     assigned_by = models.ForeignKey(Staff,null=True, blank=True,on_delete=models.CASCADE,related_name='assigned_by')
 
 class Webinar(models.Model):

@@ -101,14 +101,14 @@ class AdminDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            current_batches = Batch.objects.filter(status='1').count()
-            upcoming_batches = Batch.objects.filter(status='2').count()
-            active_leads = Lead.objects.filter(Q(status='New')|Q(status='In Pipeline')).count()
+            current_batches = CurrentBatches().count()
+            upcoming_batches = UpcomingBatches().count()
+            active_leads = ActiveLeads().count()
             closed_leads = ClosedLeads()
             st = CurrentActiveStudents()
             pending_lms = Lead.objects.filter(approval='2').count()
             c3 = MonthlyRevenue()
-            webinar = Webinar.objects.filter(status='Upcoming').count()
+            webinar = UpcomingWebinar().count()
             trainers = Staff.objects.filter(stype='3').order_by('doj')
             leads = Lead.objects.filter(Q(status='New')|Q(status='In Pipeline'))
             context={'webinar':webinar,'count':count,'notify':notify,'staff':staff,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'active_leads':active_leads,'closed_leads':closed_leads,'students':st,'pending_lms':pending_lms,'monthly_fee_collected':c3,'trainers':trainers,'leads':leads}
@@ -1506,7 +1506,10 @@ class OperationsDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            context ={'staff':staff,'notify':notify,'count':count}
+            current_batches = CurrentBatches().count()
+            upcoming_batches = UpcomingBatches().count()
+            upcoming_webinar = UpcomingWebinar().count()
+            context ={'staff':staff,'notify':notify,'count':count,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'upcoming_webinar':upcoming_webinar}
             return render(request,'operations/dashboard.html',context)
         else:
             if request.user.is_authenticated:

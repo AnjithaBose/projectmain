@@ -451,6 +451,18 @@ def SendNotification(type, staff,message):
     n=Notification(type=type,user1=staff,message=message,date=date,time=time,timestamp=timestamp)
     n.save()
 
+def CurrentBatches():
+    return  Batch.objects.filter(status='1')
+
+def UpcomingBatches():
+    return Batch.objects.filter(status='2')
+
+def ActiveLeads():
+    return Lead.objects.filter(Q(status='New')|Q(status='In Pipeline'))
+
+def UpcomingWebinar():
+    return Webinar.objects.filter(status='Upcoming')
+
 
 
 
