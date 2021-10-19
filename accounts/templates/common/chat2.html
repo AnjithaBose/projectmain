@@ -1,0 +1,236 @@
+{% extends 'common/main2.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="">
+        <div class="">
+            <!-- Start Breadcrumbbar -->
+
+            
+            
+           <!-- Chat -->
+           <main class="main is-visible card" data-dropzone-area="" style="top:0%">
+            <div class="container h-100" style="height:10%">
+
+                <div class="d-flex flex-column position-relative h-100" style="height:10%">
+                    <!-- Chat: Header -->
+                    <div class="chat-header border-bottom py-4 py-lg-7">
+                        <div class="row align-items-center">
+
+                            <!-- Mobile: close -->
+                            <div class="col-2 d-xl-none">
+                                <a class="icon icon-lg text-muted" href="{% url 'home' %}" data-toggle-chat="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                </a>
+                            </div>
+                            <!-- Mobile: close -->
+
+                            <!-- Content -->
+                            <div class="col-8 col-md-6 ">
+                                <div class="row align-items-center text-center text-xl-start">
+                                    <!-- Title -->
+                                    <div class="col-12 col-xl-12">
+                                        <div class="row align-items-center gx-5">
+                                            <div class="col-auto">
+                                                <div class="avatar  d-none d-xl-inline-block">
+                                                    <img class="avatar-img" src="{{user.profile_pic.url}}" alt="">
+                                                </div>
+                                            </div>
+
+                                            <div class="col overflow-hidden">
+                                                <h5 class="text-truncate">{{user}}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Title -->
+
+                                    <!-- Toolbar -->
+                                    
+                                    <!-- Toolbar -->
+                                </div>
+                            </div>
+                            <!-- Content -->
+
+                            <!-- Mobile: more -->
+                            
+                            <!-- Mobile: more -->
+
+                        </div>
+                    </div>
+                    <!-- Chat: Header -->
+
+                    <!-- Chat: Content -->
+                    <div class="chat-body hide-scrollbar flex-1 h-100">
+                        <div class="chat-body-inner">
+                            <div class="py-6 py-lg-12" id="chat-content">
+
+                                <!-- Message -->
+                                 
+                                    
+                                        
+                                    
+
+                                    
+                                       
+                                            
+                                                
+                                    
+
+                                <!-- Message -->
+                                <div class="message">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal-user-profile" class="avatar avatar-responsive">
+                                        <img class="avatar-img" src="{{user.profile_pic.url}}" alt="">
+                                    </a>
+
+                                    <div class="message-inner">
+                                        <div class="message-body">
+                                            <div class="message-content">
+                                                <div class="message-text">
+                                                    <p>{{user}} Message loading <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="message-footer">
+                                            <span class="extra-small text-muted"><span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Message -->
+                                <div class="message message-out">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal-profile" class="avatar avatar-responsive">
+                                        <img class="avatar-img" src="{{staff.profile_pic.url}}" alt="">
+                                    </a>
+
+                                    <div class="message-inner">
+                                        <div class="message-body">
+                                            <div class="message-content">
+                                                <div class="message-text">
+                                                    <p>{{staff}} Message loading <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="message-footer">
+                                            <span class="extra-small text-muted"><span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                               
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chat: Content -->
+
+                    <!-- Chat: Footer -->
+                    <div class="chat-footer col-12 col-md-6 position-absolute bottom-0 start-0">
+                        <!-- Chat: Files -->
+                        <div class="dz-preview bg-dark" id="dz-preview-row" data-horizontal-scroll="">
+                        </div>
+                        <!-- Chat: Files -->
+
+                        <!-- Chat: Form -->
+                        <form class="chat-form rounded-pill bg-dark" data-emoji-form="">
+                            <div class="row align-items-center gx-0">
+                                <div class="col-auto">
+                                    <a href="#" class="btn btn-icon btn-link text-body rounded-circle" id="dz-btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                                    </a>
+                                </div>
+
+                                <div class="col">
+                                    <div class="input-group">
+                                        <textarea class="form-control px-0" placeholder="Type your message..." rows="1" data-emoji-input="" data-autosize="true"></textarea>
+
+                                        <a href="#" class="input-group-text text-body pe-0" data-emoji-btn="">
+                                            <span class="icon icon-lg">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smile"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="col-auto">
+                                    <button class="btn btn-icon btn-primary rounded-circle ms-5">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- Chat: Form -->
+                    </div>
+                    <!-- Chat: Footer -->
+                </div>
+
+            </div>
+        </main>
+        <!-- Chat -->
+
+            
+            <!-- state end-->
+            <script>
+                $(document).ready(function(){
+
+                setInterval(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url : '{{chatroom.id}}',
+                        success: function(response){
+                            console.log(response);
+                            $("#chat-content").empty();
+                            for (var key in response.messages)
+                            {   
+                                if (response.staff == response.messages[key].username ){
+                                    var temp="<div class='message message-out'><a data-bs-toggle='modal' data-bs-target='#modal-profile' class='avatar avatar-responsive'><img class='avatar-img' src="+response.messages[key].pic+" alt=''></a><div class='message-inner'> <div class='message-body'><div class='message-content'><div class='message-text'><p>"+response.messages[key].message+"</p></div></div></div><div class='message-footer'><span class='extra-small text-muted'>"+response.messages[key].timestamp+"</span></div></div></div>";
+                                }
+                                else{
+                                    var temp="<div class='message'><a data-bs-toggle='modal' data-bs-target='#modal-user-profile' class='avatar avatar-responsive'><img class='avatar-img' src="+response.messages[key].pic+" alt=''></a><div class='message-inner'> <div class='message-body'><div class='message-content'><div class='message-text'><p>"+response.messages[key].message+"</p></div></div></div><div class='message-footer'><span class='extra-small text-muted'>"+response.messages[key].timestamp+"</span></div></div></div>";
+                                }
+                                
+                                $("#chat-content").append(temp);
+                            }
+                        },
+                        // error: function(response){
+                        //     alert('An error occured')
+                        // }
+                    });
+                },5000);
+                })
+            </script>
+            <script>
+             function notify(){
+                    $.ajax({
+                        type: 'GET',
+                        url : '/user/chat/notify/{{chatroom.id}}',
+                    });
+                    alert("Chat push notifications has been sent to the user.")
+                }
+            </script>
+            <script>
+                function readURL(input) {
+                        if (input.files && input.files[0]) {
+                            $(".ti-clip").css("color", "green");
+                        }else{
+                        $(".ti-clip").css("color", "black");
+                        }
+                    }
+                
+                
+                $("#inputFile").change(function () {
+                        readURL(this);
+                    });
+            </script>
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

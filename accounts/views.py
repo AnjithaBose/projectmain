@@ -758,10 +758,14 @@ class Message(View):
             notify = Notifications(staff)
             count = CountNotifications(notify)
             chatroom = FindRoom(request,staff,id)
+            if chatroom.user1 == staff:
+                user = chatroom.user2
+            else:
+                user = chatroom.user1
             chatmessage = ChatMessage.objects.filter(chatroom=chatroom).order_by('timestamp')
             form = SendChatMessageForm()
-            context={'count':count,'notify':notify,'staff':staff,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
-            return render(request,'common/chat.html',context)
+            context={'count':count,'notify':notify,'staff':staff,'chatroom':chatroom,'chatmessage':chatmessage,'form':form,'user':user}
+            return render(request,'common/chat2.html',context)
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
