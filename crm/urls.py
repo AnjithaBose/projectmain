@@ -93,6 +93,7 @@ urlpatterns = [
     path('trainer/projects/reject/<id>/',RejectProject.as_view(),name='reject_project'),
     path('trainer/assignments/remove/<id>/',RemoveAssignment.as_view(),name='remove_assignment'),
     path('trainer/projects/remove/<id>/',RemoveProject.as_view(),name='remove_project'),
+    path('trainer/projects/activate/<id>/',ActivateProject.as_view(),name='activate_project'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),

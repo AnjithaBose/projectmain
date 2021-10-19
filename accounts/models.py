@@ -341,7 +341,7 @@ class Project(models.Model):
     attachment = models.FileField(null=True, blank=True,upload_to='images/project/')
     date = models.DateField(null=True,blank=True)
     final_date = models.DateField(null=True,blank=True)
-    active = models.BooleanField(null=True, blank=True, default=True)
+    active = models.BooleanField(default=True)
 
 class StudentAssignmentData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='candidate',null=True,blank=True)

@@ -2288,12 +2288,12 @@ class SubmitProject(View):
             project = Project.objects.get(id=id)
             try:
                 spd = StudentProjectData.objects.filter(project=project).filter(Q(status='1')|Q(status='2'))
-                # spd = StudentProjectData.objects.all()
-                # for i in spd:
-                #     print(i.status)
-                
                 if spd:
                     alert="You have alredy submitted this project."
+                    context={'count':count,'notify':notify,'student':student,'alert':alert,'project':project}
+                    return render(request,'messages/student/projects.html',context)
+                elif project.active==False:
+                    alert="This project has stopped accepting results.Please contact your trainer if you find this as an error."
                     context={'count':count,'notify':notify,'student':student,'alert':alert,'project':project}
                     return render(request,'messages/student/projects.html',context)
                 else:
@@ -2671,6 +2671,21 @@ class RemoveProject(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+class ActivateProject(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            project = Project.objects.get(id=id)
+            project.active =True
+            project.save()
+            return redirect('upload_projects')
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
 
 
 

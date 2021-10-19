@@ -124,8 +124,12 @@
 
                             {% if staff.stype == '4' or staff.stype == '7' %}
                                 <td class="text-right" style="width:20%">
-                                <a href="" class="btn btn-danger-rgba" ><i class="ti ti-trash"></i> Remove</a>&nbsp;&nbsp;
-                                <a href="" class="btn btn-primary-rgba" ><i class="ti ti-file"></i> Submissions</a></td>
+                                  {% if i.active %}
+                                    <a href="{% url 'remove_project' i.id %}" class="btn btn-danger-rgba" ><i class="ti ti-trash"></i> Remove</a>&nbsp;&nbsp;
+                                  {% else %}
+                                    <a href="{% url 'activate_project' i.id %}" class="btn btn-success-rgba" ><i class="ti ti-trash"></i> Activate</a>&nbsp;&nbsp;
+                                  {% endif %}
+                                <a href="{% url 'projects' i.id %}" class="btn btn-primary-rgba" ><i class="ti ti-file"></i> Submissions</a></td>
                             {% endif %}
 
                       {% empty %}
