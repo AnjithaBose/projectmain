@@ -259,21 +259,28 @@ def ActivateStudent(student):
     student.save()
 
 def CheckAccount(username):
+    m=""
     try:
-        staff = Staff.objects.get(email=username)
+        staff = Staff.objects.get(user__username=username)
         if staff:
-            if staff.status == 'Inactive':
-                msg = 'Staff account has been suspended. Please contact your reporting manager.'
+            user = staff.user
+            if user.is_active:
+                m ="Invalid login.Check your credentials!" 
+            else:
+                m = 'Staff account has been suspended. Please contact your reporting manager.'
         else:
-            msg ="Invalid login.Check your credentials!" 
+            m ="Invalid login.Check your credentials!" 
     except:
-        student = Student.objects.get(email=username)
+        student = Student.objects.get(user__username=username)
         if student:
             if student.status == 'Inactive' :
-                msg ="Account has been suspended.Contact your representative."
+                m ="Account has been suspended.Contact your representative."
         else:
-            msg ="Invalid login.Check your credentials!"
-    return(msg)
+            m ="Invalid login.Check your credentials!"
+    finally:
+        if m == "":
+            m ="Invalid login.Check your credentials!"
+        return(m)
 
 def Manager(staff):
     reporting = Reporting.objects.get(user=staff)

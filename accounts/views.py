@@ -37,7 +37,8 @@ class LoginView(View):
             login(request, user)
             return redirect('home')
         else:
-            msg = CheckAccount(username)
+            message = CheckAccount(username)
+            msg = message
             return render(request,'common/login.html',{'msg':msg})
 
 
@@ -2603,7 +2604,7 @@ class RemoveAssignment(View):
             assignment = Assignment.objects.get(id=id)
             confirm = "Are you sure you want to remove this assignment?This may remove all the submitted assignments as well."
             context={'count':count,'notify':notify,'staff':staff,'confirm':confirm}
-            return render(request,'messages/trainer/projects.html',context)
+            return render(request,'messages/trainer/assignments.html',context)
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
@@ -2624,12 +2625,54 @@ class RemoveAssignment(View):
             except:
                 alert = "Failed to delete assignment.Please try again"
                 context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
+            return render(request,'messages/trainer/assignments.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
+class RemoveProject(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            project = Project.objects.get(id=id)
+            confirm = "This will not completly remove the project but will stop accepting new submissions.Are you sure you want to continue?"
+            context={'count':count,'notify':notify,'staff':staff,'confirm':confirm}
             return render(request,'messages/trainer/projects.html',context)
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+    def post(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            project = Project.objects.get(id=id)
+            try:
+                project.active = False
+                project.save()
+                msg = "Project deactivated successfully"
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
+            except:
+                alert = "Failed to delactivate project.Please try again"
+                context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
+            return render(request,'messages/trainer/projects.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
 
 
 

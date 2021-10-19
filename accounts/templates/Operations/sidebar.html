@@ -32,7 +32,9 @@
           <li><a href="{% url 'add_job' %}">Add New Jobs</a></li>
         </ul>
       </li>
-      <li> <a href=""><i class="ti ti-rss"></i> <span>Teq News</span></a></li>
+      {% if request.user.is_superuser %}
+      <li> <a href="/admin/"><i class="ti ti-star"></i> <span>Administrator</span></a></li>
+      {% endif %}
      
     </ul>
   </div>

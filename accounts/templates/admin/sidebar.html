@@ -40,6 +40,9 @@
           <li><a href="{% url 'list_lms_revert' %}">Past Webinars</a></li>
         </ul>
       </li>
+      {% if request.user.is_superuser %}
+      <li> <a href="/admin/"><i class="ti ti-star"></i> <span>Administrator</span></a></li>
+      {% endif %}
       <!-- <li class="menu_sub"> <a href="#"> <i class="ti ti-blackboard"></i> <span>UI Elements </span> <span
             class="badge badge-pill badge-danger float-right">New</span> </a>
         <ul class="down_menu">
