@@ -121,11 +121,11 @@
                       {% endif %}
                       {% if staff.stype == '4' or staff.stype == '7' %}
                         <td class="text-right" style="width:20%">
-                        <a href="" class="btn btn-danger-rgba" ><i class="ti ti-trash"></i> Remove</a>&nbsp;&nbsp;
+                        <a href="{% url 'remove_assignment' i.id %}" class="btn btn-danger-rgba" ><i class="ti ti-trash"></i> Remove</a>&nbsp;&nbsp;
                         <a href="{% url 'assignments' i.id %}" class="btn btn-primary-rgba" ><i class="ti ti-file"></i> Submissions</a></td>
                       {% endif %}
                       {% empty %}
-                      <td colspan="7">No assignments to show.</td>
+                      <td colspan="8">No assignments to show.</td>
                     </tr>
                     {% endfor %}
                     
