@@ -69,12 +69,6 @@
                         <div class="chat-body-inner">
                             <div class="py-6 py-lg-12" id="chat-content">
 
-                                <!-- Message -->
-                                 
-                                    
-                                        
-                                    
-
                                     
                                        
                                             
@@ -82,7 +76,7 @@
                                     
 
                                 <!-- Message -->
-                                <div class="message">
+                                <!-- <div class="message">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#modal-user-profile" class="avatar avatar-responsive">
                                         <img class="avatar-img" src="{{user.profile_pic.url}}" alt="">
                                     </a>
@@ -100,11 +94,11 @@
                                             <span class="extra-small text-muted"><span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></span>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- Message -->
-                                <div class="message message-out">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal-profile" class="avatar avatar-responsive">
+                                <!-- <div class="message message-out">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#modal-profile" class="avatar avatar-responsive change" >
                                         <img class="avatar-img" src="{{staff.profile_pic.url}}" alt="">
                                     </a>
 
@@ -121,7 +115,7 @@
                                             <span class="extra-small text-muted"><span class="typing-dots"><span>.</span><span>.</span><span>.</span></span></span>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                                
 
@@ -131,24 +125,30 @@
                     <!-- Chat: Content -->
 
                     <!-- Chat: Footer -->
-                    <div class="chat-footer col-12 col-md-6 position-absolute bottom-0 start-0">
+                    <div class="chat-footer col-12 col-md-6 position-absolute bottom-0 start-0 ">
+                        
                         <!-- Chat: Files -->
                         <div class="dz-preview bg-dark" id="dz-preview-row" data-horizontal-scroll="">
                         </div>
                         <!-- Chat: Files -->
 
                         <!-- Chat: Form -->
-                        <form class="chat-form rounded-pill bg-dark" data-emoji-form="">
+                        
+                        <form class="chat-form rounded-pill bg-dark" data-emoji-form="" method="post" action>
+                            <center>
+                            {% csrf_token %}
                             <div class="row align-items-center gx-0">
                                 <div class="col-auto">
-                                    <a href="#" class="btn btn-icon btn-link text-body rounded-circle" id="dz-btn">
+
+                                    <!-- <a href="#" class="btn btn-icon btn-link text-body rounded-circle" id="dz-btn">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-                                    </a>
+                                    </a> -->
                                 </div>
 
                                 <div class="col">
                                     <div class="input-group">
-                                        <textarea class="form-control px-0" placeholder="Type your message..." rows="1" data-emoji-input="" data-autosize="true"></textarea>
+                                        {% load widget_tweaks %}
+                                        {% render_field form.message class="form-control px-0" placeholder="Type your message..." rows="1" data-emoji-input="" data-autosize="true" %}
 
                                         <a href="#" class="input-group-text text-body pe-0" data-emoji-btn="">
                                             <span class="icon icon-lg">
@@ -159,11 +159,11 @@
                                 </div>
 
                                 <div class="col-auto">
-                                    <button class="btn btn-icon btn-primary rounded-circle ms-5">
+                                    <button class="btn btn-icon btn-primary rounded-circle ms-5" type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                                     </button>
                                 </div>
-                            </div>
+                            </div></center>
                         </form>
                         <!-- Chat: Form -->
                     </div>
@@ -189,7 +189,7 @@
                             for (var key in response.messages)
                             {   
                                 if (response.staff == response.messages[key].username ){
-                                    var temp="<div class='message message-out'><a data-bs-toggle='modal' data-bs-target='#modal-profile' class='avatar avatar-responsive'><img class='avatar-img' src="+response.messages[key].pic+" alt=''></a><div class='message-inner'> <div class='message-body'><div class='message-content'><div class='message-text'><p>"+response.messages[key].message+"</p></div></div></div><div class='message-footer'><span class='extra-small text-muted'>"+response.messages[key].timestamp+"</span></div></div></div>";
+                                    var temp="<div class='message message-out'><a data-bs-toggle='modal' data-bs-target='#modal-profile' class='avatar avatar-responsive change'><img class='avatar-img' src="+response.messages[key].pic+" alt=''></a><div class='message-inner'> <div class='message-body'><div class='message-content'><div class='message-text'><p>"+response.messages[key].message+"</p></div></div></div><div class='message-footer'><span class='extra-small text-muted'>"+response.messages[key].timestamp+"</span></div></div></div>";
                                 }
                                 else{
                                     var temp="<div class='message'><a data-bs-toggle='modal' data-bs-target='#modal-user-profile' class='avatar avatar-responsive'><img class='avatar-img' src="+response.messages[key].pic+" alt=''></a><div class='message-inner'> <div class='message-body'><div class='message-content'><div class='message-text'><p>"+response.messages[key].message+"</p></div></div></div><div class='message-footer'><span class='extra-small text-muted'>"+response.messages[key].timestamp+"</span></div></div></div>";
