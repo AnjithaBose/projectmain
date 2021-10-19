@@ -1200,9 +1200,9 @@ class Students(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            student = Student.objects.all().order_by('-start_date')
-            FindSCD(request,student)
-            context={'count':count,'notify':notify,'staff':staff,'student':student}
+            students = Student.objects.all().order_by('-start_date')
+            FindSCD(request,students)
+            context={'count':count,'notify':notify,'staff':staff,'students':students}
             return render(request,'common/students.html',context)
         else:
             if request.user.is_authenticated:
@@ -1221,7 +1221,7 @@ class ViewStudent(View):
             scd(request,student)
             cd = StudentCourseData.objects.filter(student=student)
             na = StudentCourseData.objects.filter(student=student,batch__status='1')
-            context={'count':count,'notify':notify,'staff':staff,'student':student,'cd':cd,'na':na}
+            context={'count':count,'notify':notify,'staff':staff,'students':student,'cd':cd,'na':na}
             return render(request,'common/student_profile.html',context)
         else:
             if request.user.is_authenticated:
@@ -1602,7 +1602,7 @@ class GetStudentPaymentDetails(View):
                 spd.save()
             payments = StudentPayments.objects.filter(spd=spd).order_by('-timestamp')
             feeform = StudentPaymentForm()
-            context ={'staff':staff,'student':student,'spd':spd,'payments':payments,'feeform':feeform}
+            context ={'staff':staff,'student':student,'spd':spd,'payments':payments,'feeform':feeform,'notify':notify,'count':count}
             return render(request,'sales/student_payments.html',context)
         else:
             if request.user.is_authenticated:
@@ -2589,6 +2589,46 @@ class SendChatNotification(View):
             return HttpResponse(status = 200)
         else:
             return HttpResponse(status = 404)
+
+class RemoveAssignment(View):
+    def get(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            assignment = Assignment.objects.get(id=id)
+            confirm = "Are you sure you want to remove this assignment?This may remove all the submitted assignments as well."
+            context={'count':count,'notify':notify,'staff':staff,'confirm':confirm}
+            return render(request,'messages/trainer/projects.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+    def post(self, request,id):
+        x = TrainerManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            assignment = Assignment.objects.get(id=id)
+            try:
+                assignment.delete()
+                msg = "Assignment deleted successfully"
+                context={'count':count,'notify':notify,'staff':staff,'msg':msg}
+            except:
+                alert = "Failed to delete assignment.Please try again"
+                context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
+            return render(request,'messages/trainer/projects.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
 
 
 

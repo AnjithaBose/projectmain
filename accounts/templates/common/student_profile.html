@@ -15,20 +15,20 @@
                 <!-- Start row -->
                 <div class="row">
                     <div class="col-md-8 col-lg-8">
-                        <h4 class="page-title">{{student}}</h4>
+                        <h4 class="page-title">{{students}}</h4>
                         <div class="breadcrumb-list">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{% url 'view_students' %}">Students</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">{{student}}</li>
+                                <li class="breadcrumb-item"><a href="{% url 'view_students' %}">students</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">{{students}}</li>
                             </ol>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4 mr-0">
                         <div class="widgetbar">
-                            <a href="{% url 'add_scd' student.id %}" class="btn btn-primary"><i class="ti ti-plus"></i> Course Data</a>
+                            <a href="{% url 'add_scd' students.id %}" class="btn btn-primary"><i class="ti ti-plus"></i> Course Data</a>
                             {% if staff.stype == '4' or staff.stype == '2' or staff.stype == '6' %}
-                            <a href="{% url 'get_student_payments' student.id %}" class="btn btn-primary"><i class="ti ti-money"></i> Payment Details</a>
+                            <a href="{% url 'get_student_payments' students.id %}" class="btn btn-primary"><i class="ti ti-money"></i> Payment Details</a>
                             {% endif %}
                             <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
                         </div>
@@ -42,9 +42,9 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-12">
                     <div class="card">
-                        <h4 class="m-t-0 header-title">{{student}} 's  Data</h4>
+                        <h4 class="m-t-0 header-title">{{students}} 's  Data</h4>
                 
-                        <img class="img-circle pro_pic" src="{{student.profile_pic.url}}" alt="{{student.name}}" style="width: 100px;height:100px">
+                        <img class="img-circle pro_pic" src="{{students.profile_pic.url}}" alt="{{students.name}}" style="width: 100px;height:100px">
                         
                         <div class="card card-body">
                             <form class="forms-sample" method="post" enctype="multipart/form-data" action>
@@ -52,19 +52,19 @@
                               <div class="form-group row">
                                 <div class="col-12 col-md-6" style="padding:10px">
                                     <label for="exampleInputName1">Name</label> 
-                                    <input type="text" class="form-control" value="{{student.name}}" disabled>
+                                    <input type="text" class="form-control" value="{{students.name}}" disabled>
                                   </div>
                                 <div class="col-12 col-md-6" style="padding:10px">
                                     <label for="exampleInputName1">Email</label> 
-                                    <input type="text" class="form-control" value="{{student.email}}" disabled>
+                                    <input type="text" class="form-control" value="{{students.email}}" disabled>
                                   </div>
                                   <div class="col-12 col-md-6" style="padding:10px">
                                     <label for="exampleInputName1">Mobile</label> 
-                                    <input type="text" class="form-control" value="{{student.mobile}}" disabled>
+                                    <input type="text" class="form-control" value="{{students.mobile}}" disabled>
                                   </div>
                                   <div class="col-12 col-md-6" style="padding:10px">
                                     <label for="exampleInputName1">Status</label> 
-                                    <input type="text" class="form-control" value="{{student.status}}" disabled>
+                                    <input type="text" class="form-control" value="{{students.status}}" disabled>
                                   </div>
                                   <div class="col-12 col-md-6" style="padding:10px">
                                     <label for="exampleInputName1">Courses Enrolled</label> 
@@ -86,19 +86,19 @@
                                   </div>
                                   <div class="col-6 col-md-3" style="padding:10px">
                                     <label for="exampleInputName1">Gender</label> 
-                                    <input type="text" class="form-control" value="{{student.sex}}" disabled>
+                                    <input type="text" class="form-control" value="{{students.sex}}" disabled>
                                   </div>
                                   <div class="col-6 col-md-3" style="padding:10px">
                                     <label for="exampleInputName1">Date of Birth</label> 
-                                    <input type="text" class="form-control" value="{{student.dob}}" disabled>
+                                    <input type="text" class="form-control" value="{{students.dob}}" disabled>
                                   </div>
                                   <div class="col-6 col-md-3" style="padding:10px">
                                     <label for="exampleInputName1">Blood Group</label> 
-                                    <input type="text" class="form-control" value="{{student.blood_group}}" disabled>
+                                    <input type="text" class="form-control" value="{{students.blood_group}}" disabled>
                                   </div>
                                   <div class="col-6 col-md-3" style="padding:10px">
                                     <label for="exampleInputName1">Date of Joining</label> 
-                                    <input type="text" class="form-control" value="{{student.start_date}}" disabled>
+                                    <input type="text" class="form-control" value="{{students.start_date}}" disabled>
                                   </div>
                                   
                                 
