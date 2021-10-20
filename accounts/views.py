@@ -2745,6 +2745,81 @@ class AskQuery(View):
             else:
                 return redirect('home')
 
+class MyTrainers(View):
+    def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            scd = StudentCourseData.objects.filter(student=student)
+            trainer = []
+            for i in scd:
+                trainer.append(i.batch.trainer)
+            trainers = Staff.objects.filter(name__in=trainer)
+            context={'count':count,'notify':notify,'student':student,'trainers':trainers}
+            return render(request,'student/my_trainers.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+class MyProfile(View):
+    def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            form = EditProfileForm(instance=student)
+            scd = StudentCourseData.objects.filter(student=student)
+            context={'scd':scd,'count':count,'notify':notify,'student':student,'form':form}
+            return render(request,'student/profile.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
+    def post(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            name = student.name
+            email = student.email
+            status = student.status
+            start_date = student.start_date
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            form = EditProfileForm(request.POST,request.FILES,instance=student)
+            if form.is_valid():
+                f = form.save(commit=False)
+                try:
+                    pic = request.FILES['pic']
+                    f.profile_pic = pic
+                    f.save()
+                except:
+                    f.save()
+                msg = "Profile updated successfully."
+                context = {'count':count,'notify':notify,'student':student,'msg':msg}
+            else:
+                alert = "Failed to update profile.Please try again!"
+                context={'count':count,'notify':notify,'student':student,'alert':alert}
+            return render(request,'messages/student/profile.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+            
+        
+
+            
+            
+
 
 
 

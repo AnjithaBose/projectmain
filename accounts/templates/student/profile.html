@@ -1,0 +1,168 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Edit {{student.name}}'s Student</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+            <!-- state start-->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="card">
+                        <h4 class="m-t-0 header-title">{{student.name}}'s Profile</h4>
+                        
+
+                        
+                        <div class="card card-body">
+                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                                {% csrf_token %}
+                              <div class="form-group row">
+                                <div class="col-12 col-md-12">
+                                  <label for="exampleInputName1">Name</label>
+                                  <input type="text" class="form-control" disabled="true" value="{{student.name}}"> 
+                                </div>
+                                
+                              </div>
+                              <div class="form-group row">
+                                <div class="col-12 col-md-4">
+                                  <label for="exampleInputName1">Mobile<code>*</code></label>
+                                  {% load widget_tweaks %}
+                                  {% render_field form.mobile class="form-control" required="true" type="tel" pattern="[6-9]{1}[0-9]{9}" %}
+                                </div>
+                                <div class="col-12 col-md-4">
+                                  <label for="exampleInputEmail3">Email</label>
+                                  <input type="text" class="form-control" value="{{student.email}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="exampleInputEmail3">Profile Status</label>
+                                    <input type="text" class="form-control" value="{{student.status}}" disabled>
+                                  </div>
+                                <div class="col-12 col-md-3">
+                                  <label for="exampleInputEmail3">Gender<code>*</code></label>
+                                  {% render_field form.sex class="form-control" required="true"%}
+                                </div>
+                                <div class="col-12 col-md-3">
+                                  <label for="exampleInputEmail3">Date of Birth</label>
+                                  {% render_field form.dob class="form-control" type="date" %}
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label for="exampleInputEmail3">Date of Joining</label>
+                                    <input type="text" class="form-control" value="{{student.start_date}}" disabled>
+                                  </div>
+                                  <div class="col-12 col-md-3">
+                                    <label for="exampleInputEmail3">Blood Group</label>
+                                    {% render_field form.blood_group class="form-control"  %}
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputName1">House Name</label>
+                                  {% render_field form.house class="form-control"  %}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Address Line 1</label>
+                                  {% render_field form.street class="form-control"  %}
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="exampleInputName1">Address Line 2</label>
+                                    {% render_field form.street2 class="form-control"  %}
+                                  </div>
+                                  <div class="col-12 col-md-6">
+                                    <label for="exampleInputEmail3">City</label>
+                                    {% render_field form.city class="form-control"  %}
+                                  </div>
+                                  <div class="col-12 col-md-6">
+                                    <label for="exampleInputName1">State</label>
+                                    {% render_field form.state class="form-control" required="true" %}
+                                  </div>
+                                  <div class="col-12 col-md-6">
+                                    <label for="exampleInputEmail3">Pincode</label>
+                                    {% render_field form.pincode class="form-control"  %}
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-12 col-md-6">
+                                            <label for="exampleInputName1">Enrolled Courses</label>
+                                            <div class="row">
+                                                {% for i in scd %}
+                                                    <div class="col-1">
+                                                        <img class="img-circle pro_pic" src="{{i.batch.subject.pic.url}}" alt="{{i.batch.subject.name}}" style="width: 50px;height:50px">
+                                                    </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <label for="exampleInputEmail3">Resume</label>
+                                            {% render_field form.cv class="form-control"  %}
+                                        </div>
+                                    </div>
+                                </div>
+                                  <div class="col-12 col-md-6">
+                                    <label for="exampleInputEmail3">Current Profile Picture</label>
+                                  <div class="row">
+                                      <div class="col-4 col-md-4">
+                                          <img src="{{student.profile_pic.url}}" style="width: 100px;height: 100px">
+                                      </div>
+                                      <div class="col-8 col-md-8">
+                                        <label for="exampleInputName1">Update Profile Picture</label>
+                                        <input type="file" class="form-control" name='pic'>
+                                      </div>
+                                  </div>
+                                  </div>
+                              </div>
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-primary mr-2"><i class="ti ti-save"></i> Save</button>
+                                    <a href="{% url 'home' %}" class="btn btn-light"><i class="ti ti-home"></i> Home</a>
+                                </div>
+                            </form>
+                  </div>
+                </div>
+                    
+                </div>
+                
+            </div>
+            <!--- End row -->
+
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

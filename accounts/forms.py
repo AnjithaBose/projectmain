@@ -137,6 +137,22 @@ class SubmitProjectForm(ModelForm):
         model = StudentProjectData
         fields = ['link','attachment']
 
+class EditProfileForm(ModelForm):
+    sex = forms.ChoiceField(choices=sex_choices,required=False)
+    dob = forms.DateField(required=False)
+    blood_group = forms.ChoiceField(required=False,choices=groups)
+    house = forms.CharField(required=False)
+    street =forms.CharField(required=False)
+    street2 =forms.CharField(required=False)
+    city = forms.CharField(required=False)
+    profile_pic = forms.ImageField(required=False)
+    cv = forms.FileField(required=False)
+    pincode = forms.CharField(required=False)
+    class Meta:
+        model = Student
+        fields = ['pincode','mobile','sex','dob','blood_group','house','street','street2','city','state','profile_pic','cv']
+
+
 
 
 

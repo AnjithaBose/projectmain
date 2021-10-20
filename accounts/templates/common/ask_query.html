@@ -19,14 +19,14 @@
                         <div class="breadcrumb-list">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{% url 'view_contacts' %}">Contacts</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'my_trainers' %}">Queries</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Message</li>
                             </ol>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4 mr-0">
                         <div class="widgetbar">
-                            <button class="btn btn-warning" type="button" onclick="notify()" ><i class="far fa-flag"></i> Notify</button>
+                            <button class="btn btn-warning" type="button" onclick="notify()" ><i class="ti ti-hand-point-right"></i> Poke</button>
                             <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
                         </div>
                     </div>
@@ -55,21 +55,38 @@
                         </div>   
                     </form>
                 </div>
-                <div class="col-12 col-md-8" style="height: 400px;overflow-y: scroll;">
+                <div class="col-12 col-md-8" style="height: 400px;overflow-y: scroll;" onload="$(this).scrollTop = $(this).scrollHeight;">
                     {% for i in chatmessage %}
-                    <div class="card bg-light m-b-30">
-                        <div class="card-body">
-                            {% if i.message %}
-                            <p class="card-text">{{i.message}}</p>
-                            {% endif %}
-                            {% if i.pic %}
-                                <img src="{{i.pic.url}}" style="width: 100px;height: auto;">
-                            {% endif %}
+                        {% if i.user == request.user %}
+                        <div class="card text-white bg-primary m-b-30">
+                            <div class="card-body">
+                                {% if i.message %}
+                                <p class="card-text">{{i.message}}</p>
+                                {% endif %}
+                                {% if i.pic %}
+                                    <a href="{{i.pic.url}}" target="_blank"><img src="{{i.pic.url}}" class="thumbnail" height="auto" width="100"></a>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <p>{{i.time}}<br>{{i.date}}</p>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <p>{{i.time}}</p>
+                        {% else %}
+                        <div class="card bg-light m-b-30">
+                            <div class="card-body">
+                                {% if i.message %}
+                                <p class="card-text">{{i.message}}</p>
+                                {% endif %}
+                                {% if i.pic %}
+                                    <a href="{{i.pic.url}}" target="_blank"><img src="{{i.pic.url}}" class="thumbnail" height="auto" width="100"></a>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <p>{{i.time}}<br>{{i.date}}</p>
+                            </div>
                         </div>
-                    </div>
+
+                        {% endif %}
                     {% empty %}
                     <div class="card bg-light m-b-30">
                         <div class="card-body">
@@ -99,7 +116,7 @@
                         type: 'GET',
                         url : '/user/chat/notify/{{chatroom.id}}',
                     });
-                    alert("Chat push notifications has been sent to the user.")
+                    alert("Trainer has been poked.")
                 }
             </script>
         </div>

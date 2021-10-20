@@ -118,6 +118,8 @@ urlpatterns = [
     path('student/project/submissions/',ProjectSubmissions.as_view(),name='project_submissions'),
     path('student/certificates/',MyCertificates.as_view(),name='my_certificates'),
     path('student/queries/<id>/',AskQuery.as_view(),name='ask_queries'),
+    path('student/trainers/',MyTrainers.as_view(),name='my_trainers'),
+    path('student/profile/',MyProfile.as_view(),name='my_profile'),
 
     path('user/chat/notify/<id>/',SendChatNotification.as_view(),name='chat_notification'),
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),

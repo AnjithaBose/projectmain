@@ -228,6 +228,7 @@ class Student(models.Model):
     street2 =models.CharField(max_length=100,null=True,blank=True)
     city = models.CharField(max_length=100,null=True,blank=True)
     state = models.CharField(max_length=100,null=True,choices=state,blank=True)
+    pincode = models.CharField(max_length=6,null=True, blank=True)
     course_enrolled = models.CharField(max_length=1000,null=True,blank=True)
     now_attending = models.CharField(max_length=1000,null=True,blank=True)
     start_date = models.DateField(null=True,blank=True)

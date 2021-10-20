@@ -1,0 +1,114 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Contacts</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">My Trainers</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+           <!-- state start-->
+        <div class="row">
+            
+            <!-- end col --> 
+          </div>
+          
+          <!-- End row -->
+          <div class="row">
+            {% for i in trainers %}
+            <div class="col-md-3 col-12" style="padding:10px">
+              <div class="text-center card">
+                <div class="member-card pt-2 pb-2">
+                  <div class="thumb-lg member-thumb m-b-10 mx-auto"> <img src="{% static 'images/user3.png' %}" class="rounded-circle img-thumbnail" alt="{{i.name}}" style="width: 150px;height:150px"> </div>
+                  <div class="">
+                    <h4 class="m-b-5">{{i.name}}</h4>
+                    <p class="text-muted">{{i.get_stype_display}} <br> </p>
+                  </div>
+                 
+                  <a href="{% url 'ask_queries' i.id %}"><button type="button" class="btn btn-primary m-t-20 btn-rounded btn-bordered waves-effect w-md waves-light">Message Now</button></a>
+                  
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="col-lg-6">
+                <div class="card m-b-30">
+                  <div class="card-header border-bottom">
+                  </div>
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading"><i class="far fa-times-circle"></i> Contacts is empty!</h4>
+                        <p></p>
+                        <hr>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            {% endfor %}
+            <!-- end col -->
+            
+             
+          </div>
+          <!-- End row -->
+          
+          
+          
+          <div class="row">
+            <div class="col-12">
+              <div class="text-right">
+                <ul class="pagination pagination-split mt-0 pull-right mb-4">
+                  <div class="text-right">
+                    {% if webatch.has_previous %}
+                    <li><a href="{% url 'view_batches' %}?page={{ webatch.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a></li>
+                    {% endif %}
+                    {% if webatch.has_next %}
+                    <li><a href="{% url 'view_batches' %}?page={{ webatch.next_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-right"></i> Next</button></a></li>
+                    {% endif %}
+                    </div>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- End row -->
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}
