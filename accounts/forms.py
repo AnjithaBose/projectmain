@@ -36,6 +36,13 @@ class SendChatMessageForm(ModelForm):
         model = ChatMessage
         fields = ['message']
 
+class SendQueryMessageForm(ModelForm):
+    message = forms.CharField(required=False)
+    pic = forms.ImageField(required=False)
+    class Meta:
+        model = ChatQuery
+        fields = ['message','pic']
+
 class CreateStaffForm(ModelForm):
     name = forms.CharField(required=False)
     email = forms.EmailField(required=False)

@@ -1,0 +1,110 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Chat - {{chatroom.user1}}</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'view_contacts' %}">Contacts</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Message</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-warning" type="button" onclick="notify()" ><i class="far fa-flag"></i> Notify</button>
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card row">
+                <div class="row">
+                <div class="col-12 col-md-4">
+                    <h5 class="header-title">Send Queries</h5><br><br>
+                    <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-12">
+                              <label for="exampleInputName1">Message</label>
+                              {% load widget_tweaks %} 
+                              {% render_field form.message class="form-control" rows="3" %}
+                            </div>
+                            <div class="col-12">
+                                <label for="exampleInputName1">Attachment</label>
+                                {% render_field form.pic class="form-control" %}
+                            </div>
+                            <div class="col-12" style="padding-top:20px">
+                                <button class="btn btn-primary col-12" type="submit"><i class="fa fa-paper-plane"></i> Send</button>
+                            </div>
+                        </div>   
+                    </form>
+                </div>
+                <div class="col-12 col-md-8" style="height: 400px;overflow-y: scroll;">
+                    {% for i in chatmessage %}
+                    <div class="card bg-light m-b-30">
+                        <div class="card-body">
+                            {% if i.message %}
+                            <p class="card-text">{{i.message}}</p>
+                            {% endif %}
+                            {% if i.pic %}
+                                <img src="{{i.pic.url}}" style="width: 100px;height: auto;">
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <p>{{i.time}}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="card bg-light m-b-30">
+                        <div class="card-body">
+                            <p class="card-text">No messages</p>
+                        </div>
+                    </div>
+                    
+                    {% endfor %}
+                </div>
+                </div>
+            </div>
+            
+
+
+
+
+
+
+            
+
+            
+            <!-- state end-->
+           
+            <script>
+             function notify(){
+                    $.ajax({
+                        type: 'GET',
+                        url : '/user/chat/notify/{{chatroom.id}}',
+                    });
+                    alert("Chat push notifications has been sent to the user.")
+                }
+            </script>
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

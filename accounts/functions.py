@@ -502,6 +502,21 @@ def StaffBirthdays():
     birthdays = Staff.objects.filter(name__in=name)
     return (birthdays)
 
+def UnallocatedBatches():
+    batches = Batch.objects.filter(trainer = None)
+    return (batches)
+
+
+def FindQueryRoom(request,id):
+    receiver = Staff.objects.get(id=id)
+    student = Student.objects.get(user=request.user)       
+    try:
+        chatroom = ChatRoom.objects.get(user1=receiver,student=student)
+    except:
+        chatroom = ChatRoom(user1 =receiver,student=student)
+        chatroom.save()
+    return(chatroom)
+
 
 
 

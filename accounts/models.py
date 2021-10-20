@@ -61,7 +61,7 @@ approval_choices =(
     ('2', 'Pending'),
 )
 
-groups = (
+levels = (
     ('New', 'New'),
     ('In Pipeline', 'In Pipeline'),
     ('Converted', 'Converted'),
@@ -207,7 +207,7 @@ class Lead(models.Model):
     sex = models.CharField(max_length=10,null=True,choices=sex_choices,blank=True,default="Male")
     generator = models.ForeignKey(Staff,on_delete=models.CASCADE, blank=True,null=True,related_name='representative')
     created_on = models.DateField(null=True, blank=True)
-    status = models.CharField(max_length=100,null=True, blank=True,choices=groups,default="New")
+    status = models.CharField(max_length=100,null=True, blank=True,choices=levels,default="New")
     lms = models.BooleanField(default = False)
     approval = models.CharField(max_length=100,null=True, blank=True,choices=approval_choices)
     to_be_approved_by = models.ForeignKey(Staff,on_delete=models.CASCADE, blank=True,null=True)
@@ -272,6 +272,16 @@ class StudentPaymentData(models.Model):
 
     def __str__(self):
         return self.student.name
+
+class ChatQuery(models.Model):
+    chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
+    time = models.TimeField(blank=True, null=True)
+    date = models.DateField(null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
+    pic = models.ImageField(null=True, blank=True, upload_to='images/chat/')
+    message = models.TextField(max_length=5000,null=True, blank=True)
+
 
 class StudentPayments(models.Model):
     spd = models.ForeignKey(StudentPaymentData,on_delete=models.CASCADE,null=True, blank=True,related_name='student_payment')

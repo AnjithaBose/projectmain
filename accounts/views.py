@@ -1654,7 +1654,12 @@ class TrainerDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            context ={'staff':staff,'notify':notify,'count':count}
+            current_batches = Batch.objects.filter(status='1',trainer=staff).count()
+            upcoming_batches = Batch.objects.filter(status='2',trainer=staff).count()
+            active_batches = Batch.objects.filter(status='1',trainer=staff)
+            coming_batches = Batch.objects.filter(status='2',trainer=staff)
+            pending_task = PendingTask(staff).count()
+            context ={'pending_task':pending_task,'active_batches':active_batches,'coming_batches':coming_batches,'upcoming_batches':upcoming_batches,'current_batches':current_batches,'staff':staff,'notify':notify,'count':count}
             if staff.stype == '4' or staff.stype== '7':
                 return redirect('trainer_manager_dashboard')
             else:
@@ -1672,7 +1677,15 @@ class TrainerManagerDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            context ={'staff':staff,'notify':notify,'count':count}
+            current_batches = CurrentBatches().count()
+            upcoming_batches = UpcomingBatches().count()
+            unallocated_batches = UnallocatedBatches().count()
+            pending_task = PendingTask(staff).count()
+            active_batches = CurrentBatches()
+            coming_batches = UpcomingBatches()
+            staff_members = Managing(staff)
+            birthdays = StaffBirthdays()
+            context ={'birthdays':birthdays,'staff_members':staff_members,'active_batches':active_batches,'coming_batches':coming_batches,'pending_task':pending_task,'unallocated_batches':unallocated_batches,'staff':staff,'notify':notify,'count':count,'upcoming_batches':upcoming_batches,'current_batches':current_batches}
             return render(request,'trainer/manager_dashboard.html',context)
         else:
             if request.user.is_authenticated:
@@ -2690,6 +2703,50 @@ class ActivateProject(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+
+class AskQuery(View):
+    def get(self, request,id):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            chatroom = FindQueryRoom(request,id)
+            chatmessage = ChatQuery.objects.filter(chatroom=chatroom).order_by('timestamp')
+            for i in chatmessage:
+                print(i.message)
+            form = SendQueryMessageForm()
+            context={'count':count,'notify':notify,'student':student,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
+            return render(request,'common/ask_query.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+    def post(self, request,id):
+        x = StudentCheck(request)
+        if x == True:
+            form = SendQueryMessageForm(request.POST,request.FILES)
+            chatroom = FindQueryRoom(request,id)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.chatroom = chatroom
+                f.user = request.user
+                f.date = datetime.datetime.today()
+                f.time = datetime.datetime.now()
+                f.timestamp = datetime.datetime.now()
+                f.save()
+                return redirect('ask_queries',id=id)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
+
 
 
 
