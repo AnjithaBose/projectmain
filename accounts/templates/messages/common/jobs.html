@@ -30,21 +30,21 @@
             {% endif %}
             {% if alert %}
             <div class="col-lg-6">
-                <div class="card m-b-30">
-                  <div class="card-header border-bottom">
-                  </div>
-                  <div class="card-body">
-                    <div class="alert-list">
-                      <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading"><i class="far fa-times-circle"></i> Something went wrong!</h4>
-                        <p>{{alert}}</p>
-                        <hr>
-                        <a class="btn btn-primary" href="{% url 'jobs' %}">OK</a>
-                      </div>
+              <div class="card m-b-30">
+                <div class="card-header border-bottom">
+                </div>
+                <div class="card-body">
+                  <div class="alert-list">
+                    <div class="alert alert-danger" role="alert">
+                      <h4 class="alert-heading"><i class="far fa-times-circle"></i> Something went wrong!</h4>
+                      <p>{{alert}}</p>
+                      <hr>
+                      <a class="btn btn-primary" href="{% url 'jobs' %}">OK</a>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
             {% endif %}
             {% if confirm %}
             <div class="col-lg-6">
