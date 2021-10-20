@@ -7,6 +7,8 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.core import serializers
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 from .functions import *
 from .models import *
@@ -46,6 +48,67 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('login')
+
+class PasswordChangeView(View):
+    def get(self, request):
+        user = request.user
+        if user.is_authenticated: 
+            form = PasswordChangeForm(user=user)
+            try:
+                staff = Staff.objects.get(user=user)
+                notify = Notifications(staff)
+                count = CountNotifications(notify)
+                return render(request,'common/password_change.html',{'staff':staff,'notify':notify,'count':count,'form':form})
+            except:
+                student = Student.objects.get(user=user)
+                notify = StudentNotifications(student)
+                count = CountNotifications(notify)
+                return render(request,'common/password_change.html',{'student':student,'notify':notify,'count':count,'form':form})
+        else:
+            return redirect('logout')  
+
+    def post(self, request):
+        user = request.user
+        if user.is_authenticated:
+            form = PasswordChangeForm(user=user, data=request.POST)
+            if form.is_valid():
+                form.save()
+                update_session_auth_hash(request, form.user)
+                msg="Password Updated successfully"
+                try:
+                    staff = Staff.objects.get(user=user)
+                    notify = Notifications(staff)
+                    count = CountNotifications(notify)
+                    context={'staff':staff,'msg':msg,'notify':notify,'count':count}
+                except:
+                    student = Student.objects.get(user=user)
+                    notify = StudentNotifications(student)
+                    count = CountNotifications(notify)
+                    context={'student':student,'msg':msg,'notify':notify,'count':count}
+                finally:
+                    return render(request,'messages/common/home.html',context)
+                    
+            else:
+                # alert="Password Updation failed. Please try again after some time."
+                try:
+                    staff = Staff.objects.get(user=user)
+                    notify = Notifications(staff)
+                    count = CountNotifications(notify)
+                    context ={'count':count,'notify':notify,'staff':staff,'form':form}
+                except:
+                    student = Student.objects.get(user=user)
+                    notify = StudentNotifications(student)
+                    count = CountNotifications(notify)
+                    context={'student':student,'form':form,'notify':notify,'count':count}
+                finally:
+                    return render(request,'common/password_change.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+    
 
 
 class Home(View):

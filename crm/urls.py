@@ -27,6 +27,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(),name='login'),
     path('logout/', LogoutView.as_view(),name='logout'),
     path('', Home.as_view(),name='home'),
+    path('user/password/update/', PasswordChangeView.as_view(),name='password_change'),
 
 
     path('administrator/home/',AdminDashboard.as_view(),name='admin_dashboard'),
