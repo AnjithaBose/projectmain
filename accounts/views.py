@@ -2010,7 +2010,10 @@ class StudentDashboard(View):
                 trainer.append(i.batch.trainer)
             batches = Batch.objects.filter(batch_code__in=batch)
             trainers = Staff.objects.filter(name__in=trainer)
-            context = {'trainers':trainers,'batches': batches,'student':student,'notify':notify,'count':count,'enrolled_courses':enrolled_courses,'active_courses':active_courses,'payments_done':payments}
+            assignments = Assignment.objects.filter(batch__in=batches).count()
+            submitted = StudentAssignmentData.objects.filter(student=student).count()
+            pending_assignments = int(assignments)-int(submitted)
+            context = {'pending_assignments':pending_assignments,'trainers':trainers,'batches': batches,'student':student,'notify':notify,'count':count,'enrolled_courses':enrolled_courses,'active_courses':active_courses,'payments_done':payments}
             return render(request,'student/dashboard.html',context)
         else:
             if request.user.is_authenticated:
@@ -2714,8 +2717,6 @@ class AskQuery(View):
             count = CountNotifications(notify)
             chatroom = FindQueryRoom(request,id)
             chatmessage = ChatQuery.objects.filter(chatroom=chatroom).order_by('timestamp')
-            for i in chatmessage:
-                print(i.message)
             form = SendQueryMessageForm()
             context={'count':count,'notify':notify,'student':student,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
             return render(request,'common/ask_query.html',context)
