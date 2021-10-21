@@ -24,6 +24,7 @@
       {% elif staff.stype == '3' %}
       <li> <a href="{% url 'my_batches' %}"><i class="ti ti-blackboard"></i> <span>Batches</span></a></li>
       {% endif %}
+      <li> <a href="{% url 'view_queries' %}"><i class="ti ti-comments"></i> <span>Queries</span></a></li>
       <li> <a href="{% url 'upload_assignments' %}"><i class="ti ti-file"></i> <span>Assignments</span></a></li>
       <li> <a href="{% url 'upload_projects' %}"><i class="ti ti-envelope"></i> <span>Projects</span></a></li>
       <li> <a href="{% url 'view_contacts' %}"><i class="ti ti-id-badge"></i> <span>Contacts</span></a></li>

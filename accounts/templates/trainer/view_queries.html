@@ -1,0 +1,93 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+
+            <div class="breadcrumbbar"> 
+                <!-- Start row -->
+                <div class="row">
+                  <div class="col-md-8 col-lg-8">
+                    <h4 class="page-title">Batch Register</h4>
+                    <div class="breadcrumb-list">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Batch Register</li>
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 mr-0">
+                    <div class="widgetbar">
+                        <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Breadcrumbbar --> 
+              
+              
+             
+        <!-- state start-->
+        <div class="row ">
+            <div class="col-12">
+                <div class="">
+
+
+                    <div class="col-12 col-xl-4">
+                        <div class="card  m-b-30 no-border">
+                          <div class="card-header bg-white">
+                            <h3 class="card-title float-left">Pending Queries</h3>
+                            <div class="float-right"> <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"> <i class="lni-more-alt"></i> </a>
+                              <div class="dropdown-menu"> <a class="dropdown-item" href="#"><i class="ti ti-check m-r-10"></i> View</a>
+                                <a class="dropdown-item" href="#"><i class="lni-add-file m-r-10"></i> Add</a> <a
+                                  class="dropdown-item" href="#"><i class="lni-download m-r-10"></i> Download</a> <a
+                                  class="dropdown-item" href="#"><i class="lni-cog m-r-10"></i> More</a> <a class="dropdown-item"
+                                  href="#"><i class="lni-archive m-r-10"></i> Remove</a> </div>
+                            </div>
+                          </div>
+                          <div class="card-body visitor-customer">
+                            {% for i in chatroom %}
+                            <div class="media border-bottom p-b-15"> <img class="rounded-circle m-r-15 w-45"
+                                src="{{i.user1.profile_pic.url}}" alt="widget">
+                              <div class="media-body">
+                                <div><strong>{{i.student.name}}</strong></div>
+                                {{i.status}}
+                              </div>
+                              <br>
+                              <div class="float-right text-left">
+                                <small class="text-muted  ml-md-auto" style="text-align: left;"><i class="fe fe-calendar mr-1"></i>{{i.timestamp.time}}<br>{{i.timestamp.date}}</small><br>
+                                <h6><a class="badge badge-default" href="{% url 'reply_query' i.id %}">Message</a></h6>
+                              </div>
+                            </div>
+                            {% endfor %}
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Stop Team Members -->
+        
+        
+                </div>
+            </div>
+        </div>
+        <!-- End row --> 
+
+
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+        
+    </div>
+    {% include 'common/footer.html' %}
+    
+</div>
+{% endblock %}

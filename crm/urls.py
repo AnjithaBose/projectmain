@@ -102,6 +102,8 @@ urlpatterns = [
     path('trainer/assignments/remove/<id>/',RemoveAssignment.as_view(),name='remove_assignment'),
     path('trainer/projects/remove/<id>/',RemoveProject.as_view(),name='remove_project'),
     path('trainer/projects/activate/<id>/',ActivateProject.as_view(),name='activate_project'),
+    path('trainer/queries/',ViewQueries.as_view(),name='view_queries'),
+    path('trainer/queries/read/<id>/',ReplyQuery.as_view(),name='reply_query'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
@@ -129,6 +131,7 @@ urlpatterns = [
     path('student/trainers/',MyTrainers.as_view(),name='my_trainers'),
     path('student/profile/',MyProfile.as_view(),name='my_profile'),
 
+    path('user/poke/<id>/',Poke.as_view(),name='poke'),
     path('user/chat/notify/<id>/',SendChatNotification.as_view(),name='chat_notification'),
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
     path('user/notification/read/',MarkasRead.as_view(),name='mark_as_read'),

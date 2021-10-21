@@ -1722,7 +1722,8 @@ class TrainerDashboard(View):
             active_batches = Batch.objects.filter(status='1',trainer=staff)
             coming_batches = Batch.objects.filter(status='2',trainer=staff)
             pending_task = PendingTask(staff).count()
-            context ={'pending_task':pending_task,'active_batches':active_batches,'coming_batches':coming_batches,'upcoming_batches':upcoming_batches,'current_batches':current_batches,'staff':staff,'notify':notify,'count':count}
+            pending_queries = ChatRoom.objects.filter(user1=staff,user_1_status='Unread').count()
+            context ={'pending_queries':pending_queries,'pending_task':pending_task,'active_batches':active_batches,'coming_batches':coming_batches,'upcoming_batches':upcoming_batches,'current_batches':current_batches,'staff':staff,'notify':notify,'count':count}
             if staff.stype == '4' or staff.stype== '7':
                 return redirect('trainer_manager_dashboard')
             else:
@@ -2782,7 +2783,7 @@ class AskQuery(View):
             chatmessage = ChatQuery.objects.filter(chatroom=chatroom).order_by('timestamp')
             form = SendQueryMessageForm()
             context={'count':count,'notify':notify,'student':student,'chatroom':chatroom,'chatmessage':chatmessage,'form':form}
-            return render(request,'common/ask_query.html',context)
+            return render(request,'student/ask_query.html',context)
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
@@ -2801,7 +2802,11 @@ class AskQuery(View):
                 f.date = datetime.datetime.today()
                 f.time = datetime.datetime.now()
                 f.timestamp = datetime.datetime.now()
+                chatroom.user_1_status = 'Unread'
+                chatroom.student_status = 'Read' 
                 f.save()
+                chatroom.timestamp = datetime.datetime.now()
+                chatroom.save()
                 return redirect('ask_queries',id=id)
         else:
             if request.user.is_authenticated:
@@ -2877,6 +2882,123 @@ class MyProfile(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+
+class Poke(View):
+    def get(self, request,id):
+        user = request.user
+        if user.is_authenticated:
+            try:
+                student = Student.objects.get(user=user)
+                chatroom = ChatRoom.objects.get(id=id)
+                if chatroom.student == student:
+                    chatroom.user_1_status = 'Unread'
+                    chatroom.student_status = 'Read'
+                    chatroom.timestamp = datetime.datetime.now()
+                    chatroom.save()
+                    staff = chatroom.user1
+                    type = 4
+                    msg = "%s-%s" % ("New query from ",str(student.name))
+                    SendNotification(type,staff,msg)
+                    return HttpResponse(status = 200)
+                else:
+                    return render(request,'messages/common/permission_error.html')
+            except:
+                staff = Staff.objects.get(user=request.user)
+                chatroom = ChatRoom.objects.get(id=id)
+                print(chatroom)
+                if chatroom.user1 == staff:
+                    student = chatroom.student
+                    chatroom.user_1_status = 'Read'
+                    chatroom.student_status = 'Unread'
+                    chatroom.timestamp = datetime.datetime.now()
+                    chatroom.save()
+                    type = 4
+                    msg = "%s-%s" % ("Reply for query from ",str(staff.name))
+                    SendStudentNotification(type,student,msg)
+                    return HttpResponse(status = 200)
+                else:
+                    return render(request,'messages/common/permission_error.html')        
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
+
+class ViewQueries(View):
+    def get(self, request):
+        x= TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            chatroom = ChatRoom.objects.filter(user1=staff).order_by('-timestamp')
+            for i in chatroom:
+                student = i.student
+                if student:
+                    pass
+                else:
+                    chatroom = chatroom.exclude(i)
+            context = {'count':count,'notify':notify,'staff':staff,'chatroom':chatroom}
+            return render(request,'trainer/view_queries.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+class ReplyQuery(View):
+    def get(self, request,id):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            chatroom = ChatRoom.objects.get(id=id)
+            chatmessage = ChatQuery.objects.filter(chatroom=chatroom).order_by('timestamp')
+            form = SendQueryMessageForm()
+            context = {'chatmessage':chatmessage,'count':count,'notify':notify,'staff':staff,'chatroom':chatroom,'form':form}
+            return render(request,'trainer/reply_query.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+    def post(self, request,id):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            chatroom = ChatRoom.objects.get(id=id)
+            chatmessage = ChatQuery.objects.filter(chatroom=chatroom).order_by('timestamp')
+            form = SendQueryMessageForm(request.POST,request.FILES)
+            if form.is_valid:
+                f = form.save(commit=False)
+                f.chatroom = chatroom
+                f.user = request.user
+                f.date = datetime.datetime.today()
+                f.time = datetime.datetime.now()
+                f.timestamp = datetime.datetime.now()
+                chatroom.user_1_status = 'Read'
+                chatroom.student_status = 'Unread' 
+                f.save()
+                chatroom.timestamp = datetime.datetime.now()
+                chatroom.save()
+                return redirect('reply_query',id=id)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+            
+
+
+
+
 
             
         

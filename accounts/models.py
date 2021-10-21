@@ -244,6 +244,10 @@ class ChatRoom(models.Model):
     user1 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name="user1")
     user2 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name="user2")
     student = models.ForeignKey(Student,on_delete=models.CASCADE,null=True, blank=True,related_name="client")
+    user_1_status = models.CharField(max_length=100,null=True, blank=True,choices=(('Read','Read'),('Unread','Unread')))
+    user_2_status = models.CharField(max_length=100,null=True, blank=True,choices=(('Read','Read'),('Unread','Unread')))
+    student_status = models.CharField(max_length=100,null=True, blank=True,choices=(('Read','Read'),('Unread','Unread')))
+    timestamp = models.DateTimeField(null=True, blank=True)
 
 class ChatMessage(models.Model):
     chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.CASCADE)
