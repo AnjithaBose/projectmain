@@ -2994,6 +2994,58 @@ class ReplyQuery(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+class TaskManager(View):
+    def get(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            form = AddTasksForm()
+            if staff.stype == '4':
+                task = Task.objects.all()
+            else:
+                task = Task.objects.filter(assigned_by= staff)
+            context ={'count':count,'notify':notify,'staff':staff,'form':form,'task':task}
+            return render(request,'admin/assign_task.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+    def post(self, request):
+        x = ManagerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            form = AddTasksForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.assigned_by = staff
+                f.timestamp = datetime.datetime.now()
+                f.status = '0'
+                f.save()
+                type = 5
+                msg = "%s-%s" % ("New task allocated by ",str(staff.name))
+                SendNotification(type,f.user,msg)
+                msg = "Task added successfully and notifications send."
+                context ={'count':count,'notify':notify,'staff':staff,'msg':msg}
+            else:
+                alert = "Failed to add task.Please try again."
+                context ={'count':count,'notify':notify,'staff':staff,'alert':alert}
+            return render(request,'messages/admin/task_manager.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
+
+
             
 
 

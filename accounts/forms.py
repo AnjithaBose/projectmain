@@ -153,6 +153,13 @@ class EditProfileForm(ModelForm):
         fields = ['pincode','mobile','sex','dob','blood_group','house','street','street2','city','state','profile_pic','cv']
 
 
+class AddTasksForm(ModelForm):
+    status = forms.ChoiceField(required=False, choices=values)
+    class Meta:
+        model = Task
+        fields =['topic','description','user','status']
+
+
 
 
 

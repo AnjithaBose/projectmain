@@ -70,6 +70,14 @@ levels = (
     )
 
 
+values = (
+    ('0', '0'),
+    ('25','25'),
+    ('50','50'),
+    ('75','75'),
+    ('100','100'),
+)
+
 
 class Staff(models.Model):
     value= (
@@ -235,7 +243,7 @@ class Student(models.Model):
     shared = models.CharField(max_length=100,choices=(('Yes', 'Yes'), ('No', 'No')),blank=True,null=True,default='No')
     status = models.CharField(max_length=20,choices=(('Active','Active'),('Inactive','Inactive')),default='Active',blank=True)
     profile_pic = models.ImageField(null=True,default='accounts/static/images/user1.png',blank=True, upload_to='images/dp/')
-    cv = models.FileField(blank=True, null=True,upload_to='data/cv/')
+    cv = models.FileField(blank=True, null=True,upload_to='images/cv/')
 
     def __str__(self):
         return self.name
@@ -319,9 +327,11 @@ class Notification(models.Model):
     status = models.CharField(max_length=100,choices=(('1','Read'),('2','Unread')),default='2')
 
 class Task(models.Model):
+    topic = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(max_length=5000,null=True, blank=True)
     user = models.ForeignKey(Staff,null=True, blank=True,on_delete=models.CASCADE,related_name='task_for',limit_choices_to=(~Q(stype='4')))
     timestamp = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=100,null=True, blank=True)
+    status = models.CharField(max_length=100,null=True, blank=True,choices=values,default='0')
     assigned_by = models.ForeignKey(Staff,null=True, blank=True,on_delete=models.CASCADE,related_name='assigned_by')
     complete = models.BooleanField(default=False)
 
