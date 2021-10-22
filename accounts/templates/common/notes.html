@@ -1,0 +1,204 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Notes</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Notes</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+           <!-- state start-->
+        <div class="row">
+            
+            <div class="col-sm-4">
+                
+                <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#varying-modal" data-whatever="@getbootstrap">Create Notes</button>
+            
+                <!-- Modal -->
+                <div class="modal fade" id="varying-modal" tabindex="-1" role="dialog" aria-labelledby="varying-modal-label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="varying-modal-label">New Notes</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal-body">
+                          <form method="post" id="notesform" action>
+                              {% csrf_token %}
+                            <div class="form-group">
+                              <label for="recipient-name" class="col-form-label">Topic: <code>*</code></label>
+                                {% load widget_tweaks %}
+                                {% render_field form.topic class="form-control" required="true" type="text" %}
+                            </div>
+                            <div class="form-group">
+                              <label for="message-text" class="col-form-label">Description: <code>*</code></label>
+                              {% render_field form.description class="form-control" required="true"  %}
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Attachment:</label>
+                              </div>
+                              <div class="form-group row">
+                                <div class="controls col-12">
+                                  <div class="fileupload fileupload-new" data-provides="fileupload">
+                                    <button type="button" class="btn btn-custom btn-file">
+                                    <span class="fileupload-new"><i class="ti ti-clip"></i> Select file</span> <span class="fileupload-exists"><i class="ti ti-back-left"></i></span>
+                                    <input type="file" class="btn-light" value='{{form.attachment}}' />
+                                    </button>
+                                    <span class="fileupload-preview" style="margin-left:5px;"></span> <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a> </div>
+                                </div>
+                              </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary" onclick="save()"><i class="ti ti-save"></i> Save</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+            
+            </div>
+            <br><br><br>
+            <!-- end col --> 
+          </div>
+          
+          <!-- End row -->
+          <div class="row">
+            {% for i in notes %}
+            <div class="col-md-2 col-6" style="padding:10px">
+              <div class="text-center card">
+                <div class="member-card pt-2 pb-2">
+                  <div class="thumb-lg member-thumb m-b-10 mx-auto"> <img src="{% static 'images/pdf-attachment.jpg' %}" class="rounded-circle img-thumbnail" alt="{{i.topic}}" style="width: 150px;height:150px"> </div>
+                  <div class="">
+                    <h4 class="m-b-5">{{i.topic|truncatechars_html:15}}</h4>
+                    <p class="text-muted">{{i.description|truncatechars_html:20}} <br> 
+                        {% if i.public == False  %}
+                        <span> <a class="text-pink"><i class="ti ti-key"></i> Private</a> </span>
+                        {% elif i.public == True %}
+                        <span> <a class="text-pink"><i class="ti ti-eye"></i></a> Public</span>
+                        {% endif %}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="col-md-4 col-12">
+                <div class="card m-b-30">
+                  <div class="card-body">
+                    <div class="alert-list">
+                      <div class="alert alert-primary" role="alert">
+                        <h4 class="alert-heading"><i class="ti ti-notepad"></i> Create your first notes!</h4>
+                        <p><button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#varying-modal" data-whatever="@getbootstrap">Create Notes</button></p>
+
+                        <div class="modal fade" id="varying-modal" tabindex="-1" role="dialog" aria-labelledby="varying-modal-label" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="varying-modal-label">New Notes</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal-body">
+                                  <form method="post" id="notesform" action>
+                                      {% csrf_token %}
+                                    <div class="form-group">
+                                      <label for="recipient-name" class="col-form-label">Topic: <code>*</code></label>
+                                        {% load widget_tweaks %}
+                                        {% render_field form.topic class="form-control" required="true" type="text" %}
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="message-text" class="col-form-label">Description: <code>*</code></label>
+                                      {% render_field form.description class="form-control" required="true"  %}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Attachment:</label>
+                                      </div>
+                                      <div class="form-group row">
+                                        <div class="controls col-12">
+                                          <div class="fileupload fileupload-new" data-provides="fileupload">
+                                            <button type="button" class="btn btn-custom btn-file">
+                                            <span class="fileupload-new"><i class="ti ti-clip"></i> Select file</span> <span class="fileupload-exists"><i class="ti ti-back-left"></i></span>
+                                            <input type="file" class="btn-light" value='{{form.attachment}}' />
+                                            </button>
+                                            <span class="fileupload-preview" style="margin-left:5px;"></span> <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a> </div>
+                                        </div>
+                                      </div>
+                                  </form>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-primary" onclick="save()"><i class="ti ti-save"></i> Save</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+             
+              
+
+            {% endfor %}
+            <!-- end col -->
+            
+             
+          </div>
+          <!-- End row -->
+          
+          
+          
+          
+          <!-- End row -->
+            
+
+            
+
+            
+            <!-- state end-->
+            <script>
+                var n = document.getElementById('notesform')
+                function save(){
+                    n.submit();
+                }
+            </script>
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

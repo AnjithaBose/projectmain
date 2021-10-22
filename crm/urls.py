@@ -136,6 +136,7 @@ urlpatterns = [
     path('student/trainers/',MyTrainers.as_view(),name='my_trainers'),
     path('student/profile/',MyProfile.as_view(),name='my_profile'),
 
+    path('user/notes/',UserNotes.as_view(),name='user_notes'),
     path('user/poke/<id>/',Poke.as_view(),name='poke'),
     path('user/chat/notify/<id>/',SendChatNotification.as_view(),name='chat_notification'),
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),

@@ -166,6 +166,12 @@ class TaskUpdateForm(ModelForm):
         model = Task
         fields = ['status']
 
+class AddNotesForm(ModelForm):
+    attachment = forms.FileField(required=False)
+    class Meta:
+        model = Notes
+        fields = ['topic','description','attachment']
+
 
 
 

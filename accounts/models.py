@@ -326,6 +326,21 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=100,choices=(('1','Read'),('2','Unread')),default='2')
 
+class Notes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)
+    topic = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(max_length=5000,null=True, blank=True)
+    attachment = models.FileField(null=True, blank=True)
+    created_on = models.DateField(null=True, blank=True)
+    created_at = models.TimeField(null=True, blank=True)
+    modified_on = models.DateField(null=True, blank=True)
+    modified_at = models.TimeField(null=True, blank=True)
+    url = models.CharField(max_length=1000, null=True, blank=True)
+    public = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.topic
+
 class Task(models.Model):
     topic = models.CharField(max_length=1000, null=True, blank=True)
     description = models.TextField(max_length=5000,null=True, blank=True)

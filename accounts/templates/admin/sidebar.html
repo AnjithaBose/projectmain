@@ -41,6 +41,11 @@
           <li><a href="{% url 'list_lms_revert' %}">Past Webinars</a></li>
         </ul>
       </li>
+      <li class="menu_sub"> <a href="#"> <i class="ti ti-layout-grid2-alt"></i> <span>Apps </span></a>
+        <ul class="down_menu">
+          <li><a href="{% url 'user_notes' %}">Notes</a></li>
+        </ul>
+      </li>
       {% if request.user.is_superuser %}
       <li> <a href="/admin/"><i class="ti ti-star"></i> <span>Administrator</span></a></li>
       {% endif %}

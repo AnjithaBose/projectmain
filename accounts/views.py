@@ -15,6 +15,7 @@ from .models import *
 from .forms import *
 import time
 import datetime
+import uuid 
 
 from PIL import Image
 from PIL import ImageFont
@@ -3166,6 +3167,49 @@ class DeleteTask(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+class UserNotes(View):
+    def get(self, request):
+        user = request.user
+        if request.user.is_authenticated:
+            try:
+                staff = Staff.objects.get(user=request.user)
+                notes = Notes.objects.filter(user=user)
+                notify = Notifications(staff)
+                count = CountNotifications(notify)
+                form = AddNotesForm()
+                context ={'count':count,'notify':notify,'staff':staff,'notes':notes,'form':form}
+            except:
+                student = Student.objects.get(user=request.user)
+                notes = Notes.objects.filter(user=user)
+                notify = StudentNotifications(student)
+                count = CountNotifications(notify)
+                form = AddNotesForm()
+                context ={'count':count,'notify':notify,'student':student,'notes':notes,'form':form}
+            finally:
+                return render(request,'common/notes.html',context)
+        else:
+            return redirect('home')
+
+    def post(self, request):
+        user = request.user
+        if user.is_authenticated:
+            form = AddNotesForm(request.POST,request.FILES)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.user = user
+                f. created_on = datetime.datetime.now()
+                f.created_at = datetime.datetime.now()
+                f.modified_on = datetime.datetime.now()
+                f.modified_at = datetime.datetime.now()
+                f.url = uuid.uuid4().hex[:6].upper()
+                f.save()
+                return redirect('user_notes')
+        else:
+            return redirect('home')
+
+
+
 
 
 
