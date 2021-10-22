@@ -1,0 +1,91 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+
+            <div class="breadcrumbbar"> 
+                <!-- Start row -->
+                <div class="row">
+                  <div class="col-md-8 col-lg-8">
+                    <h4 class="page-title">View notes</h4>
+                    <div class="breadcrumb-list">
+                      <ol class="breadcrumb">
+                          {% if request.user.is_authenticated %}
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'user_notes' %}">Notes</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{notes.topic}}</li>
+                        {% endif %}
+                      </ol>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 mr-0">
+                    <div class="widgetbar">
+                        <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Breadcrumbbar --> 
+              
+              
+             
+        <!-- state start-->
+        <div class="row ">
+            <div class="col-12 col-md-8">
+              <div class="card">
+
+      
+                            <h4 class="header-title">{{notes.topic}}</h4>
+                            <p style="text-align:justify">{{notes.description|linebreaksbr }}</p>
+                            <div class="row">
+                            {% if notes.attachment %}
+                              &nbsp;&nbsp;&nbsp;<a href="{{notes.attachment.url}}" class="btn btn-primary" download><i class="ti ti-download"></i> Download Attachment</a>
+                            {% endif %}
+                            </div>
+                            <br><br>
+                            <div class="row">
+                              <div class="col-12 col-md-6">
+                                <p class="text-muted">Created on: {{notes.created_on}} at {{notes.created_at}}</p>
+                              </div>
+                              <div class="col-12 col-md-6">
+                                <p class="text-muted text-right">Modified on: {{notes.modified_on}} at {{notes.modified_at}}</p>
+                              </div>
+                          </div>
+                            
+
+               
+                
+                
+              </div>
+            </div>
+          </div>
+          
+
+
+
+
+
+
+
+          
+          </div> 
+        <!-- End row --> 
+
+            <!-- End row -->
+            <!-- state end-->
+        </div>
+        {% include 'common/footer.html' %}
+    </div>
+    
+    
+</div>
+{% endblock %}

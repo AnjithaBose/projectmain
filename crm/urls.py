@@ -146,6 +146,7 @@ urlpatterns = [
     path('user/notification/read/',MarkasRead.as_view(),name='mark_as_read'),
     path('webinar/',ActiveWebinar.as_view(),name='active_webinar'),
     path('webinar/<id>/',WebinarRegister.as_view(),name='join'),
+    path('notes/<id>/',ViewNotes.as_view(),name='view_notes'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

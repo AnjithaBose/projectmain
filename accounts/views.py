@@ -3290,6 +3290,46 @@ class EditNotes(View):
         else:
             return redirect('home')
 
+class ViewNotes(View):
+    def get(self, request,id):
+        user = request.user
+        notes = Notes.objects.get(url=id)
+        if notes.public == True:
+            if request.user.is_authenticated:
+                try:
+                    staff = Staff.objects.get(user=request.user)
+                    notify = Notifications(staff)
+                    count = CountNotifications(notify)
+                    context ={'count':count,'notify':notify,'staff':staff,'notes':notes,'user':user}
+                    return render(request,'common/note.html',context)
+                except:
+                    student = Student.objects.get(user=request.user)
+                    notify = StudentNotifications(student)
+                    count = CountNotifications(notify)
+                    context ={'count':count,'notify':notify,'student':student,'notes':notes,'user':user}
+                    return render(request,'common/note.html',context)    
+            else:
+                context={'notes':notes}
+                return render(request,'common/note.html',context)
+            
+        elif notes.public == False:
+            user = request.user
+            if notes.user == request.user:
+                try:
+                    staff = Staff.objects.get(user=request.user)
+                    notify = Notifications(staff)
+                    count = CountNotifications(notify)
+                    context ={'count':count,'notify':notify,'staff':staff,'notes':notes,'user':user}
+                    return render(request,'common/note.html',context)
+                except:
+                    student = Student.objects.get(user=request.user)
+                    notify = StudentNotifications(student)
+                    count = CountNotifications(notify)
+                    context ={'count':count,'notify':notify,'student':student,'notes':notes,'user':user}
+                    return render(request,'common/note.html',context)
+            else:
+                return render(request,'messages/common/permission_error.html')
+
 
 
 
