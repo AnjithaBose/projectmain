@@ -3181,7 +3181,7 @@ class UserNotes(View):
                 context ={'count':count,'notify':notify,'staff':staff,'notes':notes,'form':form}
             except:
                 student = Student.objects.get(user=request.user)
-                notes = Notes.objects.filter(user=user)
+                notes = Notes.objects.filter(user=user).order_by('-modified_at')
                 notify = StudentNotifications(student)
                 count = CountNotifications(notify)
                 form = AddNotesForm()
@@ -3202,7 +3202,7 @@ class UserNotes(View):
                 f.created_at = datetime.datetime.now()
                 f.modified_on = datetime.datetime.now()
                 f.modified_at = datetime.datetime.now()
-                f.url = uuid.uuid4().hex[:6].upper()
+                f.url = uuid.uuid4().hex[:12].upper()
                 f.save()
                 return redirect('user_notes')
         else:
