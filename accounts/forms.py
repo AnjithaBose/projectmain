@@ -160,6 +160,12 @@ class AddTasksForm(ModelForm):
         model = Task
         fields =['topic','description','user','status','attachment']
 
+class TaskUpdateForm(ModelForm):
+    status = forms.ChoiceField(required=False,choices=values)
+    class Meta:
+        model = Task
+        fields = ['status']
+
 
 
 

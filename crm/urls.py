@@ -117,6 +117,9 @@ urlpatterns = [
     path('staff/view/profile/',ViewProfile.as_view(),name='view_profile'),
     path('staff/edit/profile/',EditProfile.as_view(),name='edit_profile'),
     path('staff/view/task/<id>/',ViewTask.as_view(),name='view_task'),
+    path('staff/update/task/<id>/',UpdateTask.as_view(),name='update_task'),
+    path('staff/view/tasks/',MyTask.as_view(),name='my_task'),
+    path('staff/remove/task/<id>/',DeleteTask.as_view(),name='delete_task'),
 
     path('student/home/',StudentDashboard.as_view(),name='student_dashboard'),
     path('student/classrooms/',MyClassroom.as_view(),name='my_classroom'),

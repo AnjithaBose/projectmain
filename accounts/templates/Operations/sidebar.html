@@ -10,13 +10,24 @@
       <li> <a href="{% url 'admin_dashboard' %}" class=" active"> <i class="ti ti-home"></i> <span>Dashboard</span></a> </li>
       {% if staff.stype == '5' %}
       <li class="menu_sub"> <a href="#"> <i class="ti ti-flag"></i> <span>Approvals </span> <span
-        class="badge badge-pill badge-danger float-right">6</span> </a>
-    <ul class="down_menu">
-      <li><a href="{% url 'batch_edit_approvals' %}">Batches<span
-        class="badge badge-pill badge-danger float-right">6</span> </a></li>
-      <!-- <li><a href="badges.html">Badges </a></li> -->
-    </ul>
-  </li>
+            class="badge badge-pill badge-danger float-right">6</span> </a>
+        <ul class="down_menu">
+          <li><a href="{% url 'batch_edit_approvals' %}">Batches<span
+                class="badge badge-pill badge-danger float-right">6</span> </a></li>
+          <!-- <li><a href="badges.html">Badges </a></li> -->
+        </ul>
+      </li>
+      {% endif %}
+      {% if staff.stype == '5' %}
+      <li class="menu_sub"> <a href="#"> <i class="ti ti-menu-alt"></i> <span> Tasks</span><span
+        class="ti ti-angle-down styleicon"></span></a>
+        <ul class="down_menu">
+          <li><a href="{% url 'task_manager' %}"> Task Manager </a></li>
+          <li><a href="{% url 'my_task' %}"> My Tasks </a></li>
+        </ul>
+      </li>
+      {% elif staff.stype == '1' %}
+      <li> <a href="{% url 'my_task' %}"><i class="ti ti-menu-alt"></i> <span>My Tasks</span></a></li>
       {% endif %}
       <li> <a href="{% url 'view_batches' %}"><i class="ti ti-blackboard"></i> <span>Batches</span></a></li>
       <li> <a href="{% url 'view_contacts' %}"><i class="ti ti-id-badge"></i> <span>Contacts</span></a></li>

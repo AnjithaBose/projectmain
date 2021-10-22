@@ -18,6 +18,17 @@
         </ul>
       </li>
       {% endif %}
+      {% if staff.stype == '7' %}
+      <li class="menu_sub"> <a href="#"> <i class="ti ti-menu-alt"></i> <span> Tasks</span><span
+        class="ti ti-angle-down styleicon"></span></a>
+        <ul class="down_menu">
+          <li><a href="{% url 'task_manager' %}"> Task Manager </a></li>
+          <li><a href="{% url 'my_task' %}"> My Tasks </a></li>
+        </ul>
+      </li>
+      {% elif staff.stype == '3' %}
+      <li> <a href="{% url 'my_task' %}"><i class="ti ti-menu-alt"></i> <span>My Tasks</span></a></li>
+      {% endif %}
       <li> <a href="{% url 'my_current_batch' %}"><i class="ti ti-upload"></i> <span>Upload Videos</span></a></li>
       {% if staff.stype == '7' %}
       <li> <a href="{% url 'view_batches' %}"><i class="ti ti-blackboard"></i> <span>Batches</span></a></li>

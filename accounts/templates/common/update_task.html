@@ -16,16 +16,16 @@
                 <!-- Start row -->
                 <div class="row">
                   <div class="col-md-8 col-lg-8">
-                    <h4 class="page-title">Task Details</h4>
+                    <h4 class="page-title">Update Task</h4>
                     <div class="breadcrumb-list">
                       <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
                         {% if staff.stype == '4' or task.assigned_by == staff %}
                         <li class="breadcrumb-item"><a href="{% url 'task_manager' %}">Task Manager</a></li>
                         {% else %}
-                        <li class="breadcrumb-item"><a href="{% url 'my_task' %}">My Tasks</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'task_manager' %}">My Tasks</a></li>
                         {% endif %}
-                        <li class="breadcrumb-item active" aria-current="page">Task Details</li>
+                        <li class="breadcrumb-item active" aria-current="page">Update Task</li>
                       </ol>
                     </div>
                   </div>
@@ -59,18 +59,24 @@
                                   <input type="text" class="form-control" value="{{task.topic}}" disabled>
                                 </div>
                                 <div class="col-12 col-md-4">
-                                  <label for="exampleInputEmail3">Attachment</label>
-                                  {% if task.attachment %}
-                                  <a href="{{task.attachment.url}}" class="btn btn-primary" download><i class="ti ti-download"></i> Download</a>
-                                  {% else %}
-                                  <input type="text" class="form-control" value="Not available" disabled>
-                                  {% endif %}
+                                  <label for="exampleInputEmail3">Status</label>
+                                  {% load widget_tweaks %} 
+                                  {% render_field form.status class="form-control" required="true"  %}
                                 </div>
                               </div>
                               <div class="form-group row">
                                 <div class="col-12 col-md-12">
                                   <label for="exampleInputName1">Description</label> 
-                                <textarea class="form-control" rows="6" disabled>{{task.description}}</textarea>
+                                <textarea class="form-control" rows="6" disabled>{{task.description}}</textarea><br><br>
+                                </div>
+                                <br><br>
+                                <div class="col-12 col-md-12 ">
+                                    <div class="text-right">
+                                        {% if task.attachment %}
+                                        <a href="{{task.attachment.url}}" class="btn btn-primary" download><i class="ti ti-download"></i> Download Attachment</a>
+                                        {% endif %}
+                                        <button type="submit" class="btn btn-primary mr-2"><i class="ti ti-save"></i> Save</button>
+                                    </div>
                                 </div>
                                 
                               </div>

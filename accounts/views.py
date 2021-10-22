@@ -3051,13 +3051,129 @@ class ViewTask(View):
             notify = Notifications(staff)
             count = CountNotifications(notify)
             task = Task.objects.get(id=id)
-            context ={'count':count,'notify':notify,'staff':staff,'task':task}
-            return render(request,'common/view_task.html',context)
+            if staff.stype == '4' or staff.stype == '5' or staff.stype == '6' or staff.stype == '7' or task.user == staff:
+                context ={'count':count,'notify':notify,'staff':staff,'task':task}
+                return render(request,'common/view_task.html',context)
+            else:
+                return render(request,'messages/common/permission_error.html')     
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+class UpdateTask(View):
+    def get(self, request,id):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            task = Task.objects.get(id=id)
+            form = TaskUpdateForm(instance=task)
+            if staff.stype == '4' or staff.stype == '5' or staff.stype == '6' or staff.stype == '7' or task.user == staff:
+                context={'count':count,'notify':notify,'staff':staff,'task': task,'form':form}
+                return render(request,'common/update_task.html',context)
+            else:
+                return render(request,'messages/common/permission_error.html')     
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+    def post(self, request,id):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            task = Task.objects.get(id=id)
+            form = TaskUpdateForm(request.POST,instance = task)
+            if form.is_valid():
+                f=form.save(commit=False)
+                if f.status == '100':
+                    f.complete = True
+                    type = 5
+                    message = "%s-%s" % ("Task completed by ",str(staff))
+                    SendNotification(type,task.assigned_by,message)
+                f.save()  
+                if staff.stype == '4' or task.assigned_by == staff:
+                    return redirect('task_manager')
+                else:
+                    return redirect('my_task')
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+class MyTask(View):
+    def get(self, request):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            task = Task.objects.filter(user=staff).order_by('-timestamp')
+            context = {'count':count,'notify':notify,'staff':staff,'task':task}
+            return render(request,'common/my_task.html', context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+class DeleteTask(View):
+    def get(self, request,id):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            task = Task.objects.get(id=id)
+            if staff.stype == '4' or task.assigned_by==staff:
+                confirm = "Are you sure you want to delete this task?"
+                context ={'count':count,'notify':notify,'staff':staff,'task':task,'confirm':confirm}
+                return render(request,'messages/admin/task_manager.html',context)
+            else:
+                return render(request,'messages/common/permission_error.html')
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+    
+    def post(self, request,id):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            task = Task.objects.get(id=id)
+            if staff.stype == '4' or task.assigned_by==staff:
+                task.delete()
+                type = 5
+                message = "%s-%s" % ("Task revoked by ",str(staff))
+                SendNotification(type,task.user,message)
+                msg = "Task deleted successfully."
+                context ={'count':count,'notify':notify,'staff':staff,'task':task,'msg':msg}
+                return render(request,'messages/admin/task_manager.html',context)
+            else:
+                return render(request,'messages/common/permission_error.html')
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
+
+        
+
+
+            
+
 
 
 
