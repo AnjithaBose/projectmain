@@ -381,7 +381,7 @@ class ViewBatch(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            if staff.stype == '7' or staff.stype == '3':
+            if staff.stype == '7' or staff.stype == '3' or staff.stype == '6':
                 batch = BatchStrength(request,id)
                 scd = StudentCourseData.objects.filter(batch=batch)
                 context={'count':count,'notify':notify,'staff':staff,'batch': batch,'scd':scd}
@@ -1697,7 +1697,9 @@ class GetStudentPaymentDetails(View):
                 f.spd = spd
                 f.timestamp = datetime.datetime.now()
                 f.representative = staff
+                f.bill_id = uuid.uuid4().hex[:8].upper()
                 f.save()
+                GenerateBill(f.id)
                 msg = "Fee details successfully updated."
                 context ={'staff':staff,'msg':msg,'student':student}
             else:
@@ -3329,6 +3331,22 @@ class ViewNotes(View):
                     return render(request,'common/note.html',context)
             else:
                 return render(request,'messages/common/permission_error.html')
+
+
+class RemoveSCD(View):
+    def get(self, request,id):
+        x = ManagerCheck(request)
+        y = SalesCheck(request)
+        if x == True and y == True:
+            scd = StudentCourseData.objects.get(id=id)
+            scd.delete()
+            return HttpResponse(status = 200)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
 
 
 

@@ -517,6 +517,24 @@ def FindQueryRoom(request,id):
         chatroom.save()
     return(chatroom)
 
+def GenerateBill(id):
+    payment = StudentPayments.objects.get(id=id)
+    date=str(payment.timestamp)
+    template = DefaultPics.objects.get(id=3)
+    img = Image.open(template.bill)
+    draw = ImageDraw.Draw(img)
+    file_name = str("images/bills/"+payment.bill_id+".pdf")
+    selectFont = ImageFont.truetype("arialbd.ttf", size = 40)
+    courseFont = ImageFont.truetype("arialbd.ttf", size = 40)
+    codeFont = ImageFont.truetype("arialbd.ttf", size = 40)
+    draw.text( (750,624), payment.bill_id, (0,0,0),anchor="ma",font=selectFont,align ="left")
+    draw.text( (750,774), payment.spd.student.name, (1,1,1),anchor="ma",font=courseFont,align ="left")
+    draw.text( (750,944),payment.amount, (1,1,1),anchor="ma",font=codeFont,align ="left")
+    draw.text( (750,1131), date, (1,1,1),anchor="ma",font=codeFont,align ="left")
+    draw.text( (750,1309), payment.representative.name, (1,1,1),anchor="ma",font=codeFont,align ="left")
+    img.save( file_name, "PDF", resolution=70.0)
+
+
 
 
 

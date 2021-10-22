@@ -9,8 +9,7 @@
     <ul id="dc_accordion" class="sidebar-menu tree">
       <li> <a href="{% url 'home' %}" class=" active"> <i class="ti ti-home"></i> <span>Dashboard</span></a> </li>
       {% if staff.stype == '4' or staff.stype == '6' %}
-      <li class="menu_sub"> <a href="#"> <i class="ti ti-flag"></i> <span>Approvals </span> <span
-            class="badge badge-pill badge-danger float-right">6</span> </a>
+      <li class="menu_sub"> <a href="#"> <i class="ti ti-flag"></i> <span>Approvals </a>
         <ul class="down_menu">
           <li><a href="{% url 'list_lms_approvals' %}">Activate LMS</a></li>
             <li><a href="{% url 'list_lms_revert' %}">Deactivate LMS</a></li>

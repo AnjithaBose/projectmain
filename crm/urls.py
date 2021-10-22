@@ -83,6 +83,7 @@ urlpatterns = [
     path('sales/leads/pending/deactivation/',ListLMSDeletion.as_view(),name='list_lms_revert'),
     path('sales/leads/approve/deactivation/<id>/',ApproveDelLMSProfile.as_view(),name='approve_lms_revert'),
     path('sales/leads/reject/deactivation/<id>/',RejectDelLMSProfile.as_view(),name='reject_lms_revert'),
+    path('sales/remove/batch/<id>/',RemoveSCD.as_view(),name='remove_scd'),
 
 
     path('trainer/home/',TrainerDashboard.as_view(),name='trainer_dashboard'),

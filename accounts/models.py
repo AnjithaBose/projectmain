@@ -8,6 +8,8 @@ from django.utils import timezone
 class DefaultPics(models.Model):
     webinar_cover = models.ImageField(null=True, blank=True,upload_to='images/default/',default='accounts/static/images/webinar_cover.jpg')
     certificate = models.ImageField(null=True, blank=True,upload_to='images/default/',default='accounts/static/images/Certificate.jpg')
+    bill = models.ImageField(null=True, blank=True,default='accounts/static/images/bill.jpg')
+
 
 state = (
     ('Andhra Pradesh','Andhra Pradesh'),
@@ -301,6 +303,7 @@ class StudentPayments(models.Model):
     amount = models.CharField(max_length=100,null=True, blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
     representative = models.ForeignKey(Staff, on_delete=models.CASCADE,null=True, blank=True)
+    bill_id = models.CharField(max_length=100,null=True, blank=True)
 
     def __str__(self):
         return self.spd.student.name
