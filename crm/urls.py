@@ -139,6 +139,7 @@ urlpatterns = [
     path('user/notes/',UserNotes.as_view(),name='user_notes'),
     path('user/delete/notes/<id>/',DeleteNote.as_view(),name='delete_notes'),
     path('user/status/notes/<id>/',PublicNote.as_view(),name='public_notes'),
+    path('user/edit/notes/<id>/',EditNotes.as_view(),name='edit_notes'),
     path('user/poke/<id>/',Poke.as_view(),name='poke'),
     path('user/chat/notify/<id>/',SendChatNotification.as_view(),name='chat_notification'),
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),

@@ -3174,7 +3174,7 @@ class UserNotes(View):
         if request.user.is_authenticated:
             try:
                 staff = Staff.objects.get(user=request.user)
-                notes = Notes.objects.filter(user=user)
+                notes = Notes.objects.filter(user=user).order_by('-modified_at')
                 notify = Notifications(staff)
                 count = CountNotifications(notify)
                 form = AddNotesForm()
@@ -3237,6 +3237,62 @@ class PublicNote(View):
                 return HttpResponse(status = 302)
         else:
             return render(request,'common/notes.html',context)
+
+class EditNotes(View):
+    def get(self, request,id):
+        user = request.user
+        if user.is_authenticated:
+            notes = Notes.objects.get(id=id)
+            if notes.user == user:
+                try:
+                    staff = Staff.objects.get(user=request.user)
+                    notify = Notifications(staff)
+                    count = CountNotifications(notify)
+                    form = AddNotesForm(instance=notes)
+                    context ={'count':count,'notify':notify,'staff':staff,'notes':notes,'form':form}
+                except:
+                    student = Student.objects.get(user=request.user)
+                    notify = StudentNotifications(student)
+                    count = CountNotifications(notify)
+                    form = AddNotesForm(instance=notes)
+                    context ={'count':count,'notify':notify,'student':student,'notes':notes,'form':form}
+                finally:
+                    return render(request,'common/edit_notes.html',context)
+            else:
+                return render(request,'messages/common/permission_error.html')
+        else:
+            return redirect('home')
+
+    def post(self, request,id):
+        user = request.user
+        if user.is_authenticated:
+            notes = Notes.objects.get(id=id)
+            if notes.user == user:
+                try:
+                    staff = Staff.objects.get(user=request.user)
+                    notify = Notifications(staff)
+                    count = CountNotifications(notify)
+                    form = AddNotesForm(request.POST,request.FILES,instance=notes)
+                except:
+                    student = Student.objects.get(user=request.user)
+                    notify = StudentNotifications(student)
+                    count = CountNotifications(notify)
+                    form = AddNotesForm(request.POST,request.FILES,instance=notes)
+                finally:
+                    if form.is_valid():
+                        f = form.save(commit=False)
+                        f.modified_on = datetime.datetime.now()
+                        f.modified_at = datetime.datetime.now()
+                        f.save()
+                        return redirect ('user_notes')
+            else:
+                return render(request,'messages/common/permission_error.html')
+        else:
+            return redirect('home')
+
+
+
+
 
 
 

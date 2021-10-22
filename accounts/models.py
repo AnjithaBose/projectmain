@@ -330,7 +330,7 @@ class Notes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)
     topic = models.CharField(max_length=1000, null=True, blank=True)
     description = models.TextField(max_length=5000,null=True, blank=True)
-    attachment = models.FileField(null=True, blank=True)
+    attachment = models.FileField(null=True, blank=True,upload_to='images/notes/')
     created_on = models.DateField(null=True, blank=True)
     created_at = models.TimeField(null=True, blank=True)
     modified_on = models.DateField(null=True, blank=True)
