@@ -3208,6 +3208,40 @@ class UserNotes(View):
         else:
             return redirect('home')
 
+class DeleteNote(View):
+    def get(self, request,id):
+        user = request.user
+        if user.is_authenticated:
+            notes = Notes.objects.get(id=id)
+            if notes.user == user:
+                notes.delete()
+                return HttpResponse(status = 200)
+            else:
+                return HttpResponse(status = 302)
+        else:
+            return render(request,'common/notes.html',context)
+
+class PublicNote(View):
+    def get(self, request,id):
+        user = request.user
+        if user.is_authenticated:
+            notes = Notes.objects.get(id=id)
+            if notes.user == user:
+                if notes.public == True:
+                    notes.public = False
+                elif notes.public == False:
+                    notes.public = True
+                notes.save()
+                return HttpResponse(status = 200)
+            else:
+                return HttpResponse(status = 302)
+        else:
+            return render(request,'common/notes.html',context)
+
+
+
+
+
 
 
 

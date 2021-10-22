@@ -93,19 +93,26 @@
           <!-- End row -->
           <div class="row">
             {% for i in notes %}
-            <div class="col-md-2 col-6" style="padding:10px">
+            <div class="col-md-3 col-12" style="padding:10px">
               <div class="text-center card">
                 <div class="member-card pt-2 pb-2">
-                  <div class="thumb-lg member-thumb m-b-10 mx-auto"> <img src="{% static 'images/pdf-attachment.jpg' %}" class="rounded-circle img-thumbnail" alt="{{i.topic}}" style="width: 150px;height:150px"> </div>
-                  <div class="">
+                  <div class="thumb-lg member-thumb m-b-10 mx-auto"> <img src="{% static 'images/pdf-attachment.jpg' %}" class="rounded-circle img-thumbnail" alt="{{i.topic}}" style="width: 100px;height:100px"> </div>
+                  <div class="card-body">
                     <h4 class="m-b-5">{{i.topic|truncatechars_html:15}}</h4>
                     <p class="text-muted">{{i.description|truncatechars_html:20}} <br> 
                         {% if i.public == False  %}
-                        <span> <a class="text-pink"><i class="ti ti-key"></i> Private</a> </span>
+                        <span> <a href="javascript:void(0)" class="text-pink" data-toggle="tooltip" data-placement="left" title="Click to change the visibility to public." onclick="makepublic('{{i.id}}')"><i class="ti ti-key"></i> Private</a> </span>
                         {% elif i.public == True %}
-                        <span> <a class="text-pink"><i class="ti ti-eye"></i></a> Public</span>
+                        <span> <a href="javascript:void(0)" class="text-pink" data-toggle="tooltip" data-placement="left" title="Click to change the visibility to private." onclick="makepublic('{{i.id}}')"><i class="ti ti-eye"></i> Public</a> </span>
                         {% endif %}
                     </p>
+                    <div class="">
+                        <center>
+                          <a class="btn btn-rounded btn-light-rgba col-3 btn-sm" data-toggle="tooltip" data-placement="left" title="Edit the contents." ><i class="ti ti-pencil"></i></a>
+                          <a class="btn btn-rounded btn-light-rgba col-3 btn-sm" data-toggle="tooltip" data-placement="bottom" title="Copy link." onclick="copylink('/notes/{{i.id}}/')"><i class="ti ti-link"></i></a>
+                          <a class="btn btn-rounded btn-light-rgba col-3 btn-sm" data-toggle="tooltip" data-placement="right" title="Once deleted this will be lost permanently." onclick="trash('{{i.id}}')"><i class="ti ti-trash"></i></a>
+                        </center>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -195,6 +202,44 @@
                     n.submit();
                 }
             </script>
+            <script>
+                function trash(x) {
+                  setTimeout(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url : '/user/delete/notes/'+x,
+                    
+                    });
+                    }, 1);
+              
+                  setTimeout(function(){
+                    window.location = window.location
+                    }, 10);
+                  
+                }
+                </script>
+                <script>
+                    function makepublic(x) {
+                      setTimeout(function(){
+                        $.ajax({
+                            type: 'GET',
+                            url : '/user/status/notes/'+x,
+                        
+                        });
+                        }, 1);
+                  
+                      setTimeout(function(){
+                        window.location = window.location
+                        }, 10);
+                      
+                    }
+                    </script>
+                    <script>
+                        function copylink(x) {
+                            navigator.clipboard.writeText(window.location.host+x);
+                            alert("Copied link "+window.location.host+x);
+                        }
+                    </script>
             
         </div>
     </div>
