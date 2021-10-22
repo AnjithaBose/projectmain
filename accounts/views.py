@@ -3004,9 +3004,9 @@ class TaskManager(View):
             count = CountNotifications(notify)
             form = AddTasksForm()
             if staff.stype == '4':
-                task = Task.objects.all()
+                task = Task.objects.all().order_by('-timestamp')
             else:
-                task = Task.objects.filter(assigned_by= staff)
+                task = Task.objects.filter(assigned_by= staff).order_by('-timestamp')
             context ={'count':count,'notify':notify,'staff':staff,'form':form,'task':task}
             return render(request,'admin/assign_task.html',context)
         else:
@@ -3021,7 +3021,7 @@ class TaskManager(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            form = AddTasksForm(request.POST)
+            form = AddTasksForm(request.POST,request.FILES)
             if form.is_valid():
                 f = form.save(commit=False)
                 f.assigned_by = staff
@@ -3042,6 +3042,23 @@ class TaskManager(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+class ViewTask(View):
+    def get(self, request,id):
+        x = StaffCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            task = Task.objects.get(id=id)
+            context ={'count':count,'notify':notify,'staff':staff,'task':task}
+            return render(request,'common/view_task.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
 
 
 

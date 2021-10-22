@@ -329,6 +329,7 @@ class Notification(models.Model):
 class Task(models.Model):
     topic = models.CharField(max_length=1000, null=True, blank=True)
     description = models.TextField(max_length=5000,null=True, blank=True)
+    attachment = models.FileField(null=True, blank=True,upload_to='images/task/')
     user = models.ForeignKey(Staff,null=True, blank=True,on_delete=models.CASCADE,related_name='task_for',limit_choices_to=(~Q(stype='4')))
     timestamp = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=100,null=True, blank=True,choices=values,default='0')

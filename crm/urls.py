@@ -116,6 +116,7 @@ urlpatterns = [
     path('staff/view/teqnews/',ViewTeqNews.as_view(),name='view_teqnews'),
     path('staff/view/profile/',ViewProfile.as_view(),name='view_profile'),
     path('staff/edit/profile/',EditProfile.as_view(),name='edit_profile'),
+    path('staff/view/task/<id>/',ViewTask.as_view(),name='view_task'),
 
     path('student/home/',StudentDashboard.as_view(),name='student_dashboard'),
     path('student/classrooms/',MyClassroom.as_view(),name='my_classroom'),

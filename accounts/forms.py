@@ -155,9 +155,10 @@ class EditProfileForm(ModelForm):
 
 class AddTasksForm(ModelForm):
     status = forms.ChoiceField(required=False, choices=values)
+    attachment = forms.FileField(required=False)
     class Meta:
         model = Task
-        fields =['topic','description','user','status']
+        fields =['topic','description','user','status','attachment']
 
 
 
