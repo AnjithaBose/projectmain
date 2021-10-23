@@ -945,8 +945,8 @@ class Leads(View):
                 new = Lead.objects.filter(status="New")
                 pipe = Lead.objects.filter(status="In Pipeline")
             else:
-                new = Lead.objects.filter(status="New",generator=staff)
-                pipe = Lead.objects.filter(status="In Pipeline",generator=staff)
+                new = Lead.objects.filter(status="New",assigned_to=staff)
+                pipe = Lead.objects.filter(status="In Pipeline",assigned_to=staff)
             page = Pagination(request,new,10)
             pages = Pagination(request,pipe,10)
             form = LeadCreateForm()
@@ -970,6 +970,7 @@ class Leads(View):
                 f.name = f.name.title()
                 f.email = f.email.casefold()
                 f.generator = staff
+                f.assigned_to = staff
                 f.created_on = datetime.datetime.now()
                 f.save()
                 if f.status == 'Converted':
@@ -1340,6 +1341,7 @@ class DeleteSCD(View):
     def get(self, request,id):
         x = NotTrainerCheck(request)
         if x == True:
+            print("Test")
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
@@ -1652,8 +1654,9 @@ class SalesDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            context ={'staff':staff}
-            return render(request,'operations/dashboard.html',context)
+
+            context ={'staff':staff,'notify':notify,'count':count}
+            return render(request,'sales/dashboard.html',context)
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
@@ -3346,6 +3349,56 @@ class RemoveSCD(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+class ReassignLead(View):
+    def get(self, request,id):
+        x = SalesManagerCheck(request)
+        if x == True:
+            lead = Lead.objects.get(id=id)
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            form = LeadReassignForm(instance=lead)
+            context={'count':count,'notify':notify,'staff':staff,'lead': lead,'form':form}
+            return render(request,'sales/reassign_lead.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+    
+    def post(self, request,id):
+        x = SalesManagerCheck(request)
+        if x == True:
+            lead = Lead.objects.get(id=id)
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            form = LeadReassignForm(request.POST,instance=lead)
+            if form.is_valid():
+                f = form.save(commit=False)
+                user = f.assigned_to
+                type = 5
+                message = "New lead re assigned"
+                SendNotification(type,user,message)
+                msg =" Lead successfully reassigned and notifications send."
+                f.save()
+                context = {'staff':staff,'notify':notify,'count':count,'lead':lead,'msg':msg}
+                return render(request,'messages/sales/leads.html',context)
+            else:
+                alert = " Failed to reassign lead. "
+                context = {'staff':staff,'notify':notify,'count':count,'lead':lead,'alert':alert}
+                return render(request,'messages/sales/leads.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+                
+
+
+
+
 
 
 

@@ -216,6 +216,7 @@ class Lead(models.Model):
     mobile = models.CharField(max_length=10,null=True,blank=True)
     sex = models.CharField(max_length=10,null=True,choices=sex_choices,blank=True,default="Male")
     generator = models.ForeignKey(Staff,on_delete=models.CASCADE, blank=True,null=True,related_name='representative')
+    assigned_to = models.ForeignKey(Staff,on_delete=models.CASCADE, blank=True,null=True,related_name='assigned_to',limit_choices_to=(Q(stype='2')|Q(stype='6')|Q(stype='4')))
     created_on = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=100,null=True, blank=True,choices=levels,default="New")
     lms = models.BooleanField(default = False)

@@ -80,7 +80,7 @@
                                     <label for="exampleInputName1">Now Attending</label> 
                                         <div class="row">
                                         {% for i in na %}
-                                        <div class="col-3"><span  class="btn btn-primary-rgba"><a href="{% url 'view_batch' i.batch.id %}">{{i.batch.batch_code}}</a> <a onclick="delscd('{{i.id}}')" data-toggle="tooltip" data-placement="right" title="Warning!.This will remove this student from this batch."><i class="btn btn-primary ti ti-close"></i></a></span></div>
+                                        <div class="col-3"><span  class="btn btn-primary-rgba"><a href="{% url 'view_batch' i.batch.id %}">{{i.batch.batch_code}}</a> <a href="{% url 'delete_scd' i.id %}" data-toggle="tooltip" data-placement="right" title="Warning!.This will remove this student from this batch."><i class="btn btn-primary ti ti-close"></i></a></span></div>
                                         {% endfor %}
                                         </div>
                                   </div>

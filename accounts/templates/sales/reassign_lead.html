@@ -1,0 +1,118 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Update {{lead.name}} Lead</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'view_leads' %}">Leads</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Reassign-{{lead.name}}</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+            <!-- state start-->
+            <div class="row">
+                <div class="col-lg-8 col-md-10 col-12">
+                    <div class="card">
+                        <h4 class="m-t-0 header-title">Update Lead Status</h4>
+                        <div class="text-right">
+                            {% if lead.status == "Converted" %}
+                                {% if lead.approval == '1' %}
+                                    <a class="btn btn-primary-rgba" href="{% url 'revert_lead' lead.id %}"><i class="fas fa-info-circle"></i> Delete LMS Profile</a>
+                                {% else %}
+                                    <button class="btn btn-primary-rgba" onclick="alert('This lead is awaiting approval!')"><i class="fas fa-info-circle"></i> Pending Deletion</button>
+                                {% endif %}
+                            {% elif lead.status == "New" or lead.status == "In Pipeline" %}
+                                {% if lead.approval == "1" %}
+                                    <a class="btn btn-primary-rgba" href="{% url 'convert_lead' lead.id %}"><i class="fas fa-info-circle"></i> Create LMS Profile</a>
+                                {% endif %}
+                            {% elif lead.status == "Not Interested" or lead.status == "Lost" %}
+                                <button class="btn btn-primary-rgba" onclick="alert('Update the lead as converted and then try again.')"><i class="fas fa-info-circle"></i> Create LMS Profile</button>
+                            {% endif %}   
+                        </div>
+
+                        
+                        <div class="card card-body">
+                            <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                                {% csrf_token %}
+                              <div class="form-group row">
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputName1">Name</label>
+                                  <input type="text" class="form-control" value="{{lead.name}}" disabled>
+                                
+                                </div>
+                                <div class="col-12 col-md-6">
+                                  <label for="exampleInputEmail3">Email</label>
+                                  <input type="text" class="form-control" value="{{lead.email}}" disabled>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="exampleInputEmail3">Mobile</label>
+                                    <input type="text" class="form-control" value="{{lead.mobile}}" disabled>
+                                  </div>
+                                  <div class="col-12 col-md-4">
+                                    <label for="exampleInputEmail3">Gender</label>
+                                    <input type="text" class="form-control" value="{{lead.sex}}" disabled>
+                                  </div>
+                                  <div class="col-12 col-md-4">
+                                    <label for="exampleInputEmail3">Status</label>
+                                    <input type="text" class="form-control" value="{{lead.status}}" disabled>
+                                  </div>
+                                  <div class="col-12 col-md-4">
+                                    <label for="exampleInputEmail3">Generated by</label>
+                                    <input type="text" class="form-control" value="{{lead.generator}}" disabled>
+                                  </div>
+                                  <div class="col-12 col-md-4">
+                                    <label for="exampleInputEmail3">Assigned to</label>
+                                    {% load widget_tweaks %} 
+                                {% render_field form.assigned_to class="form-control" required="true" %}
+                                  </div>
+                              </div>
+                              
+                              <button type="submit" class="btn btn-primary mr-2"><i class="ti ti-save"></i> Save</button>
+                              <a class="btn btn-light my-1" type="button" href="{% url 'view_leads' %}">Cancel</a>
+                            </form>
+                  </div>
+                </div>
+                    </div>
+                </div>
+                
+            </div>
+            <!--- End row -->
+
+            
+
+            
+
+            
+            <!-- state end-->
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

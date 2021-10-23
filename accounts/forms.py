@@ -171,6 +171,11 @@ class AddNotesForm(ModelForm):
     class Meta:
         model = Notes
         fields = ['topic','description','attachment']
+        
+class LeadReassignForm(ModelForm):
+    class Meta:
+        model = Lead
+        fields = ['assigned_to']
 
 
 
