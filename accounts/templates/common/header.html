@@ -47,8 +47,13 @@
       
                         <!-- Dropdown_User -->
                         <div class="dropdown dropdown-user"> <a href="javascript:void(0)" class="dropdown-toggle"
-                            data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="true"> <img
-                              class="img-circle pro_pic" src="{{student.profile_pic.url}}" alt="{{student.name}}"> </a>
+                            data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="true">
+                            {% if student.profile_pic %}
+                             <img class="img-circle pro_pic" src="{{student.profile_pic.url}}" alt="{{student.name}}">
+                            {% else %}
+                            <img class="img-circle pro_pic" src="{% static 'images/user1.png' %}" alt="{{student.name}}">
+                            {% endif %}
+                            </a>
                           <ul class="dropdown-menu dropdown-menu-default">
                             <li>
                               <div class="user-panel">
