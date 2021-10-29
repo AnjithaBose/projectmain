@@ -133,7 +133,8 @@ STATICFILES_DIRS = [
 
 # STATIC_ROOT = os.path.join(BASE_DIR,'static')
 # MEDIA_ROOT = BASE_DIR
-MEDIA_ROOT =  os.path.join(BASE_DIR,'media')
+# MEDIA_ROOT =  os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = '/home/ubuntu/crm2/media'
 
 
 
