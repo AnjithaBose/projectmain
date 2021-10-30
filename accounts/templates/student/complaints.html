@@ -1,0 +1,205 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">My Complaints</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">My Complaints</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+           <!-- state start-->
+        <div class="row">
+            
+            <div class="col-sm-4">
+                
+                <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#varying-modal" data-whatever="@getbootstrap">Report Complaint</button>
+            
+                <!-- Modal -->
+                <div class="modal fade" id="varying-modal" tabindex="-1" role="dialog" aria-labelledby="varying-modal-label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="varying-modal-label">Report Problems</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal-body">
+                          <form method="post" id="notesform" enctype="multipart/form-data" action>
+                              {% csrf_token %}
+                            <div class="form-group">
+                              <label for="recipient-name" class="col-form-label">Topic: <code>*</code></label>
+                                {% load widget_tweaks %}
+                                {% render_field form.topic class="form-control" required="true" type="text" %}
+                            </div>
+                            <div class="form-group">
+                              <label for="message-text" class="col-form-label">Description: <code>*</code></label>
+                              {% render_field form.description class="form-control" required="true" rows="3" %}
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Screen Shot 1:</label>
+                                {% render_field form.pic1 class="form-control"   %}
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Screen Shot 2:</label>
+                                {% render_field form.pic2 class="form-control"   %}
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Screen Shot 3:</label>
+                                {% render_field form.pic3 class="form-control"   %}
+                              </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary" onclick="save()"><i class="ti ti-save"></i> Save</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+            
+            </div>
+            <br><br><br>
+            <!-- end col --> 
+          </div>
+          
+          <!-- End row -->
+          <div class="row">
+            <div class="col-lg-8 col-md-10 col-12">
+                <div class="card">
+                    <h4 class="m-t-0 header-title">Complaint History</h4>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Course</th>
+                                    <th>Course Code</th>
+                                    <th>Fee</th>
+                                    <th class="text-right"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in course %}
+                                <tr>
+                                    <th scope="row">{{forloop.counter}}</th>
+                                    <td>
+                                            <img class="img-circle pro_pic" src="{{i.pic.url}}" alt="{{i.name}}" style="width: 40px;height:40px">
+                                        {{i.name}}</td>
+                                    <td>{{i.code}}</td>
+                                    <td>INR{{i.fee}}/-</td>
+                                    <td>
+                                        <div class="btn-group mr-2">
+                                            <div class="dropdown">
+                                              <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
+                                                <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
+                                                    <a class="dropdown-item" href="{% url 'edit_course' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a> 
+                                                    <a class="dropdown-item" href="{% url 'delete_course' i.id %}"><i class="ti ti-trash mr-2"></i>Delete</a> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <div class="alert alert-danger alert-link" role="alert"> No complaint history found! </div>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+
+            
+            <!-- end col -->
+            
+             
+          </div>
+          <!-- End row -->
+          
+          
+          
+          
+          <!-- End row -->
+            
+
+            
+
+            
+            <!-- state end-->
+            <script>
+                var n = document.getElementById('notesform')
+                function save(){
+                    n.submit();
+                }
+            </script>
+            <script>
+                function trash(x) {
+                  setTimeout(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url : '/user/delete/notes/'+x,
+                    
+                    });
+                    }, 1);
+              
+                  setTimeout(function(){
+                    window.location = window.location
+                    }, 10);
+                  
+                }
+                </script>
+                <script>
+                    function makepublic(x) {
+                      setTimeout(function(){
+                        $.ajax({
+                            type: 'GET',
+                            url : '/user/status/notes/'+x,
+                        
+                        });
+                        }, 1);
+                  
+                      setTimeout(function(){
+                        window.location = window.location
+                        }, 10);
+                      
+                    }
+                    </script>
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

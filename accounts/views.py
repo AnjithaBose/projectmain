@@ -3430,13 +3430,24 @@ class AllNotifications(View):
                 return render(request,'common/all_notifications.html',context)
 
 
-class ViewComplaints(View):
+class ViewMyComplaints(View):
     def get(self, request):
-        student = Student.objects.get(user=request.user)
-        notify = StudentNotifications(student)
-        count = CountNotifications(notify)
-        complaints = Complaint.objects.filter(user=student).order_by('-update_timestamp')
-        
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            complaints = Complaint.objects.filter(user=student).order_by('-update_timestamp')
+            form = AddComplaintsForm()
+            context = {'count':count,'notify':notify,'student':student,'complaints':complaints,'form':form}
+            return render(request,'student/complaints.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
 
             
                 
