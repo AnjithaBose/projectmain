@@ -32,9 +32,11 @@ class SendMailForm(ModelForm):
         fields = '__all__'
 
 class SendChatMessageForm(ModelForm):
+    pic = forms.ImageField(required=False)
+    message = forms.CharField(required=False)
     class Meta:
         model = ChatMessage
-        fields = ['message']
+        fields = ['message','pic']
 
 class SendQueryMessageForm(ModelForm):
     message = forms.CharField(required=False)

@@ -1,0 +1,132 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        {% if chatroom.user2.user == request.user %}
+                        <h4 class="page-title">Chat - {{chatroom.user1}}</h4>
+                        {% else %}
+                        <h4 class="page-title">Chat - {{chatroom.user2}}</h4>
+                        {% endif %}
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'view_contacts' %}">Contacts</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Message</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card row">
+                <div class="row">
+                <div class="col-12 col-md-4">
+                    <h5 class="header-title">Messages</h5><br><br>
+                    <form class="forms-sample" method="post" enctype="multipart/form-data" action>
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-12">
+                              <label for="exampleInputName1">Message</label>
+                              {% load widget_tweaks %} 
+                              {% render_field form.message class="form-control" rows="3" %}
+                            </div>
+                            <div class="col-12">
+                                <label for="exampleInputName1">Attachment</label>
+                                {% render_field form.pic class="form-control" %}
+                            </div>
+                            <div class="col-12" style="padding-top:20px">
+                                <button class="btn btn-primary col-12" type="submit"><i class="fa fa-paper-plane"></i> Send</button>
+                                <br><br>
+                                <button class="btn btn-warning col-12" type="button" onclick="notify()" ><i class="ti ti-hand-point-right"></i> Poke</button>
+                            </div>
+                        </div>   
+                    </form>
+                </div>
+                <div class="col-12 col-md-8" style="height: 400px;overflow-y: scroll;" onload="$(this).scrollTop = $(this).scrollHeight;">
+                    {% for i in chatmessage %}
+                        {% if i.user.user == request.user %}
+                        <div class="card text-white bg-primary m-b-30">
+                            <div class="card-body">
+                                {% if i.message %}
+                                <p class="card-text">{{i.message}}</p>
+                                {% endif %}
+                                {% if i.pic %}
+                                    <a href="{{i.pic.url}}" target="_blank"><img src="{{i.pic.url}}" class="thumbnail" height="auto" width="100"></a>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <p>{{i.time}}<br>{{i.date}}</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="card bg-light m-b-30">
+                            <div class="card-body">
+                                {% if i.message %}
+                                <p class="card-text">{{i.message}}</p>
+                                {% endif %}
+                                {% if i.pic %}
+                                    <a href="{{i.pic.url}}" target="_blank"><img src="{{i.pic.url}}" class="thumbnail" height="auto" width="100"></a>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <p>{{i.time}}<br>{{i.date}}</p>
+                            </div>
+                        </div>
+
+                        {% endif %}
+                    {% empty %}
+                    <div class="card bg-light m-b-30">
+                        <div class="card-body">
+                            <p class="card-text">No messages</p>
+                        </div>
+                    </div>
+                    
+                    {% endfor %}
+                </div>
+                </div>
+            </div>
+            
+
+
+
+
+
+
+            
+
+            
+            <!-- state end-->
+           
+            <script>
+             function notify(){
+                    $.ajax({
+                        type: 'GET',
+                        url : '/user/poke/{{chatroom.id}}',
+                    });
+                    alert("Trainer has been poked.")
+                }
+            </script>
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

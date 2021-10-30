@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-x$4%9hw8ef6+5pwh+5_1o0l9gddoe(z0zf%a_cws(f9dlaw)^n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -54,8 +54,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'crm.urls'
 
-# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-# SESSION_COOKIE_AGE = 45 * 60 #
+
+if DEBUG == False:
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+    SESSION_COOKIE_AGE = 45 * 60 #
 
 TEMPLATES = [
     {
@@ -141,8 +143,17 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'static')
+]
+
+# STATIC_ROOT = os.path.join(BASE_DIR,'static')
+# MEDIA_ROOT = BASE_DIR
+if DEBUG == True: 
+    MEDIA_ROOT =  os.path.join(BASE_DIR,'media')
+else:
+    MEDIA_ROOT = '/home/ubuntu/crm2/media'
+
 
 
 # MEDIA_ROOT = os.path.join(BASE_DIR,'static/images')

@@ -830,7 +830,7 @@ class Message(View):
             chatmessage = ChatMessage.objects.filter(chatroom=chatroom).order_by('timestamp')
             form = SendChatMessageForm()
             context={'count':count,'notify':notify,'staff':staff,'chatroom':chatroom,'chatmessage':chatmessage,'form':form,'user':user}
-            return render(request,'common/chat2.html',context)
+            return render(request,'common/chat3.html',context)
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
@@ -854,6 +854,8 @@ class Message(View):
                     chatroom = ChatRoom.objects.get(user1=receiver,user2=staff)
                 f.chatroom = chatroom
                 f.timestamp = datetime.datetime.now()
+                f.time = datetime.datetime.now()
+                f.date = datetime.datetime.now()
                 f.save()
             return redirect('message',id=id)
         else:

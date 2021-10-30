@@ -263,10 +263,11 @@ class ChatRoom(models.Model):
 class ChatMessage(models.Model):
     chatroom =models.ForeignKey(ChatRoom,null=True, blank=True,on_delete=models.CASCADE)
     user = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True)
-    username = models.CharField(max_length=500,null=True, blank=True)
     pic = models.CharField(max_length=2000,null=True, blank=True)
     message = models.TextField(max_length=5000,null=True, blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
+    time = models.TimeField(blank=True, null=True)
+    date = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
             return "[%s] %s by user: %s" % (
