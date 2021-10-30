@@ -137,6 +137,7 @@ urlpatterns = [
     path('student/queries/<id>/',AskQuery.as_view(),name='ask_queries'),
     path('student/trainers/',MyTrainers.as_view(),name='my_trainers'),
     path('student/profile/',MyProfile.as_view(),name='my_profile'),
+    path('student/complaints/',ViewMyComplaints.as_view(),name='my_complaints'),
 
     path('user/notes/',UserNotes.as_view(),name='user_notes'),
     path('user/delete/notes/<id>/',DeleteNote.as_view(),name='delete_notes'),
