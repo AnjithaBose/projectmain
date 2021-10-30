@@ -179,6 +179,13 @@ class LeadReassignForm(ModelForm):
         model = Lead
         fields = ['assigned_to']
 
+class AddComplaintsForm(ModelForm):
+    pic1 = forms.FileField(required=False)
+    pic2 = forms.FileField(required=False)
+    pic3 = forms.FileField(required=False)
+    class Meta:
+        model = Complaint
+        fields = ['topic','description','pic1','pic2','pic3']
 
 
 

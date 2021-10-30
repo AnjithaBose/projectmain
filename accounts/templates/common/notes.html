@@ -100,7 +100,7 @@
                     <div class="">
                         <center>
                           <a href="{% url 'edit_notes' i.id %}" class="btn btn-rounded btn-light-rgba col-3 btn-sm" data-toggle="tooltip" data-placement="left" title="Edit the contents." ><i class="ti ti-pencil"></i></a>
-                          <a class="btn btn-rounded btn-light-rgba col-3 btn-sm" data-toggle="tooltip" data-placement="bottom" title="Copy link." onclick="copylink('/notes/{{i.url}}/')"><i class="ti ti-link"></i></a>
+                          <a class="btn btn-rounded btn-light-rgba col-3 btn-sm" data-toggle="tooltip" data-placement="bottom" title="Copy link." onclick="navigator.clipboard.writeText(window.location.host+'/notes/{{i.url}}/');alert('Copied link '+window.location.host+'/notes/{{i.url}}/');"><i class="ti ti-link"></i></a>
                           <a class="btn btn-rounded btn-light-rgba col-3 btn-sm" data-toggle="tooltip" data-placement="right" title="Once deleted this will be lost permanently." onclick="trash('{{i.id}}')"><i class="ti ti-trash"></i></a>
                         </center>
                     </div>
@@ -215,12 +215,6 @@
                         }, 10);
                       
                     }
-                    </script>
-                    <script>
-                        function copylink(x) {
-                            navigator.clipboard.writeText(window.location.host+x);
-                            alert("Copied link "+window.location.host+x);
-                        }
                     </script>
             
         </div>

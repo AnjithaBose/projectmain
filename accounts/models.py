@@ -405,6 +405,40 @@ class StudentProjectData(models.Model):
     attachment = models.FileField(null=True, blank=True,upload_to='images/project/submissions/')
     submitted_on = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=100,null=True, blank=True,choices=(('1','Pending'),('2','Accepted'),('3','Rejected')))
+
+
+class Complaint(models.Model):
+    user = models.ForeignKey(Student, on_delete=models.CASCADE,null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
+    time = models.TimeField(blank=True, null=True)
+    date = models.DateField(null=True, blank=True)
+    update_timestamp = models.DateTimeField(null=True, blank=True)
+    update_time = models.TimeField(blank=True, null=True)
+    update_date = models.DateField(null=True, blank=True)
+    topic = models.CharField(max_length=1000, null=True, blank=True)
+    description = models.TextField(max_length=5000,null=True, blank=True)
+    pic1 = models.ImageField(null=True, blank=True)
+    pic2 = models.ImageField(null=True, blank=True)
+    pic3 = models.ImageField(null=True, blank=True)
+    status = models.CharField(max_length=100, null=True, blank=True,choices=(('New','New'),('Awaiting Support','Awaiting Support'),('Awaiting Customer','Awaiting Customer'),('Resolved','Resolved'),('Cancelled','Cancelled')))
+
+    def __str__(self):
+        return self.topic
+
+class ComplaintComment(models.Model):
+    user1 = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True)
+    user2 = models.ForeignKey(Student,on_delete=models.CASCADE,null=True, blank=True)
+    complaint = models.ForeignKey(Complaint,on_delete=models.CASCADE,null=True, blank=True)
+    message = models.TextField(max_length=5000,null=True, blank=True)
+    pic1 = models.ImageField(null=True, blank=True)
+    pic2 = models.ImageField(null=True, blank=True)
+    pic3 = models.ImageField(null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
+    time = models.TimeField(blank=True, null=True)
+    date = models.DateField(null=True, blank=True)
+
+
+
     
 
 

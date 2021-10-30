@@ -3428,6 +3428,16 @@ class AllNotifications(View):
                 notifications = Notification.objects.filter(user2=student).order_by('-timestamp')
                 context = {'count':count,'notify':notify,'student':student,'notifications':notifications}
                 return render(request,'common/all_notifications.html',context)
+
+
+class ViewComplaints(View):
+    def get(self, request):
+        student = Student.objects.get(user=request.user)
+        notify = StudentNotifications(student)
+        count = CountNotifications(notify)
+        complaints = Complaint.objects.filter(user=student).order_by('-update_timestamp')
+        
+
             
                 
 
