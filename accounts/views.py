@@ -3418,16 +3418,18 @@ class AllNotifications(View):
                 staff = Staff.objects.get(user=request.user)
                 notify = Notifications(staff)
                 count = CountNotifications(notify)
-                notificatoins = Notifications.objects.filter(user1=staff).order_by('-timestamp')
+                notifications = Notification.objects.filter(user1=staff).order_by('-timestamp')
                 context = {'count':count,'notify':notify,'staff':staff,'notifications':notifications}
+                return render(request,'common/all_notifications.html',context)
             except:
                 student = Student.objects.get(user=request.user)
                 notify = StudentNotifications(student)
                 count = CountNotifications(notify)
-                notificatoins = Notifications.objects.filter(user2=student).order_by('-timestamp')
+                notifications = Notification.objects.filter(user2=student).order_by('-timestamp')
                 context = {'count':count,'notify':notify,'student':student,'notifications':notifications}
-            finally:
                 return render(request,'common/all_notifications.html',context)
+            
+                
 
                 
 
