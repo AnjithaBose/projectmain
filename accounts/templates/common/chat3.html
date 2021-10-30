@@ -60,7 +60,7 @@
                         </div>   
                     </form>
                 </div>
-                <div class="col-12 col-md-8" style="height: 400px;overflow-y: scroll;" onload="$(this).scrollTop = $(this).scrollHeight;">
+                <div class="col-12 col-md-8" style="height: 400px;overflow-y: scroll;vertical-align: bottom;">
                     {% for i in chatmessage %}
                         {% if i.user.user == request.user %}
                         <div class="card text-white bg-primary m-b-30">
@@ -121,7 +121,7 @@
                         type: 'GET',
                         url : '/user/poke/{{chatroom.id}}',
                     });
-                    alert("Trainer has been poked.")
+                    alert("Staff has been poked.")
                 }
             </script>
         </div>

@@ -2914,19 +2914,32 @@ class Poke(View):
             except:
                 staff = Staff.objects.get(user=request.user)
                 chatroom = ChatRoom.objects.get(id=id)
-                print(chatroom)
-                if chatroom.user1 == staff:
-                    student = chatroom.student
-                    chatroom.user_1_status = 'Read'
-                    chatroom.student_status = 'Unread'
-                    chatroom.timestamp = datetime.datetime.now()
-                    chatroom.save()
-                    type = 4
-                    msg = "%s-%s" % ("Reply for query from ",str(staff.name))
-                    SendStudentNotification(type,student,msg)
-                    return HttpResponse(status = 200)
+                if not chatroom.student:
+                    if chatroom.user1 == staff:
+                        chatroom.user_1_status = 'Read'
+                        chatroom.user_2_status = 'Unread'
+                        type = 1
+                        msg = "%s-%s" % ("New message from ",str(staff.name))
+                        SendNotification(type,chatroom.user2,msg)
+                    else:
+                        chatroom.user_1_status = 'Unread'
+                        chatroom.user_2_status = 'Read'
+                        type = 1
+                        msg = "%s-%s" % ("New message from ",str(staff.name))
+                        SendNotification(type,chatroom.user1,msg)
                 else:
-                    return render(request,'messages/common/permission_error.html')        
+                    if chatroom.user1 == staff:
+                        student = chatroom.student
+                        chatroom.user_1_status = 'Read'
+                        chatroom.student_status = 'Unread'
+                        chatroom.timestamp = datetime.datetime.now()
+                        chatroom.save()
+                        type = 4
+                        msg = "%s-%s" % ("Reply for query from ",str(staff.name))
+                        SendStudentNotification(type,student,msg)
+                        return HttpResponse(status = 200)
+                    else:
+                        return render(request,'messages/common/permission_error.html')        
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
@@ -3396,6 +3409,26 @@ class ReassignLead(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+
+class AllNotifications(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            try:
+                staff = Staff.objects.get(user=request.user)
+                notify = Notifications(staff)
+                count = CountNotifications(notify)
+                notificatoins = Notifications.objects.filter(user1=staff).order_by('-timestamp')
+                context = {'count':count,'notify':notify,'staff':staff,'notifications':notifications}
+            except:
+                student = Student.objects.get(user=request.user)
+                notify = StudentNotifications(student)
+                count = CountNotifications(notify)
+                notificatoins = Notifications.objects.filter(user2=student).order_by('-timestamp')
+                context = {'count':count,'notify':notify,'student':student,'notifications':notifications}
+            finally:
+                return render(request,'common/all_notifications.html',context)
+
                 
 
 
