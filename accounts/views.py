@@ -3620,6 +3620,15 @@ class UpdateComplaintComment(View):
         return redirect ('complaint',id=comment.complaint.code)
 
 
+class DeleteComplaintComment(View):
+     def get(self, request,id):
+        comment = ComplaintComment.objects.get(id=id)
+        complaint = comment.complaint
+        comment.delete()
+        return redirect ('complaint',id=complaint.code)
+
+
+
         
 
 
