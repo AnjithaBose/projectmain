@@ -69,24 +69,31 @@
                             <hr>
                         </div>
                         <div class="col-md-3 col-12">
-                            <form method="post" enctype="multipart/form-data" action>
+                            <form method="post" enctype="multipart/form-data" id="c_status" action>
                                 {% csrf_token %}
-                              <div class="form-group">
-                                <!-- <label for="recipient-name" class="col-form-label">Topic: <code>*</code></label> -->
-                                  {% load widget_tweaks %}
-                                  {% render_field form.status class="form-control" required="true" type="text" %}
-                              </div>
+                                {% if complaint.status == 'Cancelled' or complaint.status == 'Resolved' %}
+                                    {% if staff %}
+                                        <button class="btn btn-success" style="width: 100%;" disabled>{{complaint.status}}</button>
+                                    {% else %}
+                                    <div class="form-group">
+                                        {% load widget_tweaks %}
+                                        {% render_field form.status class="form-control" required="true" type="text" onchange="change()" %}
+                                    </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="form-group">
+                                        {% load widget_tweaks %}
+                                        {% render_field form.status class="form-control" required="true" type="text" onchange="change()" %}
+                                    </div>
+                                {% endif %}
                             </form>
                             {% if staff %}
-                            <form method="post" enctype="multipart/form-data" action>
+                            <form method="post" enctype="multipart/form-data" id="c_assignee" action="{% url 'assignee' complaint.code %}">
+                                {% csrf_token %}
                               <div class="form-group">
                                 <label for="message-text" class="col-form-label">Assignee</label>
-                                <select class="form-control" name="assignee" >
-                                    <option value="none">Select Assignee</option>
-                                    {% for i in staffs %}
-                                    <option value="{{i}}">{{i.name}}</option>
-                                    {% endfor %}
-                                </select>
+                                {% load widget_tweaks %}
+                                {% render_field form2.assignee class="form-control" required="true" type="text" onchange="assign()" %}
                               </div>
                             </form>
                             {% else %}
@@ -125,8 +132,13 @@
             
             <!-- state end-->
             <script>
-                var n = document.getElementById('notesform')
-                function save(){
+                function change(){
+                    var n = document.getElementById('c_status')
+                    n.submit();
+                }
+
+                function assign(){
+                    var n = document.getElementById('c_assignee')
                     n.submit();
                 }
             </script>

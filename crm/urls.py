@@ -122,6 +122,7 @@ urlpatterns = [
     path('staff/update/task/<id>/',UpdateTask.as_view(),name='update_task'),
     path('staff/view/tasks/',MyTask.as_view(),name='my_task'),
     path('staff/remove/task/<id>/',DeleteTask.as_view(),name='delete_task'),
+    path('staff/assign/assignee/<id>/',AssignAssignee.as_view(),name='assignee'),
 
     path('student/home/',StudentDashboard.as_view(),name='student_dashboard'),
     path('student/classrooms/',MyClassroom.as_view(),name='my_classroom'),

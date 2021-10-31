@@ -192,6 +192,11 @@ class UpdateComplaintStatusForm(ModelForm):
         model = Complaint
         fields = ['status']
 
+class UpdateComplaintAssigneeForm(ModelForm):
+    class Meta:
+        model = Complaint
+        fields = ['assignee']
+
 
 
 
