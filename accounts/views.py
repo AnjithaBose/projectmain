@@ -3490,7 +3490,9 @@ class ViewComplaint(View):
             if complaint.user == student:
                 form = UpdateComplaintStatusForm(instance=complaint)
                 form2 = UpdateComplaintAssigneeForm(instance=complaint)
-                context={'count':count,'notify':notify,'student':student,'form':form,'complaint':complaint,'form2':form2}
+                comments = ComplaintComment.objects.filter(complaint=complaint)
+                commentform = AddCommentForm()
+                context={'count':count,'notify':notify,'student':student,'form':form,'complaint':complaint,'form2':form2,'comments':comments,'commentform':commentform}
                 return render(request,'common/complaint.html',context)
             else:
                 return render(request,'messages/common/permission_error.html')
@@ -3503,7 +3505,9 @@ class ViewComplaint(View):
                 complaint = Complaint.objects.get(code=id)
                 form = UpdateComplaintStatusForm(instance=complaint)
                 form2 = UpdateComplaintAssigneeForm(instance=complaint)
-                context={'count':count,'notify':notify,'staff':staff,'form':form,'complaint':complaint,'form2':form2}
+                comments = ComplaintComment.objects.filter(complaint=complaint)
+                commentform = AddCommentForm()
+                context={'count':count,'notify':notify,'staff':staff,'form':form,'complaint':complaint,'form2':form2,'comments':comments,'commentform':commentform}
                 return render(request,'common/complaint.html',context)
             else:
                 if request.user.is_authenticated:
@@ -3570,6 +3574,28 @@ class AssignAssignee(View):
             f.save()
         return redirect('complaint',id=complaint.code)
             
+
+class PostComplaintComment(View):
+    def post(self, request,id):
+        complaint = Complaint.objects.get(code=id)
+        commentform =  AddCommentForm(request.POST,request.FILES)
+        if commentform.is_valid():
+            f = commentform.save(commit=False)
+            try:
+                student = Student.objects.get(user=request.user)
+                f.user2 = student 
+            except:
+                staff = Staff.objects.get(user=request.user)
+                f.user1 = staff
+            f.complaint = complaint
+            f.timestamp = datetime.datetime.now()
+            f.time = datetime.datetime.now()
+            f.date = datetime.datetime.now() 
+            f.save()
+        return redirect('complaint',id=complaint.code)
+
+
+
 
 
             

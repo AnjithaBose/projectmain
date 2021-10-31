@@ -150,6 +150,7 @@ urlpatterns = [
     path('user/notification/read/',MarkasRead.as_view(),name='mark_as_read'),
     path('user/notifications/',AllNotifications.as_view(),name='notifications'),
     path('user/complaint/<id>/',ViewComplaint.as_view(),name='complaint'),
+    path('user/complaint/comment/<id>/',PostComplaintComment.as_view(),name='comment_complaint'),
 
 
     path('webinar/',ActiveWebinar.as_view(),name='active_webinar'),

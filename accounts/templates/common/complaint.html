@@ -104,6 +104,50 @@
                                 </div>
                               </form>
                             {% endif %}
+
+
+                            <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#varying-modal" data-whatever="@getbootstrap">Addd Comment</button>
+            
+                                <!-- Modal -->
+                                <div class="modal fade" id="varying-modal" tabindex="-1" role="dialog" aria-labelledby="varying-modal-label"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="varying-modal-label">Add Comment</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span
+                                            aria-hidden="true">&times;</span> </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" id="commentform" enctype="multipart/form-data" action="{% url 'comment_complaint' complaint.code %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Comment: <code>*</code></label>
+                                            {% load widget_tweaks %}
+                                            {% render_field commentform.message class="form-control" required="true" rows="4" %}
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Attachment: </label>
+                                            {% render_field commentform.pic1 class="form-control" %}
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Attachment:</label>
+                                            {% render_field commentform.pic2 class="form-control" %}
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Attachment:</label>
+                                            {% render_field commentform.pic3 class="form-control" %}
+                                        </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="save()"><i class="ti ti-save"></i> Save</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <!-- Modal End -->
                         </div>
                     </div>
                     
@@ -111,7 +155,43 @@
                     
                 </div>
             </div>
-            
+            <hr>
+            <div class="col-lg-12 col-md-12 col-12">
+                <div class="card">
+                    <div class="container-fluid">
+                        {% for i in comments %}
+                        <div class="col-12 col-md-9">
+                            <p style="text-align:justify">{{i.message|linebreaksbr }}</p>
+                            {% if i.pic1 %}
+                            <div class="col-2">
+                                <a href="{{i.pic1.url}}" download><img src="{{i.pic1.url}}" class="thumbnail" height="auto" width="100"></a>
+                            </div>
+                            {% endif %}
+                            {% if i.pic2 %}
+                            <div class="col-2">
+                                <a href="{{i.pic2.url}}" download><img src="{{i.pic2.url}}" class="thumbnail" height="auto" width="100"></a>
+                            </div>
+                            {% endif %}
+                            {% if i.pic3 %}
+                            <div class="col-2">
+                                <a href="{{i.pic3.url}}" download><img src="{{i.pic3.url}}" class="thumbnail" height="auto" width="100"></a>
+                            </div>
+                            {% endif %}
+                            <br><br>
+                            {% if i.user1 %}
+                            <p class="text-muted">{{i.user1}}<br>{{i.timestamp}}</p>
+                            {% else %}
+                            <p class="text-muted">{{i.user2}}<br>{{i.timestamp}}</p>
+                            {% endif %}
+                            <hr>
+                        </div>
+                        {% empty %}
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div class="alert alert-primary alert-link col-12 col-md-9" role="alert"> No comments yet! </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
         </div>
 
             
@@ -139,6 +219,10 @@
 
                 function assign(){
                     var n = document.getElementById('c_assignee')
+                    n.submit();
+                }
+                function save(){
+                    var n = document.getElementById('commentform')
                     n.submit();
                 }
             </script>
