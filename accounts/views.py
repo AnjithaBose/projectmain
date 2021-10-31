@@ -110,15 +110,11 @@ class PasswordChangeView(View):
             else:
                 return redirect('home')
 
-def handler404(request, *args, **argv):
-    response = render_to_response('common/404.html', {},context_instance=RequestContext(request))
-    response.status_code = 404
-    return response  
+def handler404(request, exception):
+    return render(request,'common/404.html')
 
 def handler500(request, *args, **argv):
-    response = render_to_response('common/500.html', {},context_instance=RequestContext(request))
-    response.status_code = 500
-    return response
+    return render(request,'common/500.html')
 
 
 class Home(View):
