@@ -187,6 +187,24 @@ class AddComplaintsForm(ModelForm):
         model = Complaint
         fields = ['topic','description','pic1','pic2','pic3']
 
+class UpdateComplaintStatusForm(ModelForm):
+    class Meta:
+        model = Complaint
+        fields = ['status']
+
+class UpdateComplaintAssigneeForm(ModelForm):
+    class Meta:
+        model = Complaint
+        fields = ['assignee']
+
+class AddCommentForm(ModelForm):
+    pic1 = forms.FileField(required=False)
+    pic2 = forms.FileField(required=False)
+    pic3 = forms.FileField(required=False)
+    class Meta:
+        model = ComplaintComment
+        fields = ['message','pic1','pic2','pic3']
+
 
 
 

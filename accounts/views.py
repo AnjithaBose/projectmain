@@ -3446,6 +3446,193 @@ class ViewMyComplaints(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+            
+    def post(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            form = AddComplaintsForm(request.POST,request.FILES)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.user = student
+                f.timestamp = datetime.datetime.now()
+                f.time = datetime.datetime.now()
+                f.date = datetime.datetime.now()
+                f.update_timestamp = datetime.datetime.now()
+                f.update_time = datetime.datetime.now()
+                f.update_date = datetime.datetime.now()
+                c = "TCS"
+                v = int(Complaint.objects.all().count())+100
+                f.code = "%s_%d" % (c,v)
+                f.status = 'New'
+                f.save()
+                msg = "Reported successfully!"
+                context ={'count':count,'notify':notify,'student':student,'msg':msg}
+            else:
+                alert = "Failed to report complaint."
+                context = {'count':count,'notify':notify,'student':student,'alert':alert}
+            return render(request,'messages/student/complaints.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+class ViewComplaint(View):
+    def get(self, request,id):
+        try:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            complaint = Complaint.objects.get(code=id)
+            if complaint.user == student:
+                form = UpdateComplaintStatusForm(instance=complaint)
+                form2 = UpdateComplaintAssigneeForm(instance=complaint)
+                comments = ComplaintComment.objects.filter(complaint=complaint)
+                commentform = AddCommentForm()
+                context={'count':count,'notify':notify,'student':student,'form':form,'complaint':complaint,'form2':form2,'comments':comments,'commentform':commentform}
+                return render(request,'common/complaint.html',context)
+            else:
+                return render(request,'messages/common/permission_error.html')
+        except:
+            y = StaffCheck(request)
+            if y == True:
+                staff = Staff.objects.get(user=request.user)
+                notify = Notifications(staff)
+                count = CountNotifications(notify)
+                complaint = Complaint.objects.get(code=id)
+                form = UpdateComplaintStatusForm(instance=complaint)
+                form2 = UpdateComplaintAssigneeForm(instance=complaint)
+                comments = ComplaintComment.objects.filter(complaint=complaint)
+                commentform = AddCommentForm()
+                context={'count':count,'notify':notify,'staff':staff,'form':form,'complaint':complaint,'form2':form2,'comments':comments,'commentform':commentform}
+                return render(request,'common/complaint.html',context)
+            else:
+                if request.user.is_authenticated:
+                    return render(request,'messages/common/permission_error.html')
+                else:
+                    return redirect('home')
+
+    def post(self, request,id):
+        try:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            complaint = Complaint.objects.get(code=id)
+            if complaint.user == student:
+                form = UpdateComplaintStatusForm(request.POST,instance=complaint)
+                if form.is_valid():
+                    f = form.save(commit=False)
+                    f.update_timestamp = datetime.datetime.now()
+                    f.update_date = datetime.datetime.now()
+                    f.update_time = datetime.datetime.now()
+                    f.save()
+                return redirect('complaint',id=complaint.code)
+            else:
+                if request.user.is_authenticated:
+                    return render(request,'messages/common/permission_error.html')
+                else:
+                    return redirect('home')
+
+        except:
+            y = StaffCheck(request)
+            if y == True:
+                staff = Staff.objects.get(user=request.user)
+                notify = Notifications(staff)
+                count = CountNotifications(notify)
+                complaint = Complaint.objects.get(code=id)
+                form = UpdateComplaintStatusForm(request.POST,instance=complaint)
+                if form.is_valid():
+                    f = form.save(commit=False)
+                    f.update_timestamp = datetime.datetime.now()
+                    f.update_date = datetime.datetime.now()
+                    f.update_time = datetime.datetime.now()
+                    f.save()
+                return redirect('complaint',id=complaint.code)
+            else:
+                if request.user.is_authenticated:
+                    return render(request,'messages/common/permission_error.html')
+                else:
+                    return redirect('home')
+
+class AssignAssignee(View):
+    def post(self, request,id):
+        complaint = Complaint.objects.get(code=id)
+        form = UpdateComplaintAssigneeForm(request.POST,instance=complaint)
+        if form.is_valid():
+            f = form.save(commit=False)
+            assignee = f.assignee
+            staff = Staff.objects.get(user=request.user)
+            if staff == assignee:
+                pass
+            else:
+                type = 5
+                msg = "%s-%s" % ("Ticket assigned by ",str(staff))
+                SendNotification(type,assignee,msg)
+            f.save()
+        return redirect('complaint',id=complaint.code)
+            
+
+class PostComplaintComment(View):
+    def post(self, request,id):
+        complaint = Complaint.objects.get(code=id)
+        commentform =  AddCommentForm(request.POST,request.FILES)
+        if commentform.is_valid():
+            f = commentform.save(commit=False)
+            try:
+                student = Student.objects.get(user=request.user)
+                f.user2 = student 
+            except:
+                staff = Staff.objects.get(user=request.user)
+                f.user1 = staff
+            f.complaint = complaint
+            f.timestamp = datetime.datetime.now()
+            f.time = datetime.datetime.now()
+            f.date = datetime.datetime.now() 
+            f.save()
+        return redirect('complaint',id=complaint.code)
+
+class UpdateComplaintComment(View):
+    def post(self, request,id):
+        comment = ComplaintComment.objects.get(id=id)
+        message = request.POST['message']
+        print (message)
+        comment.message = message
+        try:
+            file1 = request.FILES['pic1']
+            comment.pic1 = file1
+        except:
+            pass
+        try:
+            file2 = request.FILES['pic2']
+            comment.pic2 = file2 
+        except:
+            pass
+        try:
+            file3 = request.FILES['pic3']
+            comment.pic3 = file3
+        except:
+            pass  
+        comment.edited = True
+        comment.save()
+        return redirect ('complaint',id=comment.complaint.code)
+
+
+        
+
+
+
+
+
+
+            
+
+
+
+
+
 
 
 

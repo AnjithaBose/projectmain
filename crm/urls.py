@@ -122,6 +122,7 @@ urlpatterns = [
     path('staff/update/task/<id>/',UpdateTask.as_view(),name='update_task'),
     path('staff/view/tasks/',MyTask.as_view(),name='my_task'),
     path('staff/remove/task/<id>/',DeleteTask.as_view(),name='delete_task'),
+    path('staff/assign/assignee/<id>/',AssignAssignee.as_view(),name='assignee'),
 
     path('student/home/',StudentDashboard.as_view(),name='student_dashboard'),
     path('student/classrooms/',MyClassroom.as_view(),name='my_classroom'),
@@ -148,6 +149,9 @@ urlpatterns = [
     path('user/video/<id>/',PlayVideo.as_view(),name='video_player'),
     path('user/notification/read/',MarkasRead.as_view(),name='mark_as_read'),
     path('user/notifications/',AllNotifications.as_view(),name='notifications'),
+    path('user/complaint/<id>/',ViewComplaint.as_view(),name='complaint'),
+    path('user/complaint/comment/<id>/',PostComplaintComment.as_view(),name='comment_complaint'),
+    path('user/complaint/comment/update/<id>/',UpdateComplaintComment.as_view(),name='update_comment'),
 
 
     path('webinar/',ActiveWebinar.as_view(),name='active_webinar'),
