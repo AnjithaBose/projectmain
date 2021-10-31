@@ -179,9 +179,65 @@
                             {% endif %}
                             <br><br>
                             {% if i.user1 %}
-                            <p class="text-muted">{{i.user1}}<br>{{i.timestamp}}</p>
+                            <p class="text-muted">{{i.user1}}<br>{{i.timestamp}}<br>
+                                {% if i.edited %}
+                                (Edited)
+                                {% endif %}
+                                </p>
+                                {% if i.user1.user == request.user %}
+                                <a class="btn btn-rounded btn-light-rgba btn-sm"><i class="ti ti-pencil"></i></a>
+                                <a class="btn btn-rounded btn-light-rgba btn-sm"><i class="ti ti-trash"></i></a>
+                                {% endif %}
                             {% else %}
-                            <p class="text-muted">{{i.user2}}<br>{{i.timestamp}}</p>
+                            <p class="text-muted">{{i.user2}}<br>{{i.timestamp}}<br>
+                                {% if i.edited %}
+                                (Edited)
+                                {% endif %}
+                                </p>
+                                {% if i.user2.user == request.user %}
+                                <button class="btn btn-rounded btn-light-rgba btn-sm" data-toggle="modal" data-target="#comment{{i.id}}" data-whatever="@getbootstrap"><i class="ti ti-pencil"></i></button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="comment{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="varying-modal-label"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="varying-modal-label">Update Comment</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span
+                                            aria-hidden="true">&times;</span> </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" id="edit{{i.id}}" enctype="multipart/form-data" action="{% url 'update_comment' i.id %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Comment: <code>*</code></label>
+                                            {% load widget_tweaks %}
+                                            <textarea class="form-control" name="message" required="true" rows="4">{{i.message}}</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Attachment: </label>
+                                            <input type="file" class="form-control" name="pic1" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Attachment:</label>
+                                            <input type="file" class="form-control" name="pic2" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Attachment:</label>
+                                            <input type="file" class="form-control" name="pic3" >
+                                        </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="update('edit{{i.id}}')"><i class="ti ti-save"></i> Save</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <!-- Modal End -->
+                                <a class="btn btn-rounded btn-light-rgba btn-sm"><i class="ti ti-trash"></i></a>
+                                {% endif %}
                             {% endif %}
                             <hr>
                         </div>
@@ -198,7 +254,7 @@
             <!-- end col -->
             
              
-          </div>
+          
           <!-- End row -->
           
           
@@ -223,6 +279,10 @@
                 }
                 function save(){
                     var n = document.getElementById('commentform')
+                    n.submit();
+                }
+                function update(x){
+                    var n = document.getElementById(x)
                     n.submit();
                 }
             </script>

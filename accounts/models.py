@@ -438,6 +438,7 @@ class ComplaintComment(models.Model):
     timestamp = models.DateTimeField(null=True, blank=True)
     time = models.TimeField(blank=True, null=True)
     date = models.DateField(null=True, blank=True)
+    edited = models.BooleanField(default = False)
 
 
 

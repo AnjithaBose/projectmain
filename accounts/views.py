@@ -3594,6 +3594,35 @@ class PostComplaintComment(View):
             f.save()
         return redirect('complaint',id=complaint.code)
 
+class UpdateComplaintComment(View):
+    def post(self, request,id):
+        comment = ComplaintComment.objects.get(id=id)
+        message = request.POST['message']
+        print (message)
+        comment.message = message
+        try:
+            file1 = request.FILES['pic1']
+            comment.pic1 = file1
+        except:
+            pass
+        try:
+            file2 = request.FILES['pic2']
+            comment.pic2 = file2 
+        except:
+            pass
+        try:
+            file3 = request.FILES['pic3']
+            comment.pic3 = file3
+        except:
+            pass  
+        comment.edited = True
+        comment.save()
+        return redirect ('complaint',id=comment.complaint.code)
+
+
+        
+
+
 
 
 
