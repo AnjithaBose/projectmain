@@ -9,6 +9,7 @@ from django.template.loader import render_to_string
 from django.core import serializers
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.template import RequestContext
 
 from .functions import *
 from .models import *
@@ -109,7 +110,10 @@ class PasswordChangeView(View):
             else:
                 return redirect('home')
 
-    
+def handler404(request, *args, **argv):
+    response = render_to_response('common/404.html', {},context_instance=RequestContext(request))
+    response.status_code = 404
+    return response  
 
 
 class Home(View):
