@@ -3446,6 +3446,76 @@ class ViewMyComplaints(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+            
+    def post(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            form = AddComplaintsForm(request.POST,request.FILES)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.user = student
+                f.timestamp = datetime.datetime.now()
+                f.time = datetime.datetime.now()
+                f.date = datetime.datetime.now()
+                f.update_timestamp = datetime.datetime.now()
+                f.update_time = datetime.datetime.now()
+                f.update_date = datetime.datetime.now()
+                c = "TCS"
+                v = int(Complaint.objects.all().count())+100
+                f.code = "%s_%d" % (c,v)
+                f.status = 'New'
+                f.save()
+                msg = "Reported successfully!"
+                context ={'count':count,'notify':notify,'student':student,'msg':msg}
+            else:
+                alert = "Failed to report complaint."
+                context = {'count':count,'notify':notify,'student':student,'alert':alert}
+            return render(request,'messages/student/complaints.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+class ViewComplaint(View):
+    def get(self, request,id):
+        try:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            complaint = Complaint.objects.get(code=id)
+            if complaint.user == student:
+                form = UpdateComplaintStatusForm(instance=complaint)
+                context={'count':count,'notify':notify,'student':student,'form':form,'complaint':complaint}
+                return render(request,'common/complaint.html',context)
+            else:
+                return render(request,'messages/common/permission_error.html')
+        except:
+            y = StaffCheck(request)
+            if y == True:
+                staff = Staff.objects.get(user=request.user)
+                notify = Notifications(staff)
+                count = CountNotifications(notify)
+                complaint = Complaint.objects.get(code=id)
+                form = UpdateComplaintStatusForm(instance=complaint)
+                staffs = Staff.objects.all()
+                context={'count':count,'notify':notify,'staff':staff,'form':form,'complaint':complaint,'staffs':staffs}
+                return render(request,'common/complaint.html',context)
+            else:
+                if request.user.is_authenticated:
+                    return render(request,'messages/common/permission_error.html')
+                else:
+                    return redirect('home')
+
+            
+
+
+
+
+
 
 
 

@@ -1,0 +1,171 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">{{complaint.topic}}</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                {% if complaint.user.user == request.user %}
+                                <li class="breadcrumb-item"><a href="{% url 'my_complaints' %}">My Complaints</a></li>
+                                {% endif %}
+                                <li class="breadcrumb-item active" aria-current="page">{{complaint.code}}</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+           
+          
+          <!-- End row -->
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-12">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-9 col-12">
+                            <h4 class="m-t-0 header-title">{{complaint.topic}}</h4>
+                            <p style="text-align:justify">{{complaint.description|linebreaksbr }}</p>
+                            <div class="row">
+                                {% if complaint.pic1 %}
+                                <div class="col-2">
+                                    <a href="{{complaint.pic1.url}}" download><img src="{{complaint.pic1.url}}" class="thumbnail" height="auto" width="100"></a>
+                                </div>
+                                {% endif %}
+                                {% if complaint.pic2 %}
+                                <div class="col-2">
+                                    <a href="{{complaint.pic2.url}}" download><img src="{{complaint.pic2.url}}" class="thumbnail" height="auto" width="100"></a>
+                                </div>
+                                {% endif %}
+                                {% if complaint.pic3 %}
+                                <div class="col-2">
+                                    <a href="{{complaint.pic3.url}}" download><img src="{{complaint.pic3.url}}" class="thumbnail" height="auto" width="100"></a>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <hr>
+                            <p class="text-muted">Reported on : {{complaint.timestamp}}</p>
+                            <p class="text-muted">Last updated on : {{complaint.update_timestamp}}</p>
+                            <hr>
+                        </div>
+                        <div class="col-md-3 col-12">
+                            <form method="post" enctype="multipart/form-data" action>
+                                {% csrf_token %}
+                              <div class="form-group">
+                                <!-- <label for="recipient-name" class="col-form-label">Topic: <code>*</code></label> -->
+                                  {% load widget_tweaks %}
+                                  {% render_field form.status class="form-control" required="true" type="text" %}
+                              </div>
+                            </form>
+                            {% if staff %}
+                            <form method="post" enctype="multipart/form-data" action>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label">Assignee</label>
+                                <select class="form-control" name="assignee" >
+                                    <option value="none">Select Assignee</option>
+                                    {% for i in staffs %}
+                                    <option value="{{i}}">{{i.name}}</option>
+                                    {% endfor %}
+                                </select>
+                              </div>
+                            </form>
+                            {% else %}
+                            <form method="post" enctype="multipart/form-data" action>
+                                <div class="form-group">
+                                  <label for="message-text" class="col-form-label">Assignee</label>
+                                  <input type="text" class="form-control" value="{{complaint.assignee}}" disabled>
+                                </div>
+                              </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    
+                    
+                </div>
+            </div>
+            
+        </div>
+
+            
+            <!-- end col -->
+            
+             
+          </div>
+          <!-- End row -->
+          
+          
+          
+          
+          <!-- End row -->
+            
+
+            
+
+            
+            <!-- state end-->
+            <script>
+                var n = document.getElementById('notesform')
+                function save(){
+                    n.submit();
+                }
+            </script>
+            <script>
+                function trash(x) {
+                  setTimeout(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url : '/user/delete/notes/'+x,
+                    
+                    });
+                    }, 1);
+              
+                  setTimeout(function(){
+                    window.location = window.location
+                    }, 10);
+                  
+                }
+                </script>
+                <script>
+                    function makepublic(x) {
+                      setTimeout(function(){
+                        $.ajax({
+                            type: 'GET',
+                            url : '/user/status/notes/'+x,
+                        
+                        });
+                        }, 1);
+                  
+                      setTimeout(function(){
+                        window.location = window.location
+                        }, 10);
+                      
+                    }
+                    </script>
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

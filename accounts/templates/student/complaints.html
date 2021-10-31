@@ -91,7 +91,7 @@
           
           <!-- End row -->
           <div class="row">
-            <div class="col-lg-8 col-md-10 col-12">
+            <div class="col-lg-12 col-md-12 col-12">
                 <div class="card">
                     <h4 class="m-t-0 header-title">Complaint History</h4>
                     
@@ -100,32 +100,36 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Course</th>
-                                    <th>Course Code</th>
-                                    <th>Fee</th>
-                                    <th class="text-right"></th>
+                                    <th>Code</th>
+                                    <th>Topic</th>
+                                    <th>Reported On</th>
+                                    <th>Assignee</th>
+                                    <th class="text-center">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for i in course %}
+                                {% for i in complaints %}
                                 <tr>
                                     <th scope="row">{{forloop.counter}}</th>
-                                    <td>
-                                            <img class="img-circle pro_pic" src="{{i.pic.url}}" alt="{{i.name}}" style="width: 40px;height:40px">
-                                        {{i.name}}</td>
-                                    <td>{{i.code}}</td>
-                                    <td>INR{{i.fee}}/-</td>
-                                    <td>
-                                        <div class="btn-group mr-2">
-                                            <div class="dropdown">
-                                              <button class="btn btn-round btn-primary-rgba" type="button" id="CustomdropdownMenuButton4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>
-                                                <div class="dropdown-menu" aria-labelledby="CustomdropdownMenuButton4">
-                                                    <a class="dropdown-item" href="{% url 'edit_course' i.id %}"><i class="ti ti-pencil mr-2"></i>Edit</a> 
-                                                    <a class="dropdown-item" href="{% url 'delete_course' i.id %}"><i class="ti ti-trash mr-2"></i>Delete</a> 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    <td><a href="{% url 'complaint' i.code %}" style="color: blue"><b>{{i.code}}</b></a></td>
+                                    <td>{{i.topic}}</td>
+                                    <th>{{i.date}} - {{i.time}}</th>
+                                    {% if i.assignee %}
+                                    <th>N/A</th>
+                                    {% else %}
+                                    <th>{{i.assignee}}</th>
+                                    {% endif %}
+                                    {% if i.status == "New" %}
+                                    <td class="text-center"><span class="badge label-table badge-secondary">New</span></td>
+                                    {% elif i.status == "Awaiting Support" %}
+                                    <td class="text-center"><span class="badge label-table badge-warning">Awaiting Support</span></td>
+                                    {% elif i.status == "Awaiting Customer" %}
+                                    <td class="text-center"><span class="badge label-table badge-primary">Awaiting Customer</span></td>
+                                    {% elif i.status == "Resolved" %}
+                                    <td class="text-center"><span class="badge label-table badge-success">Resolved</span></td>
+                                    {% elif i.status == "Cancelled" %}
+                                    <td class="text-center"><span class="badge label-table badge-success">Cancelled</span></td>
+                                    {% endif %}
                                 </tr>
                                 {% empty %}
                                 &nbsp;&nbsp;&nbsp;&nbsp;

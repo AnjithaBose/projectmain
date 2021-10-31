@@ -187,6 +187,11 @@ class AddComplaintsForm(ModelForm):
         model = Complaint
         fields = ['topic','description','pic1','pic2','pic3']
 
+class UpdateComplaintStatusForm(ModelForm):
+    class Meta:
+        model = Complaint
+        fields = ['status']
+
 
 
 

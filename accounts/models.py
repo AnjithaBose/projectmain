@@ -409,6 +409,7 @@ class StudentProjectData(models.Model):
 
 class Complaint(models.Model):
     user = models.ForeignKey(Student, on_delete=models.CASCADE,null=True, blank=True)
+    assignee = models.ForeignKey(Staff, on_delete=models.CASCADE,null=True,blank=True)
     timestamp = models.DateTimeField(null=True, blank=True)
     time = models.TimeField(blank=True, null=True)
     date = models.DateField(null=True, blank=True)
@@ -420,7 +421,8 @@ class Complaint(models.Model):
     pic1 = models.ImageField(null=True, blank=True)
     pic2 = models.ImageField(null=True, blank=True)
     pic3 = models.ImageField(null=True, blank=True)
-    status = models.CharField(max_length=100, null=True, blank=True,choices=(('New','New'),('Awaiting Support','Awaiting Support'),('Awaiting Customer','Awaiting Customer'),('Resolved','Resolved'),('Cancelled','Cancelled')))
+    code = models.CharField(max_length=100,null=True, blank=True)
+    status = models.CharField(max_length=100,choices=(('New','New'),('Awaiting Support','Awaiting Support'),('Awaiting Customer','Awaiting Customer'),('Resolved','Resolved'),('Cancelled','Cancelled')))
 
     def __str__(self):
         return self.topic
