@@ -3529,13 +3529,15 @@ class ViewComplaint(View):
                     f.update_date = datetime.datetime.now()
                     f.update_time = datetime.datetime.now()
                     f.save()
+                    type = 5
+                    msg = "%s-%s" % ("Ticket status updated ",str(f.code))
+                    SendNotification(type,f.assignee,msg)
                 return redirect('complaint',id=complaint.code)
             else:
                 if request.user.is_authenticated:
                     return render(request,'messages/common/permission_error.html')
                 else:
                     return redirect('home')
-
         except:
             y = StaffCheck(request)
             if y == True:
@@ -3623,9 +3625,30 @@ class UpdateComplaintComment(View):
 class DeleteComplaintComment(View):
      def get(self, request,id):
         comment = ComplaintComment.objects.get(id=id)
-        complaint = comment.complaint
-        comment.delete()
-        return redirect ('complaint',id=complaint.code)
+        if comment.user1.user == request.user or comment.user2.user == request.user:
+            complaint = comment.complaint
+            comment.delete()
+            return redirect ('complaint',id=complaint.code)
+        else:
+            return render(request,'messages/common/permission_error.html')
+
+
+class AllComplaints(View):
+    def get(self, request):
+        y = StaffCheck(request)
+        if y == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            complaints = Complaint.objects.all().order_by('-timestamp')
+            context = {'count':count,'notify':notify,'staff':staff,'complaints':complaints}
+            return render(request,'common/all_complaints.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
 
 
 

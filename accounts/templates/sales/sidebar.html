@@ -30,6 +30,7 @@
       {% endif %}
       <li> <a href="{% url 'view_contacts' %}"><i class="ti ti-id-badge"></i> <span>Contacts</span></a></li>
       <li> <a href="{% url 'view_students' %}"><i class="ti ti-user"></i> <span>Students</span></a></li>
+      <li> <a href="{% url 'all_complaints' %}"><i class="ti ti-write"></i> <span>Complaints</span></a></li>
       <li> <a href="{% url 'view_leads' %}"><i class="fas fa-book-medical"></i> <span>Leads</span></a></li>
       {% if staff.stype == '4' or staff.stype == '6' %}
       <li> <a href="{% url 'view_mails' %}"><i class="fa fa-envelope-o"></i> <span>Mail</span></a></li>

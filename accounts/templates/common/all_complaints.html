@@ -1,0 +1,158 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">My Complaints</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">My Complaints</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+           <!-- state start-->
+       
+          
+          <!-- End row -->
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-12">
+                <div class="card">
+                    <h4 class="m-t-0 header-title">Complaint History</h4>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Code</th>
+                                    <th>Topic</th>
+                                    <th>Client</th>
+                                    <th>Reported On</th>
+                                    <th>Assignee</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in complaints %}
+                                <tr>
+                                    <th scope="row">{{forloop.counter}}</th>
+                                    <td><a href="{% url 'complaint' i.code %}" style="color: blue"><b>{{i.code}}</b></a></td>
+                                    <td>{{i.topic}}</td>
+                                    <td>{{i.user}}</td>
+                                    <th>{{i.date}} - {{i.time}}</th>
+                                    {% if i.assignee %}
+                                    <th>N/A</th>
+                                    {% else %}
+                                    <th>{{i.assignee}}</th>
+                                    {% endif %}
+                                    {% if i.status == "New" %}
+                                    <td class="text-center"><span class="badge label-table badge-secondary">New</span></td>
+                                    {% elif i.status == "Awaiting Support" %}
+                                    <td class="text-center"><span class="badge label-table badge-warning">Awaiting Support</span></td>
+                                    {% elif i.status == "Awaiting Customer" %}
+                                    <td class="text-center"><span class="badge label-table badge-primary">Awaiting Customer</span></td>
+                                    {% elif i.status == "Resolved" %}
+                                    <td class="text-center"><span class="badge label-table badge-success">Resolved</span></td>
+                                    {% elif i.status == "Cancelled" %}
+                                    <td class="text-center"><span class="badge label-table badge-success">Cancelled</span></td>
+                                    {% endif %}
+                                </tr>
+                                {% empty %}
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <div class="alert alert-danger alert-link" role="alert"> No complaint history found! </div>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+
+            
+            <!-- end col -->
+            
+             
+          </div>
+          <!-- End row -->
+          
+          
+          
+          
+          <!-- End row -->
+            
+
+            
+
+            
+            <!-- state end-->
+            <script>
+                var n = document.getElementById('notesform')
+                function save(){
+                    n.submit();
+                }
+            </script>
+            <script>
+                function trash(x) {
+                  setTimeout(function(){
+                    $.ajax({
+                        type: 'GET',
+                        url : '/user/delete/notes/'+x,
+                    
+                    });
+                    }, 1);
+              
+                  setTimeout(function(){
+                    window.location = window.location
+                    }, 10);
+                  
+                }
+                </script>
+                <script>
+                    function makepublic(x) {
+                      setTimeout(function(){
+                        $.ajax({
+                            type: 'GET',
+                            url : '/user/status/notes/'+x,
+                        
+                        });
+                        }, 1);
+                  
+                      setTimeout(function(){
+                        window.location = window.location
+                        }, 10);
+                      
+                    }
+                    </script>
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

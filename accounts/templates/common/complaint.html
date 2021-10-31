@@ -22,6 +22,9 @@
                                 {% if complaint.user.user == request.user %}
                                 <li class="breadcrumb-item"><a href="{% url 'my_complaints' %}">My Complaints</a></li>
                                 {% endif %}
+                                {% if staff %}
+                                <li class="breadcrumb-item"><a href="{% url 'all_complaints' %}">Complaints</a></li>
+                                {% endif %}
                                 <li class="breadcrumb-item active" aria-current="page">{{complaint.code}}</li>
                             </ol>
                         </div>
