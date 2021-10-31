@@ -52,17 +52,17 @@
                             <div class="row">
                                 {% if complaint.pic1 %}
                                 <div class="col-2">
-                                    <a href="{{complaint.pic1.url}}" download><img src="{{complaint.pic1.url}}" class="thumbnail" height="auto" width="100"></a>
+                                    <a href="{{complaint.pic1.url}}" target="_blank"><img src="{{complaint.pic1.url}}" class="thumbnail" height="auto" width="100"></a>
                                 </div>
                                 {% endif %}
                                 {% if complaint.pic2 %}
                                 <div class="col-2">
-                                    <a href="{{complaint.pic2.url}}" download><img src="{{complaint.pic2.url}}" class="thumbnail" height="auto" width="100"></a>
+                                    <a href="{{complaint.pic2.url}}" target="_blank"><img src="{{complaint.pic2.url}}" class="thumbnail" height="auto" width="100"></a>
                                 </div>
                                 {% endif %}
                                 {% if complaint.pic3 %}
                                 <div class="col-2">
-                                    <a href="{{complaint.pic3.url}}" download><img src="{{complaint.pic3.url}}" class="thumbnail" height="auto" width="100"></a>
+                                    <a href="{{complaint.pic3.url}}" target="_blank"><img src="{{complaint.pic3.url}}" class="thumbnail" height="auto" width="100"></a>
                                 </div>
                                 {% endif %}
                             </div>
@@ -167,17 +167,17 @@
                             <p style="text-align:justify">{{i.message|linebreaksbr }}</p>
                             {% if i.pic1 %}
                             <div class="col-2">
-                                <a href="{{i.pic1.url}}" download><img src="{{i.pic1.url}}" class="thumbnail" height="auto" width="100"></a>
+                                <a href="{{i.pic1.url}}" target="_blank"><img src="{{i.pic1.url}}" class="thumbnail" height="auto" width="100"></a>
                             </div>
                             {% endif %}
                             {% if i.pic2 %}
                             <div class="col-2">
-                                <a href="{{i.pic2.url}}" download><img src="{{i.pic2.url}}" class="thumbnail" height="auto" width="100"></a>
+                                <a href="{{i.pic2.url}}" target="_blank"><img src="{{i.pic2.url}}" class="thumbnail" height="auto" width="100"></a>
                             </div>
                             {% endif %}
                             {% if i.pic3 %}
                             <div class="col-2">
-                                <a href="{{i.pic3.url}}" download><img src="{{i.pic3.url}}" class="thumbnail" height="auto" width="100"></a>
+                                <a href="{{i.pic3.url}}" target="_blank"><img src="{{i.pic3.url}}" class="thumbnail" height="auto" width="100"></a>
                             </div>
                             {% endif %}
                             <br><br>
