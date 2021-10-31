@@ -1,0 +1,33 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+
+    <div class="content_wrapper bg_homebefore inner-wrapper extra-pages-sec">
+        <div class="container-fluid"> 
+          <!-- State start--> 
+          <!-- error-404 start-->
+        <div class="error-wrapper">
+          <div class="container"><img class="img-100" src="{% static 'images/sad.png' %}" alt="">
+            <div class="error-heading">
+              <h2 class="headline font-danger">500</h2>
+            </div>
+            <div class="col-md-8 offset-md-2">
+              <p class="sub-content">The page you are attempting to reach is currently not available. This may be because the page does not exist or has been moved.</p>
+            </div>
+            <div><a class="bttn" href="{% url 'home' %}">BACK TO HOME PAGE</a></div>
+          </div>
+        </div>
+        <!-- error-404 end      -->
+           <!-- End row --> 
+        </div>
+      </div>
+    
+{% include 'common/footer.html' %}
+</div>
+
+{% endblock %}
