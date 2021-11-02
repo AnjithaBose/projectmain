@@ -1,0 +1,179 @@
+{% extends 'common/main.html' %}
+{% load static %}
+{% block content %}
+<!-- header -->
+{% include 'common/header.html' %}
+<!-- header_End -->
+<!-- Content_right -->
+<div class="container_full">
+    {% include 'common/sidebar.html' %}
+    <div class="content_wrapper bg_homebefore inner-wrapper tables-sec">
+        <div class="container-fluid">
+            <!-- Start Breadcrumbbar -->
+            
+            <div class="breadcrumbbar">
+                <!-- Start row -->
+                <div class="row">
+                    <div class="col-md-8 col-lg-8">
+                        <h4 class="page-title">Uploaded Notes</h4>
+                        <div class="breadcrumb-list">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Uploaded Notes</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 mr-0">
+                        <div class="widgetbar">
+                            <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Breadcrumbbar -->
+
+
+           <!-- state start-->
+       
+          
+          <!-- End row -->
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-12">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-6">
+                            <h4 class="m-t-0 header-title">Study Materials</h4>
+                        </div>
+                        <div class="col-6 text-right">
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#varying-modal" data-whatever="@getbootstrap"><i class="ti ti-plus"></i> Add Materials</button>
+
+
+                            <!-- Modal -->
+                                <div class="modal fade" id="varying-modal" tabindex="-1" role="dialog" aria-labelledby="varying-modal-label"
+                                aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="varying-modal-label">New Notes</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span
+                                        aria-hidden="true">&times;</span> </button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <form method="post" id="notesform" enctype="multipart/form-data" action>
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Batch: <code>*</code></label>
+                                        {% load widget_tweaks %}
+                                        {% render_field form.batch class="form-control" required="true" %}
+                                        </div>
+                                        <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Topic: <code>*</code></label>
+                                        {% render_field form.topic class="form-control" required="true" %}
+                                        </div>
+                                        <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Attachment:</label>
+                                        {% render_field form.attachment class="form-control" required="true" %}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" onclick="save()"><i class="ti ti-save"></i> Save</button>
+                                    </div>
+                                </form>
+                                </div>
+                                </div>
+                            </div>
+                        <!-- Modal End -->
+
+
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Batch</th>
+                                    <th>TimeStamp</th>
+                                    <th>Topic</th>
+                                    <th>Attachment</th>
+                                    <th class="text-right"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in notes %}
+                                <tr>
+                                    <th scope="row">{{forloop.counter}}</th>
+                                    <td>{{i.batch.batch_code}}</td>
+                                    <td>{{i.date}}- {{i.time}}</td>
+                                    <td>{{i.topic}}</td>
+                                    <td><a href="{{i.attachment.url}}" class="btn btn-primary" target="_blank"><i class="ti ti-new-window"></i> Open</a></td>
+                                    <td class="text-right">
+                                        <button class="btn btn-rounded btn-danger-rgba btn-sm" data-toggle="modal" data-target="#del{{i.id}}" data-whatever="@getbootstrap"><i class="ti ti-trash"></i></button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="del{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalCenterTitle">{{i.topic}}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span
+                                                                aria-hidden="true">&times;</span> </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p class="text-muted">Are you sure you want to remove this study material?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <form method="post" action="{% url 'delete_study_material' i.id %}">
+                                                            {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal End -->
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <div class="alert alert-danger alert-link" role="alert"> No materials shared yet! </div>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+
+            
+            <!-- end col -->
+            
+             
+          </div>
+          <!-- End row -->
+          
+          
+          
+          
+          <!-- End row -->
+            
+
+            
+
+            
+            <!-- state end-->
+            
+                
+            
+        </div>
+    </div>
+    {% include 'common/footer.html' %}
+</div>
+
+{% endblock %}

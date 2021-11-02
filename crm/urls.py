@@ -107,6 +107,7 @@ urlpatterns = [
     path('trainer/projects/activate/<id>/',ActivateProject.as_view(),name='activate_project'),
     path('trainer/queries/',ViewQueries.as_view(),name='view_queries'),
     path('trainer/queries/read/<id>/',ReplyQuery.as_view(),name='reply_query'),
+    path('trainer/delete/notes/<id>/',DeleteStudyMaterial.as_view(),name='delete_study_material'),
 
 
     path('staff/contacts/',ViewStaff.as_view(),name='view_contacts'),
@@ -155,6 +156,7 @@ urlpatterns = [
     path('user/complaint/comment/<id>/',PostComplaintComment.as_view(),name='comment_complaint'),
     path('user/complaint/comment/update/<id>/',UpdateComplaintComment.as_view(),name='update_comment'),
     path('user/complaint/comment/delete/<id>/',DeleteComplaintComment.as_view(),name='delete_comment'),
+    path('user/batch/materials/',UploadNotes.as_view(),name='upload_notes'),
 
 
     path('webinar/',ActiveWebinar.as_view(),name='active_webinar'),

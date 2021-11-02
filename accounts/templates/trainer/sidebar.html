@@ -30,6 +30,7 @@
       <li> <a href="{% url 'my_task' %}"><i class="ti ti-menu-alt"></i> <span>My Tasks</span></a></li>
       {% endif %}
       <li> <a href="{% url 'my_current_batch' %}"><i class="ti ti-upload"></i> <span>Upload Videos</span></a></li>
+      <li> <a href="{% url 'upload_notes' %}"><i class="ti ti-notepad"></i> <span>Upload Notes</span></a></li>
       {% if staff.stype == '7' %}
       <li> <a href="{% url 'view_batches' %}"><i class="ti ti-blackboard"></i> <span>Batches</span></a></li>
       {% elif staff.stype == '3' %}

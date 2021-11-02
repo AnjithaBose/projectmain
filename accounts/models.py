@@ -183,6 +183,7 @@ class BatchNotes(models.Model):
     topic = models.CharField(max_length=1000, null=True, blank=True)
     attachment = models.ImageField(null=True, blank=True,upload_to='images/notes/')
     date = models.DateField(null=True, blank=True)
+    time = models.TimeField(null=True, blank=True)
 
 
 

@@ -1934,8 +1934,11 @@ class PlayVideo(View):
                     count = CountNotifications(notify)
                     batch_data = BatchData.objects.get(id=id)
                     batch = Batch.objects.get(id=batch_data.batch.id)
-                    context={'count':count,'notify':notify,'student':student,'batch_data':batch_data,'batch':batch}
-                    return render(request,'common/video_player.html',context)
+                    if student.shared == 'Yes':
+                        context={'count':count,'notify':notify,'student':student,'batch_data':batch_data,'batch':batch}
+                        return render(request,'common/video_player.html',context)
+                    else:
+                        return render(request,'messages/student/access_denied.html')
                 else:
                     if request.user.is_authenticated:
                         return render(request,'messages/common/permission_error.html')
@@ -3674,6 +3677,108 @@ class MyReceipts(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+class UploadNotes(View):
+    def get(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            if staff.stype == '3':
+                batch = Batch.objects.filter(trainer=staff).filter(Q(status='1')|Q(status='3'))
+            else:
+                batch = Batch.objects.filter(Q(status='1')|Q(status='3'))
+            notes = BatchNotes.objects.filter(batch__in=batch)
+            form = UploadNotesForm()
+            form.fields['batch'].queryset = batch
+            context={'count':count,'notify':notify,'staff':staff,'notes':notes,'form':form}
+            return render(request,'trainer/upload_notes.html',context)
+        else:
+            x = StudentCheck(request)
+            if x == True:
+                student = Student.objects.get(user=request.user)
+                notify = StudentNotifications(student)
+                count = CountNotifications(notify)
+                scd = StudentCourseData.objects.filter(student=student)
+                batch = []
+                for i in scd:
+                    batch.append(i.batch)
+                notes = BatchNotes.objects.filter(batch__in=batch)
+                context={'count':count,'notify':notify,'student':student,'notes':notes}
+                if student.shared == 'Yes':
+                    return render(request,'student/study_material.html',context)
+                else:
+                    return render(request,'messages/student/access_denied.html')
+            else:
+                if request.user.is_authenticated:
+                    return render(request,'messages/common/permission_error.html')
+                else:
+                    return redirect('home')
+        
+
+
+    def post(self, request):
+        x = TrainerCheck(request)
+        if x == True:
+            staff = Staff.objects.get(user=request.user)
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            form = UploadNotesForm(request.POST,request.FILES)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.date = datetime.datetime.now()
+                f.time = datetime.datetime.now()
+                f.save()
+                batch = f.batch
+                scd = StudentCourseData.objects.filter(batch=batch)
+                type = 3
+                message = "New study material available."
+                for i in scd:
+                    SendStudentNotification(type, i.student,message)
+                msg = "Notes uploaded successfully."
+                context = {'count':count,'notify':notify,'staff':staff,'msg':msg}
+            else:
+                alert = "Failed to upload new study material"
+                context = {'count':count,'notify':notify,'staff':staff,'alert':alert}
+            return render(request,'messages/trainer/upload_notes.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+class DeleteStudyMaterial(View):
+    def post(self, request,id):
+        x = TrainerCheck(request)
+        if x == True:
+            note = BatchNotes.objects.get(id=id)
+            staff = Staff.objects.get(user=request.user)
+            if staff.stype == '3' and note.batch.trainer == staff:
+                note.delete()
+                return redirect('upload_notes')
+            elif staff.stype == '4' or staff.stype == '7':
+                note.delete()
+                return redirect('upload_notes')
+            else:
+                return render(request,'messages/common/permission_error.html')
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
+
+        
+                    
+
+
+
+
+            
+
+
 
 
 
