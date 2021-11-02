@@ -178,13 +178,18 @@ class BatchData(models.Model):
     date = models.DateField(null=True, blank=True)
 
 
+class BatchNotes(models.Model):
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE,null=True, blank=True)
+    topic = models.CharField(max_length=1000, null=True, blank=True)
+    attachment = models.ImageField(null=True, blank=True,upload_to='images/notes/')
+    date = models.DateField(null=True, blank=True)
+
+
+
 class Reporting(models.Model):
     user = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name='staff')
     manager = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,related_name='manager',limit_choices_to=Q(stype='4')|Q(stype='5')|Q(stype='6')|Q(stype='7'))
 
-class ApprovalCount(models.Model):
-    user = models.ForeignKey(Staff,on_delete=models.CASCADE,null=True, blank=True,limit_choices_to=(Q(stype='4')|Q(status='5')|Q(status='6')),)
-    count = models.CharField(max_length=100, null=True, blank=True)
 
 class Email(models.Model):
     subject = models.CharField(max_length=1000, null=True, blank=True)
