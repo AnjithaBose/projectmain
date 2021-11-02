@@ -3654,6 +3654,27 @@ class AllComplaints(View):
             else:
                 return redirect('home')
 
+class MyReceipts(View):
+    def get(self, request):
+        x = StudentCheck(request)
+        if x == True:
+            student = Student.objects.get(user=request.user)
+            notify = StudentNotifications(student)
+            count = CountNotifications(notify)
+            try:
+                spd = StudentPaymentData.objects.get(student=student)
+            except:
+                spd = StudentPaymentData(student=student,total=0)
+                spd.save()
+            sp = StudentPayments.objects.filter(spd=spd)
+            content = {'count':count,'notify':notify,'student':student,'spd':spd,'sp':sp}
+            return render(request,'student/my_receipts.html',content)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
 
 
 

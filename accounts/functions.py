@@ -523,7 +523,7 @@ def GenerateBill(id):
     template = DefaultPics.objects.get(id=3)
     img = Image.open(template.bill)
     draw = ImageDraw.Draw(img)
-    file_name = str("images/bills/"+payment.bill_id+".pdf")
+    file_name = str("media/images/bills/"+payment.bill_id+".pdf")
     selectFont = ImageFont.truetype("arialbd.ttf", size = 40)
     courseFont = ImageFont.truetype("arialbd.ttf", size = 40)
     codeFont = ImageFont.truetype("arialbd.ttf", size = 40)
@@ -532,7 +532,8 @@ def GenerateBill(id):
     draw.text( (750,944),payment.amount, (1,1,1),anchor="ma",font=codeFont,align ="left")
     draw.text( (750,1131), date, (1,1,1),anchor="ma",font=codeFont,align ="left")
     draw.text( (750,1309), payment.representative.name, (1,1,1),anchor="ma",font=codeFont,align ="left")
-    img.save( file_name, "PDF", resolution=70.0)
+    print(file_name)
+    img.save( file_name, "PDF", resolution=72.0)
 
 
 

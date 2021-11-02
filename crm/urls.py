@@ -140,6 +140,7 @@ urlpatterns = [
     path('student/trainers/',MyTrainers.as_view(),name='my_trainers'),
     path('student/profile/',MyProfile.as_view(),name='my_profile'),
     path('student/complaints/',ViewMyComplaints.as_view(),name='my_complaints'),
+    path('student/receipts/',MyReceipts.as_view(),name='my_receipts'),
 
     path('user/notes/',UserNotes.as_view(),name='user_notes'),
     path('user/delete/notes/<id>/',DeleteNote.as_view(),name='delete_notes'),
