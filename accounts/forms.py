@@ -210,15 +210,10 @@ class UploadNotesForm(ModelForm):
         model = BatchNotes
         fields = ['batch','topic','attachment']
 
-        # def __init__(self, *args, **kwargs):
-        #     self.request = kwargs.pop("request")
-        #     super(UploadNotesForm, self).__init__(*args, **kwargs)
-        #     staff = Staff.objects.get(user=self.request.user)
-        #     if staff.stype == '3':
-        #         batch = Batch.objects.filter(trainer=staff).filter(Q(status='Ongoing')|Q(status='Completed'))
-        #     else:
-        #         batch = Batch.objects.filter(Q(status='Ongoing')|Q(status='Completed'))
-        #     self.fields["batch"].queryset = batch
+class AddSubjectDataForm(ModelForm):
+    class Meta:
+        model = StudentSubjects
+        fields = ['course']
 
 
 

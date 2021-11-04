@@ -283,6 +283,10 @@ class ChatMessage(models.Model):
                 self.chatroom
             )
 
+class StudentSubjects(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='student_name',null=True,blank=True)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True, blank=True,related_name='courses')
+
 
 class StudentCourseData(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name='student',null=True,blank=True)

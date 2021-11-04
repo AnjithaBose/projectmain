@@ -1292,9 +1292,17 @@ class ViewStudent(View):
             count = CountNotifications(notify)
             student = Student.objects.get(id=id)
             scd(request,student)
+            subjects = StudentSubjects.objects.filter(student=student)
+            b = []
+            for i in subjects:
+                b.append(i.course)
+            batch = Batch.objects.filter(subject__in=b).filter(Q(status='1')|Q(status='3')).filter(approval='1')
             cd = StudentCourseData.objects.filter(student=student)
             na = StudentCourseData.objects.filter(student=student,batch__status='1')
-            context={'count':count,'notify':notify,'staff':staff,'students':student,'cd':cd,'na':na}
+            form = AddSubjectDataForm()
+            form2 = AddSCDForm()
+            form2.fields['batch'].queryset = batch
+            context={'count':count,'notify':notify,'staff':staff,'students':student,'cd':cd,'na':na,'form':form,'subjects':subjects,'form2':form2}
             return render(request,'common/student_profile.html',context)
         else:
             if request.user.is_authenticated:
@@ -1302,23 +1310,58 @@ class ViewStudent(View):
             else:
                 return redirect('home')
 
-class AddSCD(View):
-    def get(self, request,id):
+    def post(self, request,id):
         x = NotTrainerCheck(request)
         if x == True:
-            staff = Staff.objects.get(user=request.user)
-            notify = Notifications(staff)
-            count = CountNotifications(notify)
             student = Student.objects.get(id=id)
-            scd(request,student)
-            form = AddSCDForm()
-            context={'count':count,'notify':notify,'staff':staff,'form':form,'student':student}
-            return render(request,'operations/add_scd.html',context)
+            form = AddSubjectDataForm(request.POST)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.student = student
+                f.save()
+            return redirect('view_student',id=id)
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+class DeleteStudentSubject(View):
+    def get(self, request,id):
+        x = NotTrainerCheck(request)
+        if x == True:
+            subject = StudentSubjects.objects.get(id=id)
+            course = subject.course
+            student = subject.student
+            subject.delete()
+            return redirect('view_student',id=student.id)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+
+
+
+    
+
+class AddSCD(View):
+    # def get(self, request,id):
+    #     x = NotTrainerCheck(request)
+    #     if x == True:
+    #         staff = Staff.objects.get(user=request.user)
+    #         notify = Notifications(staff)
+    #         count = CountNotifications(notify)
+    #         student = Student.objects.get(id=id)
+    #         scd(request,student)
+    #         form = AddSCDForm()
+    #         context={'count':count,'notify':notify,'staff':staff,'form':form,'student':student}
+    #         return render(request,'operations/add_scd.html',context)
+    #     else:
+    #         if request.user.is_authenticated:
+    #             return render(request,'messages/common/permission_error.html')
+    #         else:
+    #             return redirect('home')
 
     def post(self, request,id):
         x = NotTrainerCheck(request)
@@ -1332,12 +1375,11 @@ class AddSCD(View):
                 f = form.save(commit=False)
                 f.student = student
                 f.save()
-                msg = "Successfully added Course Data"
-                context={'count':count,'notify':notify,'staff':staff,'student':student,'msg':msg}
+                return redirect('view_student',id=id)
             else:
                 alert = "Course adding failed!.Please review your edit."
                 context={'count':count,'notify':notify,'staff':staff,'alert':alert,'student':student}
-            return render(request,'messages/operations/student_profile.html',context)
+                return render(request,'messages/operations/student_profile.html',context)
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
@@ -1348,7 +1390,6 @@ class DeleteSCD(View):
     def get(self, request,id):
         x = NotTrainerCheck(request)
         if x == True:
-            print("Test")
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
@@ -1473,7 +1514,7 @@ class AddJob(View):
             if form.is_valid():
                 f = form.save(commit=False)
                 f.timestamp = datetime.datetime.now()
-                f.approval = 'Approved'
+                f.approval = '1'
                 f.save()
                 msg = 'Job added successfully.'
                 context={'count':count,'notify':notify,'staff':staff,'msg':msg}
@@ -3608,7 +3649,6 @@ class UpdateComplaintComment(View):
     def post(self, request,id):
         comment = ComplaintComment.objects.get(id=id)
         message = request.POST['message']
-        print (message)
         comment.message = message
         try:
             file1 = request.FILES['pic1']

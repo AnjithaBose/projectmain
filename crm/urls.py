@@ -68,6 +68,7 @@ urlpatterns = [
     path('operations/view/batch/approvals/',ViewBatchEditApprovals.as_view(),name='batch_edit_approvals'),
     path('operations/batch/approve/<id>/',ApproveBatch.as_view(),name='approve_batch'),
     path('operations/batch/reject/<id>/',RejectBatch.as_view(),name='reject_batch'),
+    path('operations/remove/subject/<id>/',DeleteStudentSubject.as_view(),name='remove_subject'),
     
 
     path('sales/home/',SalesDashboard.as_view(),name='sales_dashboard'),

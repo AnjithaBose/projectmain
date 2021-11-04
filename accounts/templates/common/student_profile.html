@@ -19,17 +19,13 @@
                         <div class="breadcrumb-list">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                                <li class="breadcrumb-item"><a href="{% url 'view_students' %}">students</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'view_students' %}">Students</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">{{students}}</li>
                             </ol>
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4 mr-0">
                         <div class="widgetbar">
-                            <a href="{% url 'add_scd' students.id %}" class="btn btn-primary"><i class="ti ti-plus"></i> Course Data</a>
-                            {% if staff.stype == '4' or staff.stype == '2' or staff.stype == '6' %}
-                            <a href="{% url 'get_student_payments' students.id %}" class="btn btn-primary"><i class="ti ti-money"></i> Payment Details</a>
-                            {% endif %}
                             <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
                         </div>
                     </div>
@@ -42,11 +38,21 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-12">
                     <div class="card">
-                        <h4 class="m-t-0 header-title">{{students}} 's  Data</h4>
+                      <div class="row">
+                        <div class ="col-6">
+                          <h4 class="m-t-0 header-title">{{students}} 's  Data</h4>
+                        </div>
+                        <div class="col-6 text-right">
+                          {% if staff.stype == '4' or staff.stype == '2' or staff.stype == '6' %}
+                          <a href="{% url 'get_student_payments' students.id %}" class="btn btn-primary"><i class="ti ti-money"></i> Payment Details</a>
+                          {% endif %}
+                        </div>
+                      </div>
+                        
                 
                         <img class="img-circle pro_pic" src="{{students.profile_pic.url}}" alt="{{students.name}}" style="width: 100px;height:100px">
                         
-                        <div class="card card-body">
+                        <div class="card-body">
                             <form class="forms-sample" method="post" enctype="multipart/form-data" action>
                                 {% csrf_token %}
                               <div class="form-group row">
@@ -67,20 +73,58 @@
                                     <input type="text" class="form-control" value="{{students.status}}" disabled>
                                   </div>
                                   <div class="col-12 col-md-6" style="padding:10px">
-                                    <label for="exampleInputName1">Courses Enrolled</label> 
+                                    <label for="exampleInputName1">Courses Enrolled <span><button class="btn btn-rounded btn-primary-rgba btn-sm" data-toggle="modal" data-target="#cd" data-whatever="@getbootstrap"><i class="ti ti-plus"></i></button></span></label>
+                                    
+                                    
+                                    <!-- Modal -->
+                                        <div class="modal fade" id="cd" tabindex="-1" role="dialog" aria-labelledby="varying-modal-label"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="varying-modal-label">Add Courses</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span
+                                                aria-hidden="true">&times;</span> </button>
+                                            </div>
+                                            <form method="post" id="notesform" enctype="multipart/form-data" action></form>
+                                            <div class="modal-body">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Courses <code>*</code></label>
+                                                {% load widget_tweaks %}
+                                                {% render_field form.course class="form-control" required="true" %}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary"><i class="ti ti-save"></i> Save</button>
+                                            </div>
+                                        </form>
+                                        </div>
+                                        </div>
+                                    </div>
+                                <!-- Modal End -->
+
                                     <!-- <textarea class="form-control" disabled> -->
                                         <ul type="disc">
-                                        {% for i in cd %}
-                                        <li class="btn btn-primary-rgba">{{i.batch.subject.code}}&nbsp;&nbsp;&nbsp;&nbsp;<small><a href="{% url 'delete_scd' i.id %}"><i class="btn btn-primary ti ti-close"></i></a></small></li>
+                                        {% for i in subjects %}
+                                        <li class="btn btn-primary-rgba">{{i.course.code}}&nbsp;&nbsp;&nbsp;&nbsp;<small><a href="{% url 'remove_subject' i.id %}"><i class="btn btn-primary ti ti-close"></i></a></small></li>
+                                        {% empty %}
+                                        <div class="alert alert-warning" role="alert"><a class="alert-link">No subjects added yet</a></div>
                                         {% endfor %}
                                         </ul>
                                     <!-- </textarea> -->
                                   </div>
                                   <div class="col-12 col-md-6" style="padding:10px">
-                                    <label for="exampleInputName1">Now Attending</label> 
+                                    <label for="exampleInputName1">Now Attending <span><button class="btn btn-rounded btn-primary-rgba btn-sm" data-toggle="modal" data-target="#scd" data-whatever="@getbootstrap"><i class="ti ti-plus"></i></button></span></label> 
                                         <div class="row">
                                         {% for i in na %}
                                         <div class="col-3"><span  class="btn btn-primary-rgba"><a href="{% url 'view_batch' i.batch.id %}">{{i.batch.batch_code}}</a> <a href="{% url 'delete_scd' i.id %}" data-toggle="tooltip" data-placement="right" title="Warning!.This will remove this student from this batch."><i class="btn btn-primary ti ti-close"></i></a></span></div>
+                                        {% empty %}
+                                        <div class="container">
+                                          <div class="alert alert-warning col-12" role="alert"><a class="alert-link">Not added to any active batches</a></div>
+                                        </div>
+                                        
                                         {% endfor %}
                                         </div>
                                   </div>
@@ -116,12 +160,43 @@
                 <div class="row ">
                   <div class="col-12">
                     <div class="card">
-      
-                    
-      
-                      
-                      
-                      <h4 class="m-t-0 header-title">Batches Attended</h4>
+                      <div class="row">
+                        <div class="col-6">
+                          <h4 class="m-t-0 header-title">Batches Record</h4>
+                        </div>
+                        <div class="col-6 text-right">
+                          <button  class="btn btn-primary"  data-toggle="modal" data-target="#scd" data-whatever="@getbootstrap"><i class="ti ti-plus"></i> Course Data</button>
+                          <!-- Modal -->
+                              <div class="modal fade" id="scd" tabindex="-1" role="dialog" aria-labelledby="varying-modal-label"
+                              aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                  <h5 class="modal-title" id="varying-modal-label">Add to batches</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span
+                                      aria-hidden="true">&times;</span> </button>
+                                  </div>
+                                  <form method="post"  enctype="multipart/form-data" action="{% url 'add_scd' students.id %}">
+                                  <div class="modal-body">
+                                      {% csrf_token %}
+                                      <div class="form-group">
+                                      <label for="recipient-name" class="col-form-label">Courses <code>*</code></label>
+                                      {% load widget_tweaks %}
+                                      {% render_field form2.batch class="form-control" required="true" %}
+                                      </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="submit" class="btn btn-primary"><i class="ti ti-save"></i> Save</button>
+                                  </div>
+                                  </form>
+                              </div>
+                              </div>
+                          </div>
+                          <!-- Modal End -->
+                        </div>
+                      </div>
+                      <br>
                       
                       <div class="table-responsive">
                       <table id="demo-foo-filtering" class="table table-striped table-bordered toggle-circle m-b-0" >

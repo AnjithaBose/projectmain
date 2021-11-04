@@ -213,7 +213,7 @@ def CopyBatch(request,batch):
         manager = staff
     else:
         manager = Manager(staff)
-    temp = TempBatch(batch=batch,subject=batch.subject,batch_code=batch.batch_code,trainer=batch.trainer,start_date=batch.start_date,end_date=batch.end_date,start_time=batch.start_time,end_time=batch.end_time,link=batch.link,passcode=batch.passcode,type=batch.type,to_be_approved_by=manager)
+    temp = TempBatch(batch=batch,subject=batch.subject,batch_code=batch.batch_code,trainer=batch.trainer,start_date=batch.start_date,end_date=batch.end_date,start_time=batch.start_time,end_time=batch.end_time,link=batch.link,passcode=batch.passcode,status=batch.status,type=batch.type,to_be_approved_by=manager)
     temp.save()
     return (temp)
 
