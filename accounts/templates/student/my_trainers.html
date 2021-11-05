@@ -15,7 +15,7 @@
                 <!-- Start row -->
                 <div class="row">
                     <div class="col-md-8 col-lg-8">
-                        <h4 class="page-title">Contacts</h4>
+                        <h4 class="page-title">Chat</h4>
                         <div class="breadcrumb-list">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -58,20 +58,8 @@
             </div>
             {% empty %}
             <div class="col-lg-6">
-                <div class="card m-b-30">
-                  <div class="card-header border-bottom">
-                  </div>
-                  <div class="card-body">
-                    <div class="alert-list">
-                      <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading"><i class="far fa-times-circle"></i> Contacts is empty!</h4>
-                        <p></p>
-                        <hr>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div class="alert alert-warning" role="alert"><a class="alert-link">Trainer list will appear once you have been added to a batch.</a></div>
+            </div>
 
             {% endfor %}
             <!-- end col -->

@@ -1375,6 +1375,9 @@ class AddSCD(View):
                 f = form.save(commit=False)
                 f.student = student
                 f.save()
+                type = 6
+                message = "Added to a new batch"
+                SendStudentNotification(type,student,message)
                 return redirect('view_student',id=id)
             else:
                 alert = "Course adding failed!.Please review your edit."
@@ -2201,8 +2204,12 @@ class ClassRecordings(View):
             count = CountNotifications(notify)
             batch = Batch.objects.get(id=id)
             batch_data = BatchData.objects.filter(batch=batch)
-            context={'count':count,'notify':notify,'student':student,'batch': batch,'batch_data':batch_data}
-            return render(request,'student/class_recordings.html',context)
+            try:
+                scd = StudentCourseData.objects.get(student=student,batch=batch)
+                context={'count':count,'notify':notify,'student':student,'batch': batch,'batch_data':batch_data}
+                return render(request,'student/class_recordings.html',context)
+            except:
+                return render(request,'messages/common/permission_error.html') 
         else:
             if request.user.is_authenticated:
                 return render(request,'messages/common/permission_error.html')
@@ -2725,7 +2732,9 @@ class MyCertificates(View):
         x = StudentCheck(request)
         if x == True:
             student = Student.objects.get(user=request.user)
-            scd = StudentCourseData.objects.filter(student=student)
+            scd = StudentCourseData.objects.filter(student=student).filter(~Q(certificate_id=None))
+            for i in scd:
+                print(i)
             notify = StudentNotifications(student)
             count = CountNotifications(notify)
             context = {'count':count,'notify':notify,'student':student,'scd':scd}
@@ -2916,7 +2925,7 @@ class MyProfile(View):
             notify = StudentNotifications(student)
             count = CountNotifications(notify)
             form = EditProfileForm(instance=student)
-            scd = StudentCourseData.objects.filter(student=student)
+            scd = StudentSubjects.objects.filter(student=student)
             context={'scd':scd,'count':count,'notify':notify,'student':student,'form':form}
             return render(request,'student/profile.html',context)
         else:
@@ -3824,6 +3833,10 @@ class DeleteStudyMaterial(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+
+
+
 
 
 

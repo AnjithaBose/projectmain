@@ -54,18 +54,16 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% for i in scd %}
-                        {% if i.certificate_id %}
-                            <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td><img class="img-circle pro_pic" src="{{i.batch.subject.pic.url}}" alt="{{i.batch.subject}}" style="width: 40px;height:40px">{{i.batch.subject}}</td>
-                            <td>{{i.batch.trainer}}</td>
-                            <td>{{i.certificate_id}}</td>
-                            <td><a href="/media/images/certificates/{{i.certificate_id}}.pdf" class="btn btn-primary-rgba" download><i class="ti ti-download"></i> Download</a></td>
-                        {% endif %}
-                      {% empty %}
-                      <td colspan="7">No certificates to show.</td>
-                    </tr>
+                    {% for i in scd %}    
+                    <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td><img class="img-circle pro_pic" src="{{i.batch.subject.pic.url}}" alt="{{i.batch.subject}}" style="width: 40px;height:40px">{{i.batch.subject}}</td>
+                      <td>{{i.batch.trainer}}</td>
+                      <td>{{i.certificate_id}}</td>
+                      <td><a href="/media/images/certificates/{{i.certificate_id}}.pdf" class="btn btn-primary-rgba" download><i class="ti ti-download"></i> Download</a></td>
+                    </tr>   
+                    {% empty %}
+                    <tr><td colspan="7">No certificates to show. Certificates will be released after the course is over.</td></tr>
                     {% endfor %}
                     
                   </tbody>

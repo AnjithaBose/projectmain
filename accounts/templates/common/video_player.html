@@ -23,6 +23,7 @@
                                 <li class="breadcrumb-item"><a href="{% url 'upload_videos' batch.id %}">Videos</a></li>
                                 {% elif student %}
                                 <li class="breadcrumb-item"><a href="{% url 'my_recordings' %}">My Recordings</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'class_recordings' batch_data.batch.id %}">Video List</a></li>
                                 {% endif %}
                                 <li class="breadcrumb-item active" aria-current="page">Play Video</li>
                             </ol>
@@ -46,6 +47,7 @@
                             <div class="card m-b-30">
                               <div class="card-header">
                                 <h5 class="card-title">{{batch_data.topic}}</h5>
+                                <code>*Avoid using incognito mode while accessing the recordings</code>
                               </div>
                               <div class="card-body">
                                 <div class="embed-responsive embed-responsive-16by9">
@@ -59,6 +61,7 @@
 
                     
             </div>
+
             <!--- End row -->
 
             
