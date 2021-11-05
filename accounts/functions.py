@@ -361,6 +361,24 @@ def MonthlyRevenue():
             count = int(count) + int(i.amount)
     return(count)
 
+def MyMonthlyCollection(staff):
+    count = 0
+    sp = StudentPayments.objects.filter(representative=staff)
+    for i in sp:
+        if i.timestamp.month == today.month:
+            count = int(count) + int(i.amount)
+    return(count)
+
+
+def MonthlyClosure():
+    s= []
+    students = Student.objects.all()
+    for i in students:
+        if i.start_date.month == today.month:
+            s.append(i)
+    student = Student.objects.filter(name__in = s)
+    return (student)
+
 def CurrentActiveStudents():
     count = 0
     students = Student.objects.all()

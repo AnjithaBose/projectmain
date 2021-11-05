@@ -1702,8 +1702,22 @@ class SalesDashboard(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-
-            context ={'staff':staff,'notify':notify,'count':count}
+            new_leads = Lead.objects.filter(status ='New').count()
+            pipeline_leads = Lead.objects.filter(status ='In Pipeline').count()
+            closure = MonthlyClosure().count()
+            revenue = MonthlyRevenue()
+            my_generated_leads = Lead.objects.filter(generator = staff).count()
+            my_assigned_leads = Lead.objects.filter(assigned_to = staff).count()
+            my_new_leads = Lead.objects.filter(assigned_to = staff, status = 'New').count()
+            my_inpipeline_leads = Lead.objects.filter(assigned_to = staff,status='In Pipeline').count()
+            my_closure = Lead.objects.filter(status = 'Converted').filter(Q(generator = staff)|Q(assigned_to = staff)).count()
+            my_monthly_collection = MyMonthlyCollection(staff)
+            my_pending_task = Task.objects.filter(user = staff,complete=False).count()
+            complaints = Complaint.objects.filter(Q(status = 'New')|Q(status = 'Awaiting Support')).count()
+            awaiting_support = Complaint.objects.filter(Q(status = 'New')|Q(status = 'Awaiting Support')).order_by('-update_timestamp')
+            colleagues = Staff.objects.filter(Q(stype = '2')|Q(stype = '6')).filter(~Q(email = staff.email))
+            leads = Lead.objects.filter(assigned_to = staff)
+            context ={'colleagues':colleagues,'awaiting_support':awaiting_support,'complaints':complaints,'my_pending_task':my_pending_task,'my_generated_leads':my_generated_leads,'my_assigned_leads':my_assigned_leads,'my_new_leads':my_new_leads,'my_inpipeline_leads':my_inpipeline_leads,'my_closure':my_closure,'my_monthly_collection':my_monthly_collection,'staff':staff,'notify':notify,'count':count,'closure':closure,'revenue':revenue,'new_leads':new_leads,'pipeline_leads':pipeline_leads}
             return render(request,'sales/dashboard.html',context)
         else:
             if request.user.is_authenticated:
