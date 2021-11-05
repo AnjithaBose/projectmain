@@ -456,7 +456,7 @@ def CreateCertificate(student,scd):
     date = str(datetime.datetime.now().date())
     img = Image.open(template.certificate)
     draw = ImageDraw.Draw(img)
-    file_name = str("images/certificates/"+certificate_id+".pdf")
+    file_name = str("media/images/certificates/"+certificate_id+".pdf")
     selectFont = ImageFont.truetype("arialbd.ttf", size = 150)
     courseFont = ImageFont.truetype("arialbd.ttf", size = 100)
     codeFont = ImageFont.truetype("arialbd.ttf", size = 80)
