@@ -6,7 +6,7 @@
 <!-- header_End -->
 <!-- Content_right -->
 <div class="container_full">
-  {% include 'common/sidebar.html' %}
+  {% include 'student/sidebar.html' %}
   <div class="content_wrapper bg_homebefore">
     <div class="container-fluid">
       <div class="sec-title">
@@ -68,8 +68,8 @@
                     <div class="card-body">
                       <div class="row align-items-center no-gutters">
                         <div class="col-8">
-                          <p class="font-15">Payments Done</p>
-                          <h4 class="card-title mb-0 border-0">{{payments_done}}</h4>
+                          <p class="font-15">Materials Available</p>
+                          <h4 class="card-title mb-0 border-0">{{available_materials}}</h4>
                         </div>
                         <div class="col-4 text-right"> <span class="iconbar iconbar-md bg-primary text-white rounded"><i
                               class="ti ti-money line align-unset"></i></span> </div>
@@ -133,14 +133,7 @@
                   </div>
                 </div>
                 {% empty %}
-                <div class="media border-bottom p-b-15">
-                          <div class="alert-list">
-                            <div class="alert alert-danger" role="alert">
-                              <h4 class="alert-heading"><i class="far fa-times-circle"></i> Batch Error!</h4>
-                              <p>You haven't joined any batch.</p>
-                            </div>
-                          </div>
-                </div>
+                <div class="alert alert-warning" role="alert"><a class="alert-link">Not added to any batch yet!</a></div>
                 {% endfor %}
                 
               </div>
@@ -173,20 +166,8 @@
                 <!-- End col -->
                 {% empty %}
                 <!-- Start col -->
-                <div class="col-md-6 col-lg-6 col-xl-3" style="margin-left:20px;margin-right:20px;">
-                    <div class="card m-b-30">
-                        <div class="card-header border-bottom">
-                        </div>
-                        <div class="card-body">
-                            <div class="alert-list">
-                                <div class="alert alert-danger" role="alert">
-                                    <h4 class="alert-heading"><i class="far fa-times-circle"></i> Batch Error!</h4>
-                                    <p>You are not part of any active batches.</p>
-                                    <hr>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-12 col-md-11" style="margin-left:20px;margin-right:20px;">
+                  <div class="alert alert-warning" role="alert"><a class="alert-link">Not added to any batch yet!</a></div>
                 </div>
                 <!-- End col -->
                 {% endfor %}

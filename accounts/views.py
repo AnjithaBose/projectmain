@@ -2139,16 +2139,19 @@ class StudentDashboard(View):
             payments = StudentPayments.objects.filter(spd__student=student).count()
             scd = StudentCourseData.objects.filter(student=student)
             batch = []
+            b=[]
             trainer = []
             for i in scd:
                 batch.append(i.batch.batch_code)
                 trainer.append(i.batch.trainer)
+                b.append(i.batch)
             batches = Batch.objects.filter(batch_code__in=batch)
             trainers = Staff.objects.filter(name__in=trainer)
             assignments = Assignment.objects.filter(batch__in=batches).count()
             submitted = StudentAssignmentData.objects.filter(student=student).count()
             pending_assignments = int(assignments)-int(submitted)
-            context = {'pending_assignments':pending_assignments,'trainers':trainers,'batches': batches,'student':student,'notify':notify,'count':count,'enrolled_courses':enrolled_courses,'active_courses':active_courses,'payments_done':payments}
+            available_materials = BatchNotes.objects.filter(batch__in=b).count() 
+            context = {'available_materials':available_materials,'pending_assignments':pending_assignments,'trainers':trainers,'batches': batches,'student':student,'notify':notify,'count':count,'enrolled_courses':enrolled_courses,'active_courses':active_courses,'payments_done':payments}
             return render(request,'student/dashboard.html',context)
         else:
             if request.user.is_authenticated:
