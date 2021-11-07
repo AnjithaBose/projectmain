@@ -26,8 +26,6 @@
                   </div>
                   <div class="col-md-4 col-lg-4 mr-0">
                     <div class="widgetbar">
-                        <a href="{% url 'view_closure' %}" class="btn btn-primary"><i class="far fa-thumbs-up"></i> Closures</a>
-                        <a href="{% url 'view_history' %}" class="btn btn-primary"><i class="fas fa-history"></i> History</a>
                         <button class="btn btn-primary" onclick="window.location.reload()"><i class="ti ti-reload mr-2"></i>Refresh</button>
                     </div>
                   </div>
@@ -109,6 +107,7 @@
                       <th>Name</th>
                       <th>Email</th>
                       <th>Mobile</th>
+                      <th>Assignee</th>
                       <th>Date Created</th>
                       {% if staff.stype == '4' or staff.stype == '5' or staff.stype == '6' %}
                       <th>Generator</th>
@@ -124,6 +123,7 @@
                       <td>{{i.name}}</td>
                       <td>{{i.email}}</td>
                       <td>{{i.mobile}}</td>
+                      <td>{{i.assigned_to}}</td>
                       <td>{{i.created_on}}</td>
                       {% if staff.stype == '4'  or staff.stype == '6' %}
                       <td>{{i.generator}}</td>
@@ -143,14 +143,14 @@
                         </div>
                       </td>
                       {% empty %}
-                      <td colspan="8">No new leads to show.</td>
+                      <td colspan="9">No new leads to show.</td>
                     </tr>
                     {% endfor %}
                     
                   </tbody>
                   <tfoot>
                     <tr class="active">
-                      <td colspan="8"><div class="text-right">
+                      <td colspan="9"><div class="text-right">
                         {% if new.has_previous %}
                         <a href="{% url 'view_leads' %}?page={{ new.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
                         {% endif %}
@@ -171,6 +171,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
+                        <th>Assignee</th>
                         <th>Date Created</th>
                         {% if staff.stype == '4' or staff.stype == '5' or staff.stype == '6' %}
                         <th>Generator</th>
@@ -185,6 +186,7 @@
                       <td>{{i.name}}</td>
                       <td>{{i.email}}</td>
                       <td>{{i.mobile}}</td>
+                      <td>{{i.assigned_to}}</td>
                       <td>{{i.created_on}}</td>
                       {% if staff.stype == '4' or staff.stype == '5' or staff.stype == '6' %}
                       <td>{{i.generator}}</td>
@@ -200,14 +202,14 @@
                         </div>
                       </td>
                       {% empty %}
-                      <td colspan="7">No in pipeline leads to show.</td>
+                      <td colspan="9">No in pipeline leads to show.</td>
                     </tr>
                     {% endfor %}
                     
                   </tbody>
                   <tfoot>
                     <tr class="active">
-                      <td colspan="7"><div class="text-right">
+                      <td colspan="9"><div class="text-right">
                         {% if pipe.has_previous %}
                         <a href="{% url 'view_leads' %}?page={{ pipe.previous_page_number}}"><button class="btn btn-round btn-primary-rgba" ><i class="fas fa-angle-left"></i> Prev</button></a>
                         {% endif %}

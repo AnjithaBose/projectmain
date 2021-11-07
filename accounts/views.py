@@ -321,16 +321,20 @@ class ViewBatches(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            wdbatch = Batch.objects.filter(type="Weekday",approval='1').order_by('status')
+            wdbatch = Batch.objects.filter(approval='1').order_by('status')
             for i in wdbatch:
                 i = BatchStrength(request,i.id)
+                i.save()
+            filter = BatchFilter(self.request.GET,queryset=wdbatch)
+            wdbatch=filter.qs
             webatch = Batch.objects.filter(type="Weekend",approval='1').order_by('status')
             for i in wdbatch:
                 i = BatchStrength(request,i.id)
-            page = Pagination(request,wdbatch,5)
+                i.save()
+            page = Pagination(request,wdbatch,10)
             pages = Pagination(request,webatch,5)
             form = BatchCreateForm()
-            context={'count':count,'notify':notify,'staff':staff,'wdbatch': page,'webatch': pages,'form':form}
+            context={'count':count,'notify':notify,'staff':staff,'wdbatch': page,'webatch': pages,'form':form,'filter':filter}
             return render(request,'operations/batches.html',context)
         else:
             if request.user.is_authenticated:
@@ -1275,7 +1279,7 @@ class Students(View):
             notify = Notifications(staff)
             count = CountNotifications(notify)
             students = Student.objects.all().order_by('-start_date')
-            filter=StudentFilter(self.request.GET,queryset=students)
+            filter = StudentFilter(self.request.GET,queryset=students)
             students=filter.qs
             FindSCD(request,students)
             context={'count':count,'notify':notify,'staff':staff,'students':students,'filter':filter}

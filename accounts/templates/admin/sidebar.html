@@ -23,7 +23,14 @@
       <li> <a href="{% url 'task_manager' %}"><i class="ti ti-menu-alt"></i> <span>Task Manager</span></a></li>
       <li> <a href="{% url 'view_students' %}"><i class="ti ti-user"></i> <span>Students</span></a></li>
       <li> <a href="{% url 'all_complaints' %}"><i class="ti ti-write"></i> <span>Complaints</span></a></li>
-      <li> <a href="{% url 'view_leads' %}"><i class="fas fa-book-medical"></i> <span>Leads</span></a></li>
+      <li class="menu_sub"> <a href="#"><i class="fas fa-book-medical"></i> <span>Leads</span><span
+        class="ti ti-angle-down styleicon"></span></a>
+        <ul class="down_menu">
+          <li><a href="{% url 'view_leads' %}">Active Leads</a></li>
+          <li><a href="{% url 'view_closure' %}">Closure</a></li>
+          <li><a href="{% url 'view_history' %}">Lead Register</a></li>
+        </ul>
+      </li>
       <li> <a href="{% url 'view_mails' %}"><i class="fa fa-envelope-o"></i> <span>Mail</span></a></li>
       <li class="menu_sub"> <a href="#"><i class="ti ti-briefcase"></i> <span>Jobs</span><span
         class="ti ti-angle-down styleicon"></span></a>
@@ -37,7 +44,7 @@
         <ul class="down_menu">
           <li><a href="{% url 'active_webinar' %}">Upcoming Webinar</a></li>
           <li><a href="{% url 'add_webinar' %}">Add Webinar</a></li>
-          <li><a href="{% url 'list_lms_revert' %}">Past Webinars</a></li>
+          <!-- <li><a href="{% url 'list_lms_revert' %}">Past Webinars</a></li> -->
         </ul>
       </li>
       <li class="menu_sub"> <a href="#"> <i class="ti ti-layout-grid2-alt"></i> <span>Apps <span class="ti ti-angle-down styleicon"></span> </span></a>
