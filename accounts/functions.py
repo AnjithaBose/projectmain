@@ -184,10 +184,12 @@ def NotTrainerCheck(request):
 
 def scd(request,student):
     student.course_enrolled = []
+    student.batches_attended = []
     student.now_attending = []
     cd = StudentCourseData.objects.filter(student=student)
     for i in cd:
         student.course_enrolled.append(i.batch.subject.code)
+        student.batches_attended.append(i.batch.batch_code)
         if i.batch.status == '1':
             student.now_attending.append(i.batch.batch_code)
     student.save()

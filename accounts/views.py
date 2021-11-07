@@ -14,10 +14,11 @@ from django.template import RequestContext
 from .functions import *
 from .models import *
 from .forms import *
+from .filters import *
 import time
 import datetime
 import uuid 
-
+import django_filters
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
@@ -1274,8 +1275,10 @@ class Students(View):
             notify = Notifications(staff)
             count = CountNotifications(notify)
             students = Student.objects.all().order_by('-start_date')
+            filter=StudentFilter(self.request.GET,queryset=students)
+            students=filter.qs
             FindSCD(request,students)
-            context={'count':count,'notify':notify,'staff':staff,'students':students}
+            context={'count':count,'notify':notify,'staff':staff,'students':students,'filter':filter}
             return render(request,'common/students.html',context)
         else:
             if request.user.is_authenticated:

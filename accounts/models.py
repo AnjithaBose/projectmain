@@ -247,10 +247,11 @@ class Student(models.Model):
     state = models.CharField(max_length=100,null=True,choices=state,blank=True)
     pincode = models.CharField(max_length=6,null=True, blank=True)
     course_enrolled = models.CharField(max_length=1000,null=True,blank=True)
+    batches_attended = models.CharField(max_length=1000,null=True,blank=True)
     now_attending = models.CharField(max_length=1000,null=True,blank=True)
     start_date = models.DateField(null=True,blank=True)
     shared = models.CharField(max_length=100,choices=(('Yes', 'Yes'), ('No', 'No')),blank=True,null=True,default='No')
-    status = models.CharField(max_length=20,choices=(('Active','Active'),('Inactive','Inactive')),default='Active',blank=True)
+    status = models.CharField(max_length=20,choices=(('Active','Active'),('Inactive','Inactive')),default='Active')
     profile_pic = models.ImageField(null=True,default='accounts/static/images/user1.png',blank=True, upload_to='images/dp/')
     cv = models.FileField(blank=True, null=True,upload_to='images/cv/')
 
