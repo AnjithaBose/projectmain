@@ -55,6 +55,7 @@
       {% if request.user.is_superuser %}
       <li> <a href="/admin/" target="_blank"><i class="ti ti-star"></i> <span>Administrator</span></a></li>
       {% endif %}
+      <li> <a href="{% url 'login_log' %}" ><i class="fas fa-user-clock"></i> <span>Staff Login Log</span></a></li>
       <!-- <li class="menu_sub"> <a href="#"> <i class="ti ti-blackboard"></i> <span>UI Elements </span> <span
             class="badge badge-pill badge-danger float-right">New</span> </a>
         <ul class="down_menu">

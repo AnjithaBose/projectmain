@@ -451,6 +451,11 @@ class ComplaintComment(models.Model):
     date = models.DateField(null=True, blank=True)
     edited = models.BooleanField(default = False)
 
+class LoginLog(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    name = models.CharField(max_length=200,null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
+
 
 
     

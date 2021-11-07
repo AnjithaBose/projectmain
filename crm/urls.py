@@ -54,6 +54,7 @@ urlpatterns = [
     path('administrator/mail/lead/<id>/',SendLeadMail.as_view(),name='send_lead_mail'),
     path('administrator/webinar/add/',AddWebinar.as_view(),name='add_webinar'),
     path('administrator/taskmanager/',TaskManager.as_view(),name='task_manager'),
+    path('administrator/login/log/',GetLoginLog.as_view(),name='login_log'),
 
     path('operations/home/',OperationsDashboard.as_view(),name='operations_dashboard'),
     path('operations/batches/',ViewBatches.as_view(),name='view_batches'),

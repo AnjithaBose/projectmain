@@ -555,6 +555,35 @@ def GenerateBill(id):
     print(file_name)
     img.save( file_name, "PDF", resolution=72.0)
 
+def LoginLogData(request):
+    user = request.user
+    timestamp = datetime.datetime.now()
+    log = LoginLog(user=user, timestamp=timestamp)
+    log.save()
+
+def FindStaff():
+    user = User.objects.all()
+    s = []
+    for i in user:
+        try:
+            staff= Staff.objects.get(user=i)
+            s.append(staff.email)
+        except:
+            pass 
+    staff = Staff.objects.filter(email__in=s)
+    users = User.objects.filter(email__in=s)
+    return (users)
+
+def FindName():
+    log = LoginLog.objects.all()
+    for i in log:
+        staff = Staff.objects.get(user=i.user)
+        i.name = staff.name
+        i.save()
+        
+
+
+
 
 
 

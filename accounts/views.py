@@ -29,6 +29,7 @@ class LoginView(View):
     def get(self, request):
         user = request.user
         if user.is_authenticated:
+            LoginLogData(request)
             return redirect('home')
         else:
             msg=""
@@ -40,6 +41,7 @@ class LoginView(View):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            LoginLogData(request)
             return redirect('home')
         else:
             message = CheckAccount(username)
@@ -3840,6 +3842,28 @@ class DeleteStudyMaterial(View):
                 return render(request,'messages/common/permission_error.html')
             else:
                 return redirect('home')
+
+
+class GetLoginLog(View):
+    def get(self, request):
+        x = AdminCheck(request)
+        if x == True:
+            FindName()
+            staff = Staff.objects.get(user=request.user)
+            user = FindStaff()
+            notify = Notifications(staff)
+            count = CountNotifications(notify)
+            log = LoginLog.objects.filter(user__in=user).order_by('-timestamp')
+            filter = LoginLogFilter(self.request.GET,queryset=log)
+            log=filter.qs
+            context = {'filter': filter,'notify':notify,'count':count,'staff':staff,'log':log}
+            return render(request,'admin/log.html',context)
+        else:
+            if request.user.is_authenticated:
+                return render(request,'messages/common/permission_error.html')
+            else:
+                return redirect('home')
+        
 
 
 

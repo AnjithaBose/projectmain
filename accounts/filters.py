@@ -18,3 +18,9 @@ class BatchFilter(django_filters.FilterSet):
     class Meta:
         model = Batch
         fields = ['subject','batch_code','trainer','type','status']
+
+class LoginLogFilter(django_filters.FilterSet):
+    name = CharFilter(field_name='name',lookup_expr='icontains')
+    class Meta:
+        model = LoginLog
+        fields = ['name']
