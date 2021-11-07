@@ -180,7 +180,7 @@ class AdminDashboard(View):
             pending_lms = Lead.objects.filter(approval='2').count()
             c3 = MonthlyRevenue()
             webinar = UpcomingWebinar().count()
-            trainers = Staff.objects.filter(stype='3').order_by('doj')
+            trainers = Staff.objects.filter(~Q(email=staff.email))
             leads = Lead.objects.filter(Q(status='New')|Q(status='In Pipeline'))
             context={'webinar':webinar,'count':count,'notify':notify,'staff':staff,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'active_leads':active_leads,'closed_leads':closed_leads,'students':st,'pending_lms':pending_lms,'monthly_fee_collected':c3,'trainers':trainers,'leads':leads}
             # print(today.strftime('%b'))
