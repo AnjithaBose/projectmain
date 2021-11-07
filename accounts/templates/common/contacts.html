@@ -73,22 +73,9 @@
               </div>
             </div>
             {% empty %}
-            <div class="col-lg-6">
-                <div class="card m-b-30">
-                  <div class="card-header border-bottom">
-                  </div>
-                  <div class="card-body">
-                    <div class="alert-list">
-                      <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading"><i class="far fa-times-circle"></i> Contacts is empty!</h4>
-                        <p></p>
-                        <hr>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"> <strong>Ohh no!</strong> You don't have any contacts added .
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+            </div>
             {% endfor %}
             <!-- end col -->
             
