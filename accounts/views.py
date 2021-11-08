@@ -1885,9 +1885,11 @@ class MyCurrentBatch(View):
             staff = Staff.objects.get(user=request.user)
             notify = Notifications(staff)
             count = CountNotifications(notify)
-            wdbatch = Batch.objects.filter(trainer=staff,type="Weekday",status='1')
+            wdbatch = Batch.objects.filter(trainer=staff,status='1')
+            filter = BatchFilter(self.request.GET,queryset=wdbatch)
+            wdbatch=filter.qs
             webatch = Batch.objects.filter(trainer=staff,type="Weekend",status='1')
-            context={'count':count,'notify':notify,'staff':staff,'wdbatch':wdbatch,'webatch':webatch}
+            context={'count':count,'notify':notify,'staff':staff,'wdbatch':wdbatch,'webatch':webatch,'filter':filter}
             return render(request,'trainer/upload_videos.html',context)
         else:
             if request.user.is_authenticated:
