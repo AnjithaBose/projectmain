@@ -12,17 +12,17 @@
             {% if i.type == 1 %}
               <li>
                 <a href="javascript:void(0)"><span class="time">{{i.time|timesince}}</span><span class="details">
-                  {% if i.type == "Chat" %} 
+                  {% if i.type == 1 %} 
                     <span class="notification-icon deepPink-bgcolor"> <i class="fa fa-comments-o"></i></span>
-                  {% elif i.type == "Account Creation" %}
+                  {% elif i.type == 2 %}
                     <span class="notification-icon blue-bgcolor"><i class="fas fa-user-plus"></i> </span>
-                  {% elif i.type == "Batch Update" %}
+                  {% elif i.type == 3 %}
                     <span class="notification-icon purple-bgcolor"><i class="fas fa-book-reader"></i> </span>
-                  {% elif i.type == "Query" %}
+                  {% elif i.type == 4 %}
                     <span class="notification-icon red"> <i class="ti ti-hand-open"></i> </span>
-                  {% elif i.type == "General" %}
+                  {% elif i.type == 5 %}
                     <span class="notification-icon yellow"><i class="fas fa-exclamation"></i> </span>
-                  {% elif i.type == "Course" %}
+                  {% elif i.type == 6 %}
                     <span class="notification-icon pink"><i class="fas fa-check"></i> </span>
                   {% endif %}
                     {{i.message}} </span>
