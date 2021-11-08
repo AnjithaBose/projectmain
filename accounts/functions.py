@@ -580,7 +580,15 @@ def FindName():
         staff = Staff.objects.get(user=i.user)
         i.name = staff.name
         i.save()
-        
+
+def SendBatchDataNotification(batch):
+    scd = StudentCourseData.objects.filter(batch=batch)
+    type = 3
+    msg = "New batch video added."
+    for i in scd:
+        SendStudentNotification(type,i.student,msg)
+
+
 
 
 

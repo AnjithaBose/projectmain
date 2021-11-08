@@ -1930,6 +1930,7 @@ class UploadVideos(View):
                 f.batch = batch
                 f.date = datetime.datetime.now()
                 f.save()
+                SendBatchDataNotification(batch)
                 msg = "Videos uploaded successfully and notifications send."
                 context={'count':count,'notify':notify,'staff':staff,'msg':msg,'batch':batch}
             else:
