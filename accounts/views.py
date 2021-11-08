@@ -184,6 +184,7 @@ class AdminDashboard(View):
             webinar = UpcomingWebinar().count()
             trainers = Staff.objects.filter(~Q(email=staff.email))
             leads = Lead.objects.filter(Q(status='New')|Q(status='In Pipeline'))
+            UpdateBatchStrength(request)
             context={'webinar':webinar,'count':count,'notify':notify,'staff':staff,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'active_leads':active_leads,'closed_leads':closed_leads,'students':st,'pending_lms':pending_lms,'monthly_fee_collected':c3,'trainers':trainers,'leads':leads}
             # print(today.strftime('%b'))
             return render(request,'admin/dashboard.html',context)
@@ -1641,6 +1642,7 @@ class OperationsDashboard(View):
             birthdays = StaffBirthdays()
             active_batches = CurrentBatches()
             coming_batches = UpcomingBatches()
+            UpdateBatchStrength(request)
             context ={'coming_batches':coming_batches,'active_batches':active_batches,'staff':staff,'notify':notify,'count':count,'current_batches':current_batches,'upcoming_batches':upcoming_batches,'upcoming_webinar':upcoming_webinar,'pending_task':pending_task,'staff_members':staff_members,'birthdays':birthdays}
             return render(request,'operations/dashboard.html',context)
         else:
@@ -1729,6 +1731,7 @@ class SalesDashboard(View):
             awaiting_support = Complaint.objects.filter(Q(status = 'New')|Q(status = 'Awaiting Support')).order_by('-update_timestamp')
             colleagues = Staff.objects.filter(Q(stype = '2')|Q(stype = '6')).filter(~Q(email = staff.email))
             leads = Lead.objects.filter(assigned_to = staff)
+            UpdateBatchStrength(request)
             context ={'colleagues':colleagues,'awaiting_support':awaiting_support,'complaints':complaints,'my_pending_task':my_pending_task,'my_generated_leads':my_generated_leads,'my_assigned_leads':my_assigned_leads,'my_new_leads':my_new_leads,'my_inpipeline_leads':my_inpipeline_leads,'my_closure':my_closure,'my_monthly_collection':my_monthly_collection,'staff':staff,'notify':notify,'count':count,'closure':closure,'revenue':revenue,'new_leads':new_leads,'pipeline_leads':pipeline_leads}
             return render(request,'sales/dashboard.html',context)
         else:
@@ -1803,6 +1806,7 @@ class TrainerDashboard(View):
             coming_batches = Batch.objects.filter(status='2',trainer=staff)
             pending_task = PendingTask(staff).count()
             pending_queries = ChatRoom.objects.filter(user1=staff,user_1_status='Unread').count()
+            UpdateBatchStrength(request)
             context ={'pending_queries':pending_queries,'pending_task':pending_task,'active_batches':active_batches,'coming_batches':coming_batches,'upcoming_batches':upcoming_batches,'current_batches':current_batches,'staff':staff,'notify':notify,'count':count}
             if staff.stype == '4' or staff.stype== '7':
                 return redirect('trainer_manager_dashboard')
@@ -1829,6 +1833,7 @@ class TrainerManagerDashboard(View):
             coming_batches = UpcomingBatches()
             staff_members = Managing(staff)
             birthdays = StaffBirthdays()
+            UpdateBatchStrength(request)
             context ={'birthdays':birthdays,'staff_members':staff_members,'active_batches':active_batches,'coming_batches':coming_batches,'pending_task':pending_task,'unallocated_batches':unallocated_batches,'staff':staff,'notify':notify,'count':count,'upcoming_batches':upcoming_batches,'current_batches':current_batches}
             return render(request,'trainer/manager_dashboard.html',context)
         else:

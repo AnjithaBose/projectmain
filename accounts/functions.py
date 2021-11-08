@@ -588,6 +588,13 @@ def SendBatchDataNotification(batch):
     for i in scd:
         SendStudentNotification(type,i.student,msg)
 
+def UpdateBatchStrength(request):
+    batch = Batch.objects.all()
+    for i in batch:
+        i = BatchStrength(request,i.id)
+        i.save()
+    
+
 
 
 
