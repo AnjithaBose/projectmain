@@ -9,7 +9,7 @@
     <li>
       <ul class="dropdown-menu-list">
         {% for i in notify %}
-            {% if i.type == '1' %}
+            {% if i.type == 1 %}
               <li>
                 <a href="javascript:void(0)"><span class="time">{{i.time|timesince}}</span> <span class="details">
                     <span class="notification-icon deepPink-bgcolor"> <i class="fa fa-comments-o"></i> </span>
