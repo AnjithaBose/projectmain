@@ -9,20 +9,19 @@
     <li>
       <ul class="dropdown-menu-list">
         {% for i in notify %}
-            {% if i.type == 1 %}
               <li>
-                <a href="javascript:void(0)"><span class="time">{{i.time|timesince}}</span><span class="details">
-                  {% if i.type == 1 %} 
+                <a href="javascript:void(0)"><span class="time">{{i.timestamp|timesince}}</span><span class="details">
+                  {% if i.type == '1' %} 
                     <span class="notification-icon deepPink-bgcolor"> <i class="fa fa-comments-o"></i></span>
-                  {% elif i.type == 2 %}
+                  {% elif i.type == '2' %}
                     <span class="notification-icon blue-bgcolor"><i class="fas fa-user-plus"></i> </span>
-                  {% elif i.type == 3 %}
+                  {% elif i.type == '3' %}
                     <span class="notification-icon purple-bgcolor"><i class="fas fa-book-reader"></i> </span>
-                  {% elif i.type == 4 %}
+                  {% elif i.type == '4' %}
                     <span class="notification-icon red"> <i class="ti ti-hand-open"></i> </span>
-                  {% elif i.type == 5 %}
+                  {% elif i.type == '5' %}
                     <span class="notification-icon yellow"><i class="fas fa-exclamation"></i> </span>
-                  {% elif i.type == 6 %}
+                  {% elif i.type == '6' %}
                     <span class="notification-icon pink"><i class="fas fa-check"></i> </span>
                   {% endif %}
                     {{i.message}} </span>
@@ -30,24 +29,6 @@
               </li> 
         {% endfor %}
 
-        <!-- <li> <a href="javascript:void(0)"> <span class="time">just now</span> <span class="details">
-              <span class="notification-icon deepPink-bgcolor"> <i class="fa fa-check"></i> </span>
-              Congratulations!. </span> </a> </li>
-        <li> <a href="javascript:void(0)"> <span class="time">3 mins</span> <span class="details">
-              <span class="notification-icon purple-bgcolor"> <i class="fa fa-user o"></i> </span>
-              <b>John Micle </b>is now following you. </span> </a> </li>
-        <li> <a href="javascript:void(0)"> <span class="time">7 mins</span> <span class="details">
-              <span class="notification-icon blue-bgcolor"> <i class="fa fa-comments-o"></i> </span>
-              <b>Sneha Jogi </b>sent you a message. </span> </a> </li>
-        <li> <a href="javascript:void(0)"> <span class="time">12 mins</span> <span class="details">
-              <span class="notification-icon pink"> <i class="fa fa-heart"></i> </span> <b>Ravi Patel
-              </b>like your photo. </span> </a> </li>
-        <li> <a href="javascript:void(0)"> <span class="time">15 mins</span> <span class="details">
-              <span class="notification-icon yellow"> <i class="fa fa-warning"></i> </span> Warning!
-            </span> </a> </li>
-        <li> <a href="javascript:void(0)"> <span class="time">10 hrs</span> <span class="details">
-              <span class="notification-icon red"> <i class="fa fa-times"></i> </span> Application
-              error. </span> </a> </li> -->
       </ul>
     </li>
   </ul>
