@@ -1031,6 +1031,7 @@ class UpdateLead(View):
                 f = form.save(commit=False)
                 if f.status == 'Converted':
                     return redirect('convert_lead',id=lead.id)
+                f.save()
                 msg = "Lead updated successfully."
                 context={'count':count,'notify':notify,'staff':staff,'msg':msg}
             else:
@@ -1306,7 +1307,7 @@ class ViewStudent(View):
             b = []
             for i in subjects:
                 b.append(i.course)
-            batch = Batch.objects.filter(subject__in=b).filter(Q(status='1')|Q(status='3')).filter(approval='1')
+            batch = Batch.objects.filter(subject__in=b).filter(Q(status='1')|Q(status='2')).filter(approval='1')
             cd = StudentCourseData.objects.filter(student=student)
             na = StudentCourseData.objects.filter(student=student,batch__status='1')
             form = AddSubjectDataForm()
@@ -2094,12 +2095,12 @@ class AddWebinar(View):
                         f.save()
                     else:
                         f.public_url = url
-                        temp = DefaultPics.objects.get(id=3)
+                        temp = DefaultPics.objects.get(id=1)
                         img = Image.open(temp.webinar_cover)
                         draw = ImageDraw.Draw(img)
                         dt = str(f.date)
                         tm = str(f.time)
-                        file_name = str("images/webinar_cover/"+f.public_url+".jpg")
+                        file_name = str("media/images/webinar_cover/"+f.public_url+".jpg")
                         selectFont = ImageFont.truetype("arialbd.ttf", size = 40)
                         courseFont = ImageFont.truetype("arialbd.ttf", size = 20)
                         codeFont = ImageFont.truetype("arialbd.ttf", size = 20)
