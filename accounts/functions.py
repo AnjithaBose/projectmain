@@ -285,8 +285,12 @@ def CheckAccount(username):
         return(m)
 
 def Manager(staff):
-    reporting = Reporting.objects.get(user=staff)
-    return(reporting.manager) 
+    try:
+        reporting = Reporting.objects.get(user=staff)
+    except:
+        reporting = Reporting(user=staff,manager=staff)
+        reporting.save()
+    return(reporting.manager)  
 
 def StudentAccountCreation(request,lead):
     student = StudentConvert(request,lead)
@@ -540,7 +544,7 @@ def FindQueryRoom(request,id):
 def GenerateBill(id):
     payment = StudentPayments.objects.get(id=id)
     date=str(payment.timestamp)
-    template = DefaultPics.objects.get(id=3)
+    template = DefaultPics.objects.get(id=1)
     img = Image.open(template.bill)
     draw = ImageDraw.Draw(img)
     file_name = str("media/images/bills/"+payment.bill_id+".pdf")
@@ -577,9 +581,14 @@ def FindStaff():
 def FindName():
     log = LoginLog.objects.all()
     for i in log:
-        staff = Staff.objects.get(user=i.user)
-        i.name = staff.name
-        i.save()
+        try:
+            staff = Staff.objects.get(email=i.user.email)
+            i.name = staff.name
+            i.save()
+        except:
+            staff = Student.objects.get(email=i.user.email)
+            i.name = staff.name
+            i.save()
 
 def SendBatchDataNotification(batch):
     scd = StudentCourseData.objects.filter(batch=batch)

@@ -1486,7 +1486,7 @@ class Jobs(View):
                 staff = Staff.objects.get(user=request.user)
                 notify = Notifications(staff)
                 count = CountNotifications(notify)
-                job = Job.objects.filter(approval="Approved").order_by('-timestamp')
+                job = Job.objects.filter(approval='1').order_by('-timestamp')
                 page = Pagination(request,job,6)
                 context = {'staff':staff,'job':page,'notify':notify,'count':count}
             except:
@@ -1661,6 +1661,7 @@ class EditStaff(View):
             count = CountNotifications(notify)
             profile = Staff.objects.get(id=id)
             form = CreateStaffForm(instance=profile)
+            manager = Manager(profile)
             reporting = Reporting.objects.get(user=profile)
             form_manager = ReportingForm(instance=reporting)
             context={'count':count,'notify':notify,'staff':staff,'form':form,'profile':profile,'form_manager':form_manager}
@@ -2155,10 +2156,12 @@ class StudentDashboard(View):
             student = Student.objects.get(user=request.user)
             notify = StudentNotifications(student)
             count = CountNotifications(notify)
+            print("text")
             enrolled_courses = StudentCourseData.objects.filter(student=student).count()
             active_courses = StudentCourseData.objects.filter(batch__status="1",student=student).count()
             payments = StudentPayments.objects.filter(spd__student=student).count()
             scd = StudentCourseData.objects.filter(student=student)
+           
             batch = []
             b=[]
             trainer = []
